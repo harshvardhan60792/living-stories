@@ -1,0 +1,14 @@
+:root { --bg:#0d0f14; --fg:#e8e8ee; --accent:#5ad1c8; }
+body { background:var(--bg); color:var(--fg); font-family:Georgia, serif; margin:0; }
+#app { max-width:820px; margin:0 auto; padding:24px; }
+.meter { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:13px; }
+.meter .label { width:130px; opacity:.8; }
+.meter .track { flex:1; height:8px; background:#20242e; border-radius:6px; overflow:hidden; }
+.meter .fill { height:100%; background:var(--accent); transition:width .6s ease; }
+.scene { font-size:19px; line-height:1.6; margin:24px 0; }
+.choice { display:block; width:100%; text-align:left; margin:8px 0; padding:12px 14px;
+  background:#171b24; color:var(--fg); border:1px solid #2a2f3a; border-radius:8px; cursor:pointer; font:inherit; }
+.choice:hover { border-color:var(--accent); }
+.freetext { width:100%; padding:12px; background:#171b24; color:var(--fg);
+  border:1px solid #2a2f3a; border-radius:8px; font:inherit; }
+#flowchart { height:220px; border:1px solid #20242e; border-radius:8px; margin-top:16px; }
