@@ -48,4 +48,20 @@ describe("GameEngine", () => {
     expect(res.ended).toBe(true);
     expect(res.nextNodeId).toBeNull();
   });
+
+  it("survives a mid-game scorer failure: advances with neutral (zero) deltas", async () => {
+    const throwingScorer = {
+      scoreTone: async () => {
+        throw new Error("model exploded");
+      },
+    };
+    const g = new GameEngine(pack as unknown as StoryPack, throwingScorer, new LinearHead());
+    const before = g.state;
+    const res = await g.act({ choiceId: "open" });
+    // turn still advances despite the scorer throwing
+    expect(res.nextNodeId).toBe("talk");
+    expect(g.currentNode.id).toBe("talk");
+    // neutral tone => no meter movement
+    expect(g.state.RAPPORT).toBe(before.RAPPORT);
+  });
 });

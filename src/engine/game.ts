@@ -1,7 +1,7 @@
 import { StoryPack, StoryNode, MeterState } from "../state/storyTypes";
 import { applyDelta } from "../state/meters";
 import { pickTextVariant, selectEdge } from "./router";
-import { ToneScorer, StateHead } from "./scorer";
+import { ToneScorer, StateHead, ToneVector } from "./scorer";
 
 export type ActInput = { choiceId: string } | { text: string };
 export interface ActResult {
@@ -67,7 +67,16 @@ export class GameEngine {
       }
     }
 
-    const tone = await this.scorer.scoreTone(sourceText);
+    // A mid-game scorer failure (transient model/WASM error) must not freeze the
+    // turn — fall back to a neutral tone so the story still advances (load-time
+    // failures are handled separately by main.ts's MockScorer fallback).
+    let tone: ToneVector;
+    try {
+      tone = await this.scorer.scoreTone(sourceText);
+    } catch (err) {
+      console.warn("scoreTone failed; treating as neutral tone:", err);
+      tone = {};
+    }
     const deltas = this.head.delta(tone, this._state);
     this._state = applyDelta(this._state, deltas);
 
