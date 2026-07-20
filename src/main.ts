@@ -1,7 +1,7 @@
 import "./ui/style.css";
 import { StoryManifestEntry, StoryPack } from "./state/storyTypes";
 import { GameEngine, ActInput } from "./engine/game";
-import { MockScorer, LinearHead } from "./engine/scorer";
+import { MockScorer, LinearHead, ToneScorer } from "./engine/scorer";
 import { renderMeters } from "./ui/meters";
 import { renderScene } from "./ui/scene";
 import { renderMenu } from "./ui/menu";
@@ -23,8 +23,14 @@ async function startStory(id: string) {
   const flow = new Flowchart(document.getElementById("flowchart")!, pack);
   flow.markVisited(pack.startNodeId);
 
-  // TODO(Plan 2): swap MockScorer for TransformersScorer.
-  const engine = new GameEngine(pack, new MockScorer(), new LinearHead());
+  let scorer: ToneScorer = new MockScorer();
+  try {
+    const { TransformersScorer } = await import("./ml/transformersScorer");
+    scorer = await TransformersScorer.create();
+  } catch (err) {
+    console.warn("ML scorer unavailable, using MockScorer:", err);
+  }
+  const engine = new GameEngine(pack, scorer, new LinearHead());
 
   function draw(text: string, npcResponse?: string) {
     renderMeters(metersEl, pack.meterLabels, engine.state);
