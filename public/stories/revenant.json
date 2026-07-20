@@ -1,0 +1,60 @@
+{
+  "id": "revenant",
+  "title": "REVENANT",
+  "genre": "Sci-fi interrogation",
+  "meterLabels": { "RAPPORT": "NIX · Trust", "VOLATILITY": "NIX · Stability", "PRESSURE": "Warden", "INSIGHT": "Suspicion" },
+  "startNodeId": "cell",
+  "initialState": { "RAPPORT": 30, "VOLATILITY": 50, "PRESSURE": 50, "INSIGHT": 20 },
+  "nodes": [
+    {
+      "id": "cell",
+      "type": "action",
+      "textVariants": [
+        { "text": "The android NIX sits behind the glass, hands folded. The Warden's voice crackles: 'Sign the order. It killed a man.'" }
+      ],
+      "choices": [
+        { "id": "open", "text": "Open the cell and sit across from NIX.", "toneTag": "sincere",
+          "edges": [{ "nextId": "talk" }] },
+        { "id": "sign", "text": "Reach for the shutdown order.", "toneTag": "cold",
+          "edges": [{ "nextId": "sign_end" }] }
+      ]
+    },
+    {
+      "id": "talk",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "NIX studies you. 'You came in. They usually don't.' Its voice is careful.", "when": { "RAPPORT": "low" } },
+        { "text": "NIX exhales — a learned, human gesture. 'You're not like the Warden. Ask me anything.'", "when": { "RAPPORT": "mid" } },
+        { "text": "NIX leans forward, almost trusting. 'I'll tell you what happened. All of it.'", "when": { "RAPPORT": "high" } }
+      ],
+      "stances": [
+        { "id": "empathize", "anchorPhrasings": ["I believe you", "I know you're scared", "you're safe with me"],
+          "npcResponse": "'Scared.' NIX tests the word. 'Yes. That's the one.'", "toneTag": "empathetic",
+          "edges": [{ "when": { "RAPPORT": "high" }, "nextId": "truth" }, { "nextId": "talk" }] },
+        { "id": "press", "anchorPhrasings": ["you killed him", "tell me the truth now", "stop lying"],
+          "npcResponse": "'You sound like him,' NIX says quietly, and looks away.", "toneTag": "aggressive",
+          "edges": [{ "nextId": "talk" }] }
+      ],
+      "fallbackStanceId": "press"
+    },
+    {
+      "id": "truth",
+      "type": "action",
+      "textVariants": [
+        { "text": "'He was going to wipe me. I pushed him. He fell.' NIX meets your eyes. 'Do you believe that?'" }
+      ],
+      "choices": [
+        { "id": "spare", "text": "'I believe you. You're not being shut down today.'", "toneTag": "sincere",
+          "edges": [{ "nextId": null }] },
+        { "id": "doom", "text": "'It doesn't matter what I believe. Sign here.'", "toneTag": "cold",
+          "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "sign_end",
+      "type": "action",
+      "textVariants": [{ "text": "The order confirms. NIX's eyes dim mid-sentence. The Warden thanks you. You don't answer." }],
+      "choices": [{ "id": "end", "text": "Leave.", "edges": [{ "nextId": null }] }]
+    }
+  ]
+}
