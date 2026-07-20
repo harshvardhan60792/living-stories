@@ -249,7 +249,7 @@ export interface StoryManifestEntry {
         { "text": "The android NIX sits behind the glass, hands folded. The Warden's voice crackles: 'Sign the order. It killed a man.'" }
       ],
       "choices": [
-        { "id": "open", "text": "Open the cell and sit across from NIX.", "toneTag": "sincere",
+        { "id": "open", "text": "Open the cell and sit across from NIX, so it feels safe enough to trust you.", "toneTag": "sincere",
           "edges": [{ "nextId": "talk" }] },
         { "id": "sign", "text": "Reach for the shutdown order.", "toneTag": "cold",
           "edges": [{ "nextId": "sign_end" }] }

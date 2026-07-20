@@ -25,7 +25,7 @@ export class GameEngine {
   }
 
   get currentNode(): StoryNode { return this._current; }
-  get state(): MeterState { return this._state; }
+  get state(): MeterState { return { ...this._state }; }
   get history(): string[] { return this._history; }
 
   currentText(): string { return pickTextVariant(this._current, this._state); }
