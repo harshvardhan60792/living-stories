@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { matchesCondition, pickTextVariant, selectEdge } from "../src/engine/router";
 import { bands } from "../src/state/meters";
-import { StoryNode } from "../src/state/storyTypes";
+import { StoryNode, Edge } from "../src/state/storyTypes";
 
 const state = { RAPPORT: 80, VOLATILITY: 50, PRESSURE: 20, INSIGHT: 50 };
 
@@ -21,8 +21,8 @@ describe("router", () => {
     expect(pickTextVariant(node, state)).toBe("high-rapport");
   });
   it("selects the first matching edge, else undefined", () => {
-    const edges = [{ when: { RAPPORT: "low" }, nextId: "a" }, { nextId: "b" }];
+    const edges: Edge[] = [{ when: { RAPPORT: "low" }, nextId: "a" }, { nextId: "b" }];
     expect(selectEdge(edges, state)?.nextId).toBe("b");
-    expect(selectEdge([{ when: { PRESSURE: "high" }, nextId: "a" }], state)).toBeUndefined();
+    expect(selectEdge([{ when: { PRESSURE: "high" }, nextId: "a" }] as Edge[], state)).toBeUndefined();
   });
 });
