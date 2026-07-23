@@ -284,6 +284,7 @@ def export_onnx(repo):
             "logits": {0: "batch"},
         },
         opset_version=14,
+        dynamo=False,  # legacy TorchScript exporter; the default dynamo path needs onnxscript
     )
     quantize_dynamic(f"{out_dir}/model.onnx", f"{out_dir}/model_quantized.onnx",
                       weight_type=QuantType.QUInt8)
