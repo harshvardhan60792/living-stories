@@ -16,6 +16,9 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - run: npm ci
+      # `npm test` includes tests/packs.valid.test.ts (Plan 5 T8): every
+      # public/stories/*.json must pass validatePack, so an invalid pack fails
+      # the deploy here instead of shipping a broken story.
       - run: npm test
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
