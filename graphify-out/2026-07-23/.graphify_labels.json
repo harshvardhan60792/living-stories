@@ -20,5 +20,6 @@
   "18": "train_state_head.py",
   "19": "build-labels.ts",
   "20": "test_state_head.py",
-  "21": "validatePack.ts"
+  "21": "validatePack.ts",
+  "22": "stats.ts"
 }

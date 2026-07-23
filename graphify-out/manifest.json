@@ -30,8 +30,8 @@
     "semantic_hash": "ad20e623911b3e1134e9e4d564e09921"
   },
   "src/main.ts": {
-    "mtime": 1784820287.4948015,
-    "ast_hash": "437c923a56b5b6a3ab272905787a85a9",
+    "mtime": 1784820638.4657452,
+    "ast_hash": "bbf2d9698cc1a332ea960fe02126714b",
     "semantic_hash": ""
   },
   "src/ml/transformersScorer.ts": {
@@ -65,8 +65,8 @@
     "semantic_hash": "8b8d50b3873657c14c59076d46c1bb4b"
   },
   "src/ui/scene.ts": {
-    "mtime": 1784780296.4294102,
-    "ast_hash": "40f2efbc6f3f9e5c4943e7678b652693",
+    "mtime": 1784820687.4286258,
+    "ast_hash": "78d6d4c919d5380f6e63483ff8b7e7ad",
     "semantic_hash": ""
   },
   "src/vite-env.d.ts": {
@@ -332,6 +332,16 @@
   "tests/stats.test.ts": {
     "mtime": 1784820322.7845323,
     "ast_hash": "1baff5ca2db1a73f01913e4cb41c4757",
+    "semantic_hash": ""
+  },
+  "src/ui/deltaPreview.ts": {
+    "mtime": 1784820591.336184,
+    "ast_hash": "05a4a5ee158342fc8f134ed5bbbe8e78",
+    "semantic_hash": ""
+  },
+  "tests/deltaPreview.test.ts": {
+    "mtime": 1784820661.780958,
+    "ast_hash": "1edf38d8aef5aa8765e79a132904d2c0",
     "semantic_hash": ""
   }
 }
