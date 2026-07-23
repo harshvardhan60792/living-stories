@@ -1,6 +1,6 @@
 import { cosineSimilarity } from "./similarity";
 import { Embedder } from "./embedder";
-import { Stance } from "../state/storyTypes";
+import { Stance, StoryPack } from "../state/storyTypes";
 
 /**
  * Pure nearest-stance selection. `stanceAnchors[i]` is the list of anchor
@@ -55,4 +55,25 @@ export class StanceRouter {
     if (!hit) return { stanceId: this.fallbackStanceId, score: 0, isFallback: true };
     return { stanceId: this.stances[hit.index].id, score: hit.score, isFallback: false };
   }
+}
+
+/**
+ * Build one StanceRouter per DIALOGUE node in a pack, keyed by node id.
+ * Action nodes have no stances and are skipped, so `index.has(actionId)` is false.
+ * Anchor embeddings are computed once here at load time.
+ */
+export async function buildStanceIndex(
+  pack: StoryPack,
+  embedder: Embedder,
+  threshold?: number,
+): Promise<Map<string, StanceRouter>> {
+  const index = new Map<string, StanceRouter>();
+  for (const node of pack.nodes) {
+    if (node.type !== "dialogue") continue;
+    index.set(
+      node.id,
+      await StanceRouter.build(embedder, node.stances, node.fallbackStanceId, threshold),
+    );
+  }
+  return index;
 }

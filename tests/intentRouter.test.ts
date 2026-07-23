@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { nearestStance, StanceRouter } from "../src/engine/intentRouter";
+import { nearestStance, StanceRouter, buildStanceIndex } from "../src/engine/intentRouter";
 import { MockEmbedder } from "../src/engine/embedder";
 import pack from "../public/stories/revenant.json";
 import { StoryPack } from "../src/state/storyTypes";
@@ -33,5 +33,15 @@ describe("StanceRouter over the revenant 'talk' node", () => {
     const out = await r.route("what is the weather forecast tomorrow");
     expect(out.isFallback).toBe(true);
     expect(out.stanceId).toBe(talk.fallbackStanceId);
+  });
+});
+
+describe("buildStanceIndex", () => {
+  it("has a router for dialogue nodes and none for action nodes", async () => {
+    const index = await buildStanceIndex(pack as unknown as StoryPack, new MockEmbedder(), 0.3);
+    expect(index.has("talk")).toBe(true); // dialogue node
+    expect(index.has("cell")).toBe(false); // action node
+    const out = await index.get("talk")!.route("I believe you");
+    expect(out.stanceId).toBe("empathize");
   });
 });
