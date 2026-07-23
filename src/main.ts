@@ -25,6 +25,7 @@ async function startStory(id: string) {
   const sceneEl = document.getElementById("scene")!;
   const flow = new Flowchart(document.getElementById("flowchart")!, pack);
   flow.markVisited(pack.startNodeId);
+  flow.refreshGhosts([pack.startNodeId]);
 
   // Models lazy-load from the HF Hub on first play; show a placeholder so the
   // scene area isn't blank while they download (cold load can take some seconds).
@@ -85,6 +86,7 @@ async function startStory(id: string) {
       return;
     }
     flow.markVisited(engine.currentNode.id, from);
+    flow.refreshGhosts(engine.history);
     draw(res.text, res.npcResponse, res.stanceId);
   }
   draw(engine.currentText());
