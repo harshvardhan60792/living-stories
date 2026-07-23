@@ -1,3 +1,6 @@
+// @vitest-environment node
+// ORT-node's native binding type-checks tensors against Node's real Float32Array;
+// jsdom (the default env) swaps in its own, which fails the check. Run in node env.
 import { describe, it, expect } from "vitest";
 import { TransformersScorer } from "../src/ml/transformersScorer";
 import { TONE_LABELS } from "../src/engine/scorer";
