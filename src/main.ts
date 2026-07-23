@@ -1,7 +1,9 @@
 import "./ui/style.css";
 import { StoryManifestEntry, StoryPack } from "./state/storyTypes";
 import { GameEngine, ActInput } from "./engine/game";
-import { MockScorer, LinearHead, ToneScorer } from "./engine/scorer";
+import { MockScorer, LinearHead, ToneScorer, StateHead } from "./engine/scorer";
+import { LearnedStateHead, StateHeadWeights } from "./engine/learnedStateHead";
+import stateHeadWeights from "../ml-training/artifacts/state_head_weights.json";
 import type { StanceRouter } from "./engine/intentRouter";
 import { renderMeters } from "./ui/meters";
 import { renderScene } from "./ui/scene";
@@ -50,7 +52,17 @@ async function startStory(id: string) {
     console.warn("stance router unavailable, using fallback stances:", err);
   }
 
-  const engine = new GameEngine(pack, scorer, new LinearHead(), stanceIndex);
+  // Learned tone->meter head (Plan 3 Task 5/8), bundled weights — no network fetch.
+  // Falls back to the hand-tuned LinearHead only if the weights JSON is somehow bad.
+  let head: StateHead;
+  try {
+    head = new LearnedStateHead(stateHeadWeights as unknown as StateHeadWeights);
+  } catch (err) {
+    console.warn("LearnedStateHead unavailable, using LinearHead:", err);
+    head = new LinearHead();
+  }
+
+  const engine = new GameEngine(pack, scorer, head, stanceIndex);
 
   function draw(text: string, npcResponse?: string, stanceId?: string) {
     renderMeters(metersEl, pack.meterLabels, engine.state);

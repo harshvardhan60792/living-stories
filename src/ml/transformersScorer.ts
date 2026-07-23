@@ -8,7 +8,9 @@ import { ToneScorer, ToneVector, TONE_LABELS } from "../engine/scorer";
 export class TransformersScorer implements ToneScorer {
   private constructor(private clf: TextClassificationPipeline) {}
 
-  static async create(modelId = "Xenova/distilbert-base-uncased-finetuned-sst-2-english"): Promise<TransformersScorer> {
+  // Fine-tuned MiniLM tone classifier (Plan 3 Task 3/6): emits the 14 TONE_LABELS
+  // directly as its output labels, so mapLabel below is an identity check.
+  static async create(modelId = "Harsh-ag26/living-stories-tone-encoder"): Promise<TransformersScorer> {
     const clf = (await pipeline("text-classification", modelId, { dtype: "q8" })) as TextClassificationPipeline;
     return new TransformersScorer(clf);
   }
@@ -29,11 +31,9 @@ export class TransformersScorer implements ToneScorer {
   }
 }
 
-/** Placeholder remap; Plan 2's model emits TONE_LABELS directly and this becomes identity. */
+/** The fine-tuned encoder emits TONE_LABELS directly, so this is an identity check
+ *  that just drops any label outside the taxonomy. */
 function mapLabel(label: string): string | null {
   const l = label.toLowerCase();
-  if (l === "positive") return "empathetic";
-  if (l === "negative") return "aggressive";
-  if (TONE_LABELS.includes(l as any)) return l;
-  return null;
+  return TONE_LABELS.includes(l as any) ? l : null;
 }
