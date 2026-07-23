@@ -1,0 +1,26 @@
+{
+  "id": "seventh-guest",
+  "title": "THE SEVENTH GUEST",
+  "genre": "Gothic mystery",
+  "premise": "Six strangers receive a dinner invitation from Elias Vane, a railway magnate who drowned a year ago. You are the seventh guest — the one whose name is not on any card. Madame Reyes, Elias's medium, seals the manor for the night and promises the dead host will speak through her before dawn. One guest at this table pushed Elias off the pier. The house, and the medium, already know which.",
+  "characters": [
+    { "name": "MADAME REYES", "role": "the medium who binds the night", "voice": "theatrical, coaxing, answers questions with questions; never quite lies" },
+    { "name": "COLONEL HARROW", "role": "the accused who protests loudest", "voice": "clipped, defensive, retreats into rank when cornered" },
+    { "name": "ELIAS VANE", "role": "the drowned host, heard only through Reyes", "voice": "calm, patient, grieving; speaks as if he has all the time in the world" }
+  ],
+  "theTruth": "Elias staged his own drowning. He gathered the six people who ruined him to extract a confession, and needs the seventh guest — an impartial witness with no stake — to hear it and carry it out of the house. The 'murder' the guests fear never happened; the real crime is what each of them did to Elias before the pier.",
+  "tone": "candlelit dread; Agatha Christie by way of a séance. Restraint over gore — the horror is social, the pressure is who believes whom.",
+  "meterTheming": {
+    "RAPPORT": "Elias · Trust",
+    "VOLATILITY": "The Séance · Unrest",
+    "PRESSURE": "The Table's Suspicion",
+    "INSIGHT": "The Truth Uncovered"
+  },
+  "nodeBudget": { "minDepth": 4, "maxDepth": 9 },
+  "startSituation": "The doors lock behind you. Reyes lights a seventh candle, sets an empty chair, and asks the table why a stranger with no invitation would come to a dead man's dinner.",
+  "endings": [
+    { "id": "witness", "label": "You carried Elias's confession out", "summary": "High INSIGHT and Elias's Trust: you hear the truth, believe it, and leave to make it known — Elias is at peace." },
+    { "id": "accused", "label": "You named the wrong killer", "summary": "High Suspicion, low Insight: the table turns on Harrow on your word; the real truth dies with the night." },
+    { "id": "consumed", "label": "The séance took you", "summary": "Volatility maxed: you push the ritual too hard, the night comes apart, and the seventh chair is no longer empty at dawn." }
+  ]
+}
