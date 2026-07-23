@@ -32,6 +32,7 @@ from sklearn.metrics import f1_score
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    DataCollatorWithPadding,
     Trainer,
     TrainingArguments,
 )
@@ -201,6 +202,7 @@ def main():
         model=model, args=args,
         train_dataset=split["train"], eval_dataset=split["test"],
         compute_metrics=metrics,
+        data_collator=DataCollatorWithPadding(tok),  # dynamic pad: rows vary in length (padding=False above)
     )
     trainer.train()
     print("eval:", trainer.evaluate())
