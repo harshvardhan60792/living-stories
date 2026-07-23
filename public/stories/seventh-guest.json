@@ -1,0 +1,278 @@
+{
+  "id": "seventh-guest",
+  "title": "THE SEVENTH GUEST",
+  "genre": "Gothic mystery",
+  "meterLabels": {
+    "RAPPORT": "Elias · Trust",
+    "VOLATILITY": "The Séance · Unrest",
+    "PRESSURE": "The Table's Suspicion",
+    "INSIGHT": "The Truth Uncovered"
+  },
+  "startNodeId": "start",
+  "initialState": {
+    "RAPPORT": 30,
+    "VOLATILITY": 50,
+    "PRESSURE": 40,
+    "INSIGHT": 20
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "type": "action",
+      "textVariants": [
+        {
+          "text": "The doors lock behind you. Madame Reyes lights a seventh candle and sets an empty chair. 'A stranger with no invitation,' she murmurs, 'at a dead man's dinner. Tell the table why you came.'"
+        }
+      ],
+      "choices": [
+        {
+          "id": "honest",
+          "text": "'I was sent to witness. Nothing more.'",
+          "toneTag": "sincere",
+          "edges": [
+            {
+              "nextId": "table"
+            }
+          ]
+        },
+        {
+          "id": "probe",
+          "text": "'Which of you knew Elias best?'",
+          "toneTag": "curious",
+          "edges": [
+            {
+              "nextId": "table"
+            }
+          ]
+        },
+        {
+          "id": "leave",
+          "text": "Try the locked door anyway.",
+          "toneTag": "defiant",
+          "edges": [
+            {
+              "nextId": "door"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table",
+      "type": "dialogue",
+      "textVariants": [
+        {
+          "text": "Colonel Harrow's glass stops halfway. 'Elias drowned. That's the end of it.' The candle gutters though no door has opened."
+        }
+      ],
+      "stances": [
+        {
+          "id": "reassure",
+          "anchorPhrasings": [
+            "no one is on trial",
+            "we're all frightened",
+            "let's just listen"
+          ],
+          "npcResponse": "Harrow's shoulders drop half an inch. 'Fine. We listen.'",
+          "toneTag": "reassuring",
+          "edges": [
+            {
+              "nextId": "seance"
+            }
+          ]
+        },
+        {
+          "id": "accuse",
+          "anchorPhrasings": [
+            "you pushed him",
+            "you were at the pier",
+            "admit what you did"
+          ],
+          "npcResponse": "'How DARE you,' Harrow says, and every eye turns to him.",
+          "toneTag": "threatening",
+          "edges": [
+            {
+              "when": {
+                "PRESSURE": "high"
+              },
+              "nextId": "accused_end"
+            },
+            {
+              "nextId": "seance"
+            }
+          ]
+        }
+      ],
+      "fallbackStanceId": "reassure"
+    },
+    {
+      "id": "door",
+      "type": "action",
+      "textVariants": [
+        {
+          "text": "The handle is cold and does not turn. Behind you the table has gone quiet, watching the stranger who would rather flee than sit."
+        }
+      ],
+      "choices": [
+        {
+          "id": "return",
+          "text": "Return to the table.",
+          "toneTag": "apologetic",
+          "edges": [
+            {
+              "nextId": "table"
+            }
+          ]
+        },
+        {
+          "id": "force",
+          "text": "Throw your shoulder against the door.",
+          "toneTag": "defiant",
+          "edges": [
+            {
+              "when": {
+                "VOLATILITY": "high"
+              },
+              "nextId": "consumed_end"
+            },
+            {
+              "nextId": "table"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seance",
+      "type": "dialogue",
+      "textVariants": [
+        {
+          "text": "Reyes's voice drops an octave. 'You came in,' Elias says through her, patient as tidewater. 'The others owe me a death. You owe me only your ear.'",
+          "when": {
+            "RAPPORT": "mid"
+          }
+        },
+        {
+          "text": "'You believe me,' Elias says, and the candles steady. 'Then hear the rest, and carry it out.'",
+          "when": {
+            "RAPPORT": "high"
+          }
+        },
+        {
+          "text": "The medium's hand shakes. Something in the room does not want to be named.",
+          "when": {
+            "RAPPORT": "low"
+          }
+        }
+      ],
+      "stances": [
+        {
+          "id": "believe",
+          "anchorPhrasings": [
+            "tell me the truth",
+            "I'm listening, Elias",
+            "what really happened"
+          ],
+          "npcResponse": "'I was never in that water,' Elias says. 'I walked away, to watch them. And you will tell them so.'",
+          "toneTag": "curious",
+          "edges": [
+            {
+              "when": {
+                "INSIGHT": "high"
+              },
+              "nextId": "witness_end"
+            },
+            {
+              "nextId": "seance"
+            }
+          ]
+        },
+        {
+          "id": "resist",
+          "anchorPhrasings": [
+            "this is a trick",
+            "stop the ritual",
+            "you're lying to us"
+          ],
+          "npcResponse": "The flames roar sideways. Reyes screams in a voice that is not hers.",
+          "toneTag": "defiant",
+          "edges": [
+            {
+              "when": {
+                "VOLATILITY": "high"
+              },
+              "nextId": "consumed_end"
+            },
+            {
+              "nextId": "seance"
+            }
+          ]
+        }
+      ],
+      "fallbackStanceId": "believe"
+    },
+    {
+      "id": "accused_end",
+      "type": "action",
+      "textVariants": [
+        {
+          "text": "They take Harrow at your word. He does not fight it. Only later, in the empty hall, do you understand the candle never once pointed at him — and that the truth left with the tide."
+        }
+      ],
+      "choices": [
+        {
+          "id": "leave",
+          "text": "Say nothing.",
+          "ending": "You named the wrong killer",
+          "edges": [
+            {
+              "nextId": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consumed_end",
+      "type": "action",
+      "textVariants": [
+        {
+          "text": "The seventh candle goes out. When the others relight it, the seventh chair is filled — and your invitation, at last, has your name on it."
+        }
+      ],
+      "choices": [
+        {
+          "id": "leave",
+          "text": "—",
+          "ending": "The seance took you",
+          "edges": [
+            {
+              "nextId": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "witness_end",
+      "type": "action",
+      "textVariants": [
+        {
+          "text": "At dawn the door opens on its own. You step out with Elias's confession folded in your coat — the only guest the house lets leave. Behind you, six people begin, at last, to weep."
+        }
+      ],
+      "choices": [
+        {
+          "id": "leave",
+          "text": "Walk out into the morning.",
+          "ending": "You carried Elias's confession out",
+          "edges": [
+            {
+              "nextId": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

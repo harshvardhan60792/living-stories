@@ -1,3 +1,4 @@
 [
-  { "id": "revenant", "title": "REVENANT", "genre": "Sci-fi interrogation", "blurb": "One android. One night. One signature that ends a life — or doesn't." }
+  { "id": "revenant", "title": "REVENANT", "genre": "Sci-fi interrogation", "blurb": "One android. One night. One signature that ends a life — or doesn't." },
+  { "id": "seventh-guest", "title": "THE SEVENTH GUEST", "genre": "Gothic mystery", "blurb": "Six guests. One drowned host. One empty chair with your name on it." }
 ]
