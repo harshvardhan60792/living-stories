@@ -2,6 +2,7 @@ import { StoryPack, StoryNode, MeterState } from "../state/storyTypes";
 import { applyDelta } from "../state/meters";
 import { pickTextVariant, selectEdge } from "./router";
 import { ToneScorer, StateHead, ToneVector } from "./scorer";
+import { StanceRouter } from "./intentRouter";
 
 export type ActInput = { choiceId: string } | { text: string };
 export interface ActResult {
@@ -11,6 +12,7 @@ export interface ActResult {
   state: MeterState;
   nextNodeId: string | null;
   ended: boolean;
+  stanceId?: string; // which dialogue stance drove this turn, if any
 }
 
 export class GameEngine {
@@ -18,7 +20,12 @@ export class GameEngine {
   private _current: StoryNode;
   private _history: string[] = [];
 
-  constructor(private pack: StoryPack, private scorer: ToneScorer, private head: StateHead) {
+  constructor(
+    private pack: StoryPack,
+    private scorer: ToneScorer,
+    private head: StateHead,
+    private stanceIndex?: Map<string, StanceRouter>,
+  ) {
     this._state = { ...pack.initialState };
     this._current = this.node(pack.startNodeId);
     this._history.push(this._current.id);
@@ -39,6 +46,7 @@ export class GameEngine {
   async act(input: ActInput): Promise<ActResult> {
     let sourceText: string;
     let npcResponse: string | undefined;
+    let stanceId: string | undefined;
     let edges;
 
     if (this._current.type === "action") {
@@ -57,13 +65,25 @@ export class GameEngine {
         sourceText = st.anchorPhrasings[0] ?? "";
         npcResponse = st.npcResponse;
         edges = st.edges;
+        stanceId = st.id;
       } else {
-        // free text: Plan 4 adds semantic routing; here, fall back stance for routing,
-        // but score the ACTUAL typed text for relationship deltas.
-        const fb = current.stances.find((s) => s.id === current.fallbackStanceId)!;
+        // Free text (Layer 2): semantically route to the nearest authored stance.
+        // Layer 1 still scores the ACTUAL typed text for relationship deltas below.
+        // A routing failure (or no router) must not freeze the turn — degrade to
+        // the authored fallback stance, mirroring the scoreTone guard.
+        stanceId = current.fallbackStanceId;
+        const router = this.stanceIndex?.get(current.id);
+        if (router) {
+          try {
+            stanceId = (await router.route(input.text)).stanceId;
+          } catch (err) {
+            console.warn("stance routing failed; using fallback stance:", err);
+          }
+        }
+        const st = current.stances.find((s) => s.id === stanceId) ?? current.stances[0];
         sourceText = input.text;
-        npcResponse = fb.npcResponse;
-        edges = fb.edges;
+        npcResponse = st.npcResponse;
+        edges = st.edges;
       }
     }
 
@@ -87,6 +107,6 @@ export class GameEngine {
       this._current = this.node(nextNodeId!);
       this._history.push(this._current.id);
     }
-    return { text: ended ? "" : this.currentText(), npcResponse, deltas, state: this._state, nextNodeId, ended };
+    return { text: ended ? "" : this.currentText(), npcResponse, deltas, state: this._state, nextNodeId, ended, stanceId };
   }
 }

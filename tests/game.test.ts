@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { GameEngine } from "../src/engine/game";
 import { MockScorer, LinearHead } from "../src/engine/scorer";
+import { buildStanceIndex } from "../src/engine/intentRouter";
+import { MockEmbedder } from "../src/engine/embedder";
 import pack from "../public/stories/revenant.json";
 import { StoryPack } from "../src/state/storyTypes";
 
@@ -47,6 +49,22 @@ describe("GameEngine", () => {
     const res = await g.act({ choiceId: "end" });
     expect(res.ended).toBe(true);
     expect(res.nextNodeId).toBeNull();
+  });
+
+  it("free text routes to the nearest authored stance", async () => {
+    const index = await buildStanceIndex(pack as unknown as StoryPack, new MockEmbedder(), 0.3);
+    const g = new GameEngine(pack as unknown as StoryPack, new MockScorer(), new LinearHead(), index);
+    await g.act({ choiceId: "open" }); // -> talk
+    const res = await g.act({ text: "I believe you, you're safe with me" });
+    expect(res.stanceId).toBe("empathize");
+    expect(res.npcResponse).toContain("Scared"); // empathize stance's authored line
+  });
+
+  it("without a stance index, free text uses the fallback stance (back-compat)", async () => {
+    const g = new GameEngine(pack as unknown as StoryPack, new MockScorer(), new LinearHead());
+    await g.act({ choiceId: "open" });
+    const res = await g.act({ text: "anything at all" });
+    expect(res.stanceId).toBe("press"); // fallbackStanceId
   });
 
   it("survives a mid-game scorer failure: advances with neutral (zero) deltas", async () => {
