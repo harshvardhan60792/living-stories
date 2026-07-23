@@ -1,0 +1,322 @@
+{
+  "package.json": {
+    "mtime": 1784539396.4686735,
+    "ast_hash": "ab4e10fe89a20318e1c02352f0397bbf",
+    "semantic_hash": "ab4e10fe89a20318e1c02352f0397bbf"
+  },
+  "public/stories/index.json": {
+    "mtime": 1784522792.3752353,
+    "ast_hash": "f8d7d5e94c5920f1befa470ea63586c9",
+    "semantic_hash": "f8d7d5e94c5920f1befa470ea63586c9"
+  },
+  "public/stories/revenant.json": {
+    "mtime": 1784524824.2181926,
+    "ast_hash": "86dd1902cae7ac821b50d33e02483818",
+    "semantic_hash": "86dd1902cae7ac821b50d33e02483818"
+  },
+  "src/engine/game.ts": {
+    "mtime": 1784780073.4016879,
+    "ast_hash": "fc8c94c41edc3ffd9861cfa0ac98b087",
+    "semantic_hash": ""
+  },
+  "src/engine/router.ts": {
+    "mtime": 1784523294.8495839,
+    "ast_hash": "ec59e31ee362a50041daf82c42ba93b5",
+    "semantic_hash": "ec59e31ee362a50041daf82c42ba93b5"
+  },
+  "src/engine/scorer.ts": {
+    "mtime": 1784523558.4372375,
+    "ast_hash": "ad20e623911b3e1134e9e4d564e09921",
+    "semantic_hash": "ad20e623911b3e1134e9e4d564e09921"
+  },
+  "src/main.ts": {
+    "mtime": 1784819020.1469269,
+    "ast_hash": "71c4b20ee81a9af877ddfb8fef4849ac",
+    "semantic_hash": ""
+  },
+  "src/ml/transformersScorer.ts": {
+    "mtime": 1784817923.646469,
+    "ast_hash": "f1ac5feca0a74fc9c6e1d4c7211c33d7",
+    "semantic_hash": ""
+  },
+  "src/state/meters.ts": {
+    "mtime": 1784523055.6413054,
+    "ast_hash": "b05be112e337ba7950b96482fa00ff92",
+    "semantic_hash": "b05be112e337ba7950b96482fa00ff92"
+  },
+  "src/state/storyTypes.ts": {
+    "mtime": 1784522775.4696026,
+    "ast_hash": "599c199f694f9f7c729d47036a082768",
+    "semantic_hash": "599c199f694f9f7c729d47036a082768"
+  },
+  "src/ui/flowchart.ts": {
+    "mtime": 1784818843.3113666,
+    "ast_hash": "c5b58869dd8ede45423707191ad9a404",
+    "semantic_hash": ""
+  },
+  "src/ui/menu.ts": {
+    "mtime": 1784525547.6715972,
+    "ast_hash": "e2f3345a8683a414015274bb09d81f70",
+    "semantic_hash": "e2f3345a8683a414015274bb09d81f70"
+  },
+  "src/ui/meters.ts": {
+    "mtime": 1784525002.1252496,
+    "ast_hash": "8b8d50b3873657c14c59076d46c1bb4b",
+    "semantic_hash": "8b8d50b3873657c14c59076d46c1bb4b"
+  },
+  "src/ui/scene.ts": {
+    "mtime": 1784780296.4294102,
+    "ast_hash": "40f2efbc6f3f9e5c4943e7678b652693",
+    "semantic_hash": ""
+  },
+  "src/vite-env.d.ts": {
+    "mtime": 1784527070.7427068,
+    "ast_hash": "0352474ba2918efe13895edbc3780d94",
+    "semantic_hash": "0352474ba2918efe13895edbc3780d94"
+  },
+  "tests/flowchart.test.ts": {
+    "mtime": 1784525343.0552585,
+    "ast_hash": "a86cb06ed7a1964203f7469b3625aaec",
+    "semantic_hash": "a86cb06ed7a1964203f7469b3625aaec"
+  },
+  "tests/game.test.ts": {
+    "mtime": 1784780085.8705194,
+    "ast_hash": "8d01f09d394f550fc639bbf55f151e0a",
+    "semantic_hash": ""
+  },
+  "tests/menu.test.ts": {
+    "mtime": 1784525532.1164293,
+    "ast_hash": "280742c39e9d1d9f8244381123e333f9",
+    "semantic_hash": "280742c39e9d1d9f8244381123e333f9"
+  },
+  "tests/meters.test.ts": {
+    "mtime": 1784523038.0147285,
+    "ast_hash": "2043e9b5ebe9009c27c8e47bb46aad70",
+    "semantic_hash": "2043e9b5ebe9009c27c8e47bb46aad70"
+  },
+  "tests/metersUi.test.ts": {
+    "mtime": 1784524880.9286935,
+    "ast_hash": "1f21e3766e1af4c5ed2522c8f259ef9f",
+    "semantic_hash": "1f21e3766e1af4c5ed2522c8f259ef9f"
+  },
+  "tests/router.test.ts": {
+    "mtime": 1784527074.8010373,
+    "ast_hash": "b91816ec8508f7239d3b05a0fd9ce2a6",
+    "semantic_hash": "b91816ec8508f7239d3b05a0fd9ce2a6"
+  },
+  "tests/sceneUi.test.ts": {
+    "mtime": 1784525140.6593683,
+    "ast_hash": "580dc53f5eecb75e9c68ce93f0f853fe",
+    "semantic_hash": "580dc53f5eecb75e9c68ce93f0f853fe"
+  },
+  "tests/scorer.test.ts": {
+    "mtime": 1784523499.5813324,
+    "ast_hash": "d75c61812c55ebc0d2be24e061174808",
+    "semantic_hash": "d75c61812c55ebc0d2be24e061174808"
+  },
+  "tests/smoke.test.ts": {
+    "mtime": 1784522065.6126454,
+    "ast_hash": "b3983ec31655f5b9d1a72987f25fed25",
+    "semantic_hash": "b3983ec31655f5b9d1a72987f25fed25"
+  },
+  "tests/storyPack.test.ts": {
+    "mtime": 1784522806.028534,
+    "ast_hash": "40084321575484b601eae70f47edce8a",
+    "semantic_hash": "40084321575484b601eae70f47edce8a"
+  },
+  "tests/transformersScorer.test.ts": {
+    "mtime": 1784782891.0316315,
+    "ast_hash": "fe455a000faf31d7740c60244ab1cdef",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1784522799.437418,
+    "ast_hash": "fd6d41e3c7a2877feac6d5751c23261f",
+    "semantic_hash": "fd6d41e3c7a2877feac6d5751c23261f"
+  },
+  "vite.config.ts": {
+    "mtime": 1784526803.940833,
+    "ast_hash": "df6d79d6f2034a7f206a24bc3dad2ac8",
+    "semantic_hash": "df6d79d6f2034a7f206a24bc3dad2ac8"
+  },
+  "vitest.config.ts": {
+    "mtime": 1784522539.4871697,
+    "ast_hash": "c93a5e61b889197e312c89ed973408ab",
+    "semantic_hash": "c93a5e61b889197e312c89ed973408ab"
+  },
+  ".claude/launch.json": {
+    "mtime": 1784780334.465314,
+    "ast_hash": "13d552e9d6e18a8c558c5ad407e91708",
+    "semantic_hash": ""
+  },
+  ".claude/settings.json": {
+    "mtime": 1784752108.7269282,
+    "ast_hash": "cd97714e947cad4cba42471eef1c567a",
+    "semantic_hash": ""
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1784752384.5431669,
+    "ast_hash": "0fcc8665e572ab7be3dc76db735a1775",
+    "semantic_hash": ""
+  },
+  "src/engine/embedder.ts": {
+    "mtime": 1784752430.972999,
+    "ast_hash": "98dbcd691ca6368c0d99c041d885586d",
+    "semantic_hash": ""
+  },
+  "src/engine/intentRouter.ts": {
+    "mtime": 1784780013.4761205,
+    "ast_hash": "c0e6a66e3d518d5abc3c4a9b998cb776",
+    "semantic_hash": ""
+  },
+  "src/engine/similarity.ts": {
+    "mtime": 1784752427.2224958,
+    "ast_hash": "09bda6ea072b0ab2a7b6c94830df69d3",
+    "semantic_hash": ""
+  },
+  "src/ml/transformersEmbedder.ts": {
+    "mtime": 1784780130.0900912,
+    "ast_hash": "b840733aea5c405cebfc56d441767c29",
+    "semantic_hash": ""
+  },
+  "tests/embedder.test.ts": {
+    "mtime": 1784752424.684381,
+    "ast_hash": "28bd5f2be19a3f13a229a69381b1396e",
+    "semantic_hash": ""
+  },
+  "tests/intentRouter.test.ts": {
+    "mtime": 1784780022.038718,
+    "ast_hash": "9c93d9131ab24e8d41ee028fcf2dc20d",
+    "semantic_hash": ""
+  },
+  "tests/similarity.test.ts": {
+    "mtime": 1784752420.7947984,
+    "ast_hash": "de7ef33a1e486570146473802bdb83a5",
+    "semantic_hash": ""
+  },
+  "tests/transformersEmbedder.test.ts": {
+    "mtime": 1784782881.7271748,
+    "ast_hash": "9a73c8893f9cf46b9926c257dc2f99c4",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1784783253.2059877,
+    "ast_hash": "c69fb07250e91476079640ab577475f4",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1784751815.5589535,
+    "ast_hash": "8a6643a420fdad6bfb583523bc6cef16",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-20-web-engine-and-client-ml.md": {
+    "mtime": 1784524825.7309964,
+    "ast_hash": "fd4d93b457d7e0588a6dd688b138b708",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-23-free-text-dialogue-routing.md": {
+    "mtime": 1784751515.0510106,
+    "ast_hash": "128c43df4ee34e36460006ae509d3d2f",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-07-20-ai-interactive-fiction-design.md": {
+    "mtime": 1784520539.1103525,
+    "ast_hash": "6e19001147f9d3b2c3d8225476ef2eff",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1784522056.8277533,
+    "ast_hash": "5ae141d9cf8241264c1c0a6732c874b2",
+    "semantic_hash": ""
+  },
+  "ml-training/taxonomy.py": {
+    "mtime": 1784783139.7999887,
+    "ast_hash": "3f971063edaa7f70bc21d50fb4f9b689",
+    "semantic_hash": ""
+  },
+  "ml-training/tests/test_taxonomy.py": {
+    "mtime": 1784782219.2808385,
+    "ast_hash": "4999c7210fd623b33cdac3a6344cff65",
+    "semantic_hash": ""
+  },
+  "scripts/build-labels.ts": {
+    "mtime": 1784783056.4944503,
+    "ast_hash": "e22d3295a49fb0cbd48736aa53c4a7ba",
+    "semantic_hash": ""
+  },
+  "tests/buildLabels.test.ts": {
+    "mtime": 1784783086.6510856,
+    "ast_hash": "54e0f84085f6c7fdd3f9f6d2b724ae26",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-23-fine-tuned-tone-and-state-models.md": {
+    "mtime": 1784783170.2338088,
+    "ast_hash": "1ca4fdaa4ee73aae327473c1739d3e81",
+    "semantic_hash": ""
+  },
+  "ml-training/data/tone_intent.json": {
+    "mtime": 1784783017.3153043,
+    "ast_hash": "2a69f7104210f41bf4e87db90f890ea5",
+    "semantic_hash": ""
+  },
+  "ml-training/artifacts/state_head_weights.json": {
+    "mtime": 1784797725.97736,
+    "ast_hash": "1c698197a9e5bf4236622a61eaab5532",
+    "semantic_hash": ""
+  },
+  "ml-training/tests/test_state_head.py": {
+    "mtime": 1784797741.710943,
+    "ast_hash": "753f5d690de74fde58c7814f33127b68",
+    "semantic_hash": ""
+  },
+  "ml-training/train_state_head.py": {
+    "mtime": 1784797721.7885702,
+    "ast_hash": "9f4ff1c7e96c031f57bbf05824058c70",
+    "semantic_hash": ""
+  },
+  "ml-training/train_tone_encoder.py": {
+    "mtime": 1784817582.256045,
+    "ast_hash": "725b760174e5ca5912a4d5a1788d0d45",
+    "semantic_hash": ""
+  },
+  "src/engine/learnedStateHead.ts": {
+    "mtime": 1784797846.3209825,
+    "ast_hash": "b356dc31a28023cd339a9c7e1b963572",
+    "semantic_hash": ""
+  },
+  "tests/learnedStateHead.test.ts": {
+    "mtime": 1784797879.431609,
+    "ast_hash": "422b4909415f9cf7ab84c30d4075ad1e",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-23-authoring-pipeline.md": {
+    "mtime": 1784798909.2140186,
+    "ast_hash": "ca8f776a3e3af3f8601d219cfe37209c",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-07-23-library-expansion-and-upgrades.md": {
+    "mtime": 1784798967.7510474,
+    "ast_hash": "935a380657c8d46d7edb5db1d1b00120",
+    "semantic_hash": ""
+  },
+  "src/state/validatePack.ts": {
+    "mtime": 1784818681.4094555,
+    "ast_hash": "84f8b1eaa5d06fe55db4a0b8fae59f1c",
+    "semantic_hash": ""
+  },
+  "src/ui/ghostPaths.ts": {
+    "mtime": 1784818798.0106452,
+    "ast_hash": "9ad83fa47c6961d4e4978622fe8f9ac2",
+    "semantic_hash": ""
+  },
+  "tests/ghostPaths.test.ts": {
+    "mtime": 1784818813.2822614,
+    "ast_hash": "7c854c1257065d830986fa73f2dcd5c6",
+    "semantic_hash": ""
+  },
+  "tests/validatePack.test.ts": {
+    "mtime": 1784818704.998474,
+    "ast_hash": "54cb5ab65265b0e5475071be20174030",
+    "semantic_hash": ""
+  }
+}

@@ -24,6 +24,9 @@ export interface Choice {
   id: string;
   text: string;
   toneTag?: string; // author-time hint only; runtime scores the text itself
+  /** Divergence label (Plan 5 T6): short human name for the ending this choice
+   *  produces when its edge resolves to null. Drives the end-screen stats. */
+  ending?: string;
   edges: Edge[];
 }
 export interface Stance {
@@ -31,6 +34,7 @@ export interface Stance {
   anchorPhrasings: string[]; // used by free-text routing (Plan 4)
   npcResponse: string;
   toneTag?: string;
+  ending?: string; // see Choice.ending
   edges: Edge[];
 }
 interface BaseNode {

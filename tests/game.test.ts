@@ -61,6 +61,8 @@ describe("GameEngine", () => {
     const res = await g.act({ choiceId: "end" });
     expect(res.ended).toBe(true);
     expect(res.nextNodeId).toBeNull();
+    expect(res.endingId).toBe("sign_end:end");
+    expect(res.endingLabel).toBe("You shut NIX down on sight");
   });
 
   it("free text routes to the nearest authored stance", async () => {

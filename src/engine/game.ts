@@ -13,6 +13,8 @@ export interface ActResult {
   nextNodeId: string | null;
   ended: boolean;
   stanceId?: string; // which dialogue stance drove this turn, if any
+  endingId?: string; // stable "nodeId:choiceOrStanceId" key, only when ended
+  endingLabel?: string; // author `ending` label for the reached ending, if any
 }
 
 export class GameEngine {
@@ -48,6 +50,10 @@ export class GameEngine {
     let npcResponse: string | undefined;
     let stanceId: string | undefined;
     let edges;
+    // Identify the acting choice/stance so a reached ending can be labelled.
+    const decisionNodeId = this._current.id;
+    let actingId: string | undefined;
+    let endingLabel: string | undefined;
 
     if (this._current.type === "action") {
       const current = this._current;
@@ -56,6 +62,8 @@ export class GameEngine {
       if (!choice) throw new Error(`unknown choice ${input.choiceId}`);
       sourceText = choice.text;
       edges = choice.edges;
+      actingId = choice.id;
+      endingLabel = choice.ending;
     } else {
       // dialogue node
       const current = this._current;
@@ -66,6 +74,8 @@ export class GameEngine {
         npcResponse = st.npcResponse;
         edges = st.edges;
         stanceId = st.id;
+        actingId = st.id;
+        endingLabel = st.ending;
       } else {
         // Free text (Layer 2): semantically route to the nearest authored stance.
         // Layer 1 still scores the ACTUAL typed text for relationship deltas below.
@@ -84,6 +94,8 @@ export class GameEngine {
         sourceText = input.text;
         npcResponse = st.npcResponse;
         edges = st.edges;
+        actingId = st.id;
+        endingLabel = st.ending;
       }
     }
 
@@ -107,6 +119,11 @@ export class GameEngine {
       this._current = this.node(nextNodeId!);
       this._history.push(this._current.id);
     }
-    return { text: ended ? "" : this.currentText(), npcResponse, deltas, state: this._state, nextNodeId, ended, stanceId };
+    const endingId = ended && actingId ? `${decisionNodeId}:${actingId}` : undefined;
+    return {
+      text: ended ? "" : this.currentText(),
+      npcResponse, deltas, state: this._state, nextNodeId, ended, stanceId,
+      endingId, endingLabel: ended ? endingLabel : undefined,
+    };
   }
 }

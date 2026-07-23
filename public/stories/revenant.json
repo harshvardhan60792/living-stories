@@ -46,16 +46,16 @@
       ],
       "choices": [
         { "id": "spare", "text": "'I believe you. You're not being shut down today.'", "toneTag": "sincere",
-          "edges": [{ "nextId": null }] },
+          "ending": "You spared NIX", "edges": [{ "nextId": null }] },
         { "id": "doom", "text": "'It doesn't matter what I believe. Sign here.'", "toneTag": "cold",
-          "edges": [{ "nextId": null }] }
+          "ending": "You signed after hearing it out", "edges": [{ "nextId": null }] }
       ]
     },
     {
       "id": "sign_end",
       "type": "action",
       "textVariants": [{ "text": "The order confirms. NIX's eyes dim mid-sentence. The Warden thanks you. You don't answer." }],
-      "choices": [{ "id": "end", "text": "Leave.", "edges": [{ "nextId": null }] }]
+      "choices": [{ "id": "end", "text": "Leave.", "ending": "You shut NIX down on sight", "edges": [{ "nextId": null }] }]
     }
   ]
 }

@@ -9,6 +9,7 @@ import { renderMeters } from "./ui/meters";
 import { renderScene } from "./ui/scene";
 import { renderMenu } from "./ui/menu";
 import { Flowchart } from "./ui/flowchart";
+import { recordEnding, endingStats } from "./ui/stats";
 
 const app = document.getElementById("app")!;
 const base = import.meta.env.BASE_URL;
@@ -73,6 +74,33 @@ async function startStory(id: string) {
       onText: (t) => turn({ text: t }),
     });
   }
+  // Detroit-style divergence panel: record this run's ending, then show how the
+  // player's choice compares to every ending recorded on this device.
+  function endScreenHtml(endingId?: string, endingLabel?: string): string {
+    if (!endingId) return "";
+    const counts = recordEnding(pack.id, endingId);
+    const rows = endingStats(pack, counts)
+      .map((s) => {
+        const mine = s.id === endingId;
+        const pct = Math.round(s.pct);
+        return (
+          `<li class="ending-row${mine ? " mine" : ""}${s.reached ? "" : " locked"}">` +
+          `<div class="ending-bar" style="width:${pct}%"></div>` +
+          `<span class="ending-label">${escapeHtml(s.label)}${mine ? " · your ending" : ""}</span>` +
+          `<span class="ending-pct">${s.reached ? pct + "%" : "—"}</span>` +
+          `</li>`
+        );
+      })
+      .join("");
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    return (
+      `<div class="endstats">` +
+      `<h3>${escapeHtml(endingLabel ?? "Your ending")}</h3>` +
+      `<ul class="ending-list">${rows}</ul>` +
+      `<p class="endstats-total">${total} playthrough${total === 1 ? "" : "s"} recorded on this device</p>` +
+      `</div>`
+    );
+  }
   async function turn(input: ActInput) {
     const from = engine.currentNode.id;
     // Typed turns embed the text (async); show a brief "reading…" affordance.
@@ -82,7 +110,10 @@ async function startStory(id: string) {
     const res = await engine.act(input);
     if (res.ended) {
       renderMeters(metersEl, pack.meterLabels, engine.state);
-      sceneEl.innerHTML = `<p class="scene">${res.npcResponse ?? ""}</p><p class="scene"><em>— End —</em></p>`;
+      sceneEl.innerHTML =
+        `<p class="scene">${escapeHtml(res.npcResponse ?? "")}</p>` +
+        `<p class="scene"><em>— End —</em></p>` +
+        endScreenHtml(res.endingId, res.endingLabel);
       return;
     }
     flow.markVisited(engine.currentNode.id, from);
@@ -90,6 +121,12 @@ async function startStory(id: string) {
     draw(res.text, res.npcResponse, res.stanceId);
   }
   draw(engine.currentText());
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 }
 
 main();
