@@ -1,15 +1,22 @@
 name: Deploy
+# Once this repo has a GitHub remote + Pages enabled (Settings → Pages → Source:
+# GitHub Actions), every push to the default branch tests, builds, and publishes.
+# NOTE: vite.config.ts `base` is "/living-stories/" — if the repo is named
+# differently, update `base` to "/<repo-name>/" or Pages assets will 404.
 on:
-  push: { branches: [main] }
+  push: { branches: [main, master] }
+  workflow_dispatch:
 permissions: { contents: read, pages: write, id-token: write }
+concurrency: { group: pages, cancel-in-progress: true }
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with: { node-version: 20, cache: npm }
       - run: npm ci
+      - run: npm test
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with: { path: dist }
