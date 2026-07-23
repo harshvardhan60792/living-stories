@@ -10,13 +10,13 @@
     "semantic_hash": "f8d7d5e94c5920f1befa470ea63586c9"
   },
   "public/stories/revenant.json": {
-    "mtime": 1784819568.9151285,
-    "ast_hash": "a87f447f78b754e5bb67c19c402758f2",
+    "mtime": 1784820246.7323878,
+    "ast_hash": "6505c413b14e8fad315a1dbcc48bc263",
     "semantic_hash": ""
   },
   "src/engine/game.ts": {
-    "mtime": 1784819493.0546074,
-    "ast_hash": "6a5cf02ebf95965e04a47ce459a4e00c",
+    "mtime": 1784820215.064325,
+    "ast_hash": "555f2faee27e6f332f6c013ad73f28c0",
     "semantic_hash": ""
   },
   "src/engine/router.ts": {
@@ -30,8 +30,8 @@
     "semantic_hash": "ad20e623911b3e1134e9e4d564e09921"
   },
   "src/main.ts": {
-    "mtime": 1784819020.1469269,
-    "ast_hash": "71c4b20ee81a9af877ddfb8fef4849ac",
+    "mtime": 1784820287.4948015,
+    "ast_hash": "437c923a56b5b6a3ab272905787a85a9",
     "semantic_hash": ""
   },
   "src/ml/transformersScorer.ts": {
@@ -45,8 +45,8 @@
     "semantic_hash": "b05be112e337ba7950b96482fa00ff92"
   },
   "src/state/storyTypes.ts": {
-    "mtime": 1784819480.6921046,
-    "ast_hash": "7e2ac3af88dccb9cb81bd62c9febf2f7",
+    "mtime": 1784820186.9899118,
+    "ast_hash": "583143e425766c4ffbf3b8adb0304aca",
     "semantic_hash": ""
   },
   "src/ui/flowchart.ts": {
@@ -80,8 +80,8 @@
     "semantic_hash": "a86cb06ed7a1964203f7469b3625aaec"
   },
   "tests/game.test.ts": {
-    "mtime": 1784819793.2249987,
-    "ast_hash": "fba9fb17e54b027f5585adde38bbb5c4",
+    "mtime": 1784820329.0907989,
+    "ast_hash": "4263847b24f738da5a20c61161a180be",
     "semantic_hash": ""
   },
   "tests/menu.test.ts": {
@@ -322,6 +322,16 @@
   "tests/packs.valid.test.ts": {
     "mtime": 1784819400.2684813,
     "ast_hash": "3357cf1d19e6d168565083349bd6cde8",
+    "semantic_hash": ""
+  },
+  "src/ui/stats.ts": {
+    "mtime": 1784820232.4136617,
+    "ast_hash": "343b41983627f193165c03d83f65f5f4",
+    "semantic_hash": ""
+  },
+  "tests/stats.test.ts": {
+    "mtime": 1784820322.7845323,
+    "ast_hash": "1baff5ca2db1a73f01913e4cb41c4757",
     "semantic_hash": ""
   }
 }

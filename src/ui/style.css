@@ -29,3 +29,7 @@ body { background:var(--bg); color:var(--fg); font-family:Georgia, serif; margin
 .ending-row.mine .ending-label { color:var(--fg); font-weight:600; }
 .ending-row.locked { opacity:.5; font-style:italic; }
 .endstats-total { margin:12px 2px 0; font-size:12px; opacity:.5; font-family:system-ui, sans-serif; }
+.tone-preview { position:sticky; bottom:8px; margin-top:12px; padding:8px 12px; border-radius:8px;
+  background:#12151d; border:1px solid #2a2f3a; color:var(--accent);
+  font-family:system-ui, sans-serif; font-size:13px; letter-spacing:.03em;
+  display:inline-block; box-shadow:0 4px 18px rgba(0,0,0,.35); }

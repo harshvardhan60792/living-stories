@@ -10,6 +10,9 @@ import { renderScene } from "./ui/scene";
 import { renderMenu } from "./ui/menu";
 import { Flowchart } from "./ui/flowchart";
 import { recordEnding, endingStats } from "./ui/stats";
+import { effectiveDeltas } from "./ui/deltaPreview";
+import { applyDelta } from "./state/meters";
+import type { MeterState } from "./state/storyTypes";
 
 const app = document.getElementById("app")!;
 const base = import.meta.env.BASE_URL;
@@ -66,12 +69,20 @@ async function startStory(id: string) {
 
   const engine = new GameEngine(pack, scorer, head, stanceIndex);
 
+  // Emotion-read preview (T4): reuse the loaded scorer+head to predict the
+  // clamp-aware meter shift a given source text would apply from current state.
+  async function previewFor(sourceText: string): Promise<Partial<MeterState>> {
+    const tone = await scorer.scoreTone(sourceText);
+    const raw = head.delta(tone, engine.state);
+    return effectiveDeltas(engine.state, applyDelta(engine.state, raw));
+  }
   function draw(text: string, npcResponse?: string, stanceId?: string) {
     renderMeters(metersEl, pack.meterLabels, engine.state);
     renderScene(sceneEl, {
       text, npcResponse, stanceId, node: engine.currentNode,
       onChoice: (cid) => turn({ choiceId: cid }),
       onText: (t) => turn({ text: t }),
+      previewFor, meterLabels: pack.meterLabels,
     });
   }
   // Detroit-style divergence panel: record this run's ending, then show how the
