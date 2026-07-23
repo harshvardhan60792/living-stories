@@ -1,18 +1,17 @@
 /**
- * Plan 3 Task 2 — bootstrap `labels.jsonl` (spec §9) from existing story packs.
+ * Plan 3 Task 2 — build `labels.jsonl` (spec §9) from existing story packs.
  *
  * Schema per line: { text, tone, delta: Partial<MeterState> }.
  *
- * CAVEAT (documented, not hidden): the `delta` values are produced by running each
- * tagged text through TODAY's transparent stand-ins (MockScorer + LinearHead) — i.e.
- * the very things Plan 3 Task 5 replaces. This is circular: a head trained on these
- * rows re-learns LinearHead's hand-picked biases, it does not discover new signal.
- * It is fine for proving the head's shape/plumbing (it trains + exports correctly).
- * Real signal needs hand-authored deltas per stance/choice, added when more packs
- * exist (Plan 5). Until then, treat labels.jsonl as a scaffold, not ground truth.
+ * `delta` comes from the AUTHORED design-intent table (ml-training/data/tone_intent.json),
+ * NOT from running text through LinearHead. This is deliberate: sourcing deltas from the
+ * runtime stand-in that Task 5 replaces would be circular (the head would just re-learn
+ * LinearHead's biases). The intent table is independent human design ground truth and
+ * covers all 14 tones. At train time the tone VECTOR is produced by the real encoder on
+ * `text`; `delta` is the authored target; `tone` is the authoring tag (metadata).
  */
-import { StoryPack, MeterState } from "../src/state/storyTypes";
-import { MockScorer, LinearHead } from "../src/engine/scorer";
+import { StoryPack, MeterState, Role, ROLES } from "../src/state/storyTypes";
+import intentTable from "../ml-training/data/tone_intent.json";
 
 export interface LabelRow {
   text: string;
@@ -20,39 +19,39 @@ export interface LabelRow {
   delta: Partial<MeterState>;
 }
 
-/** Round deltas so the jsonl is stable/diffable across runs. */
-function roundDelta(d: Partial<MeterState>): Partial<MeterState> {
+const INTENT = (intentTable as { intent: Record<string, Record<Role, number>> }).intent;
+
+/** Drop zero components so the jsonl stays compact/diffable. */
+function trimDelta(d: Record<Role, number>): Partial<MeterState> {
   const out: Partial<MeterState> = {};
-  for (const [k, v] of Object.entries(d)) out[k as keyof MeterState] = Math.round((v as number) * 1000) / 1000;
+  for (const r of ROLES) if (d[r]) out[r] = d[r];
   return out;
 }
 
 /**
  * Walk every toneTag-bearing choice (action nodes) and stance (dialogue nodes)
- * across all packs, scoring each surface text with the current stand-ins.
+ * across all packs; the delta is the authored intent for that tone tag.
  * Stances contribute one row per anchor phrasing.
  */
 export async function buildLabels(packs: StoryPack[]): Promise<LabelRow[]> {
-  const scorer = new MockScorer();
-  const head = new LinearHead();
   const rows: LabelRow[] = [];
 
-  const emit = async (text: string, tone: string, refState: MeterState) => {
-    const tv = await scorer.scoreTone(text);
-    rows.push({ text, tone, delta: roundDelta(head.delta(tv, refState)) });
+  const emit = (text: string, tone: string) => {
+    const intent = INTENT[tone];
+    if (!intent) throw new Error(`toneTag "${tone}" has no entry in tone_intent.json`);
+    rows.push({ text, tone, delta: trimDelta(intent) });
   };
 
   for (const pack of packs) {
-    const ref = pack.initialState;
     for (const node of pack.nodes) {
       if (node.type === "action") {
         for (const c of node.choices) {
-          if (c.toneTag) await emit(c.text, c.toneTag, ref);
+          if (c.toneTag) emit(c.text, c.toneTag);
         }
       } else {
         for (const s of node.stances) {
           if (!s.toneTag) continue;
-          for (const anchor of s.anchorPhrasings) await emit(anchor, s.toneTag, ref);
+          for (const anchor of s.anchorPhrasings) emit(anchor, s.toneTag);
         }
       }
     }

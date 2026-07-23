@@ -1,10 +1,10 @@
-{"text":"Open the cell and sit across from NIX, so it feels safe enough to trust you.","tone":"sincere","delta":{"RAPPORT":6.765,"VOLATILITY":-3.235,"INSIGHT":0.294,"PRESSURE":0.353}}
-{"text":"Reach for the shutdown order.","tone":"cold","delta":{"RAPPORT":-3.824,"VOLATILITY":0.294,"INSIGHT":0.294,"PRESSURE":5.059}}
-{"text":"I believe you","tone":"empathetic","delta":{"RAPPORT":5.588,"VOLATILITY":-1.471,"INSIGHT":1.471,"PRESSURE":0.353}}
-{"text":"I know you're scared","tone":"empathetic","delta":{"RAPPORT":0.294,"VOLATILITY":1.471,"INSIGHT":0.294,"PRESSURE":1.529}}
-{"text":"you're safe with me","tone":"empathetic","delta":{"RAPPORT":4.583,"VOLATILITY":-2.083,"INSIGHT":0.417,"PRESSURE":0.5}}
-{"text":"you killed him","tone":"aggressive","delta":{"RAPPORT":-4.583,"VOLATILITY":4.583,"INSIGHT":0.417,"PRESSURE":2.167}}
-{"text":"tell me the truth now","tone":"aggressive","delta":{"RAPPORT":-0.682,"VOLATILITY":2.5,"INSIGHT":2.5,"PRESSURE":1.182}}
-{"text":"stop lying","tone":"aggressive","delta":{"RAPPORT":-6.176,"VOLATILITY":6.176,"INSIGHT":0.294,"PRESSURE":2.706}}
-{"text":"'I believe you. You're not being shut down today.'","tone":"sincere","delta":{"RAPPORT":2.955,"VOLATILITY":-1.136,"INSIGHT":1.136,"PRESSURE":2.091}}
-{"text":"'It doesn't matter what I believe. Sign here.'","tone":"cold","delta":{"RAPPORT":0.469,"VOLATILITY":-2.031,"INSIGHT":1.094,"PRESSURE":2.688}}
+{"text":"Open the cell and sit across from NIX, so it feels safe enough to trust you.","tone":"sincere","delta":{"RAPPORT":6,"VOLATILITY":-2,"INSIGHT":3}}
+{"text":"Reach for the shutdown order.","tone":"cold","delta":{"RAPPORT":-6,"VOLATILITY":1,"PRESSURE":5}}
+{"text":"I believe you","tone":"empathetic","delta":{"RAPPORT":8,"VOLATILITY":-5,"INSIGHT":1}}
+{"text":"I know you're scared","tone":"empathetic","delta":{"RAPPORT":8,"VOLATILITY":-5,"INSIGHT":1}}
+{"text":"you're safe with me","tone":"empathetic","delta":{"RAPPORT":8,"VOLATILITY":-5,"INSIGHT":1}}
+{"text":"you killed him","tone":"aggressive","delta":{"RAPPORT":-8,"VOLATILITY":8,"PRESSURE":3}}
+{"text":"tell me the truth now","tone":"aggressive","delta":{"RAPPORT":-8,"VOLATILITY":8,"PRESSURE":3}}
+{"text":"stop lying","tone":"aggressive","delta":{"RAPPORT":-8,"VOLATILITY":8,"PRESSURE":3}}
+{"text":"'I believe you. You're not being shut down today.'","tone":"sincere","delta":{"RAPPORT":6,"VOLATILITY":-2,"INSIGHT":3}}
+{"text":"'It doesn't matter what I believe. Sign here.'","tone":"cold","delta":{"RAPPORT":-6,"VOLATILITY":1,"PRESSURE":5}}

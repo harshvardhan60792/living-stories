@@ -64,20 +64,17 @@ the training script.
 
 **Schema (spec §9):** `{ text: string, tone: string, delta: Partial<MeterState> }` per line.
 
-**The bootstrap problem, stated plainly:** the only Δstate "ground truth" that exists
-today is `LinearHead`'s own hand-picked matrix — the thing Task 5 is supposed to replace.
-Using it to generate training labels is circular: the learned head will just re-learn
-`LinearHead`'s biases, not discover anything new. This is **acceptable for getting the
-head's shape/plumbing right** (it proves the MLP trains and exports correctly) but it is
-**not** a source of real signal. Flag this loudly in the plan and revisit once more packs
-exist (Plan 5) with hand-authored deltas per stance, which is the real fix.
+**Circularity — RESOLVED.** Earlier draft derived `delta` by running each text through
+`LinearHead` (the stand-in Task 5 replaces), which is circular. Fixed: deltas now come
+from an **authored design-intent table** `ml-training/data/tone_intent.json` (independent
+human ground truth, covers all 14 tones). `build-labels.ts` no longer imports
+`MockScorer`/`LinearHead` at all. At train time the tone VECTOR comes from the real
+encoder on `text`; `delta` is the authored target; `tone` is the authoring-tag metadata.
 
 - [ ] Walk every `pack.nodes[].choices[].toneTag` / `.stances[].toneTag` +
       `.anchorPhrasings` across all packs in `public/stories/*.json` (currently just
       `revenant.json`).
-- [ ] For each tagged text, compute `delta` by running it through today's
-      `MockScorer` + `LinearHead` (i.e. bootstrap labels from the current transparent
-      stand-ins, not hand-authored — see caveat above).
+- [ ] For each tagged text, set `delta = tone_intent[toneTag]` (authored, not derived).
 - [ ] Emit one `labels.jsonl` line per tagged text.
 - [ ] Test: every `toneTag`-bearing choice/stance across all packs appears exactly once
       in the output; schema matches spec §9.
@@ -97,8 +94,10 @@ exist (Plan 5) with hand-authored deltas per stance, which is the real fix.
       a Kaggle notebook with a GPU accelerator (T4).
 - [ ] Agent writes `ml-training/train_tone_encoder.py`: loads GoEmotions +
       EmpatheticDialogues + DailyDialog via `datasets`, applies Task 1's taxonomy,
-      fine-tunes MiniLM as a multi-label classifier (sigmoid output over 14 labels),
-      ~3 epochs / batch 64 (spec §11 estimate: <1 hr on one T4).
+      **concatenates `ml-training/data/tone_seed.jsonl`** (authored examples for the 5
+      gap labels deceptive/evasive/threatening/cold/defiant that the datasets can't
+      reach), fine-tunes MiniLM as a multi-label classifier (sigmoid output over 14
+      labels), ~3 epochs / batch 64 (spec §11 estimate: <1 hr on one T4).
 - [ ] Script pushes checkpoint to the HF Hub repo after training (`push_to_hub`) —
       satisfies spec §11's "no-persistence survival" (Kaggle sessions aren't durable;
       next session does `resume_from_checkpoint` pulled from Hub).
@@ -202,11 +201,12 @@ exist (Plan 5) with hand-authored deltas per stance, which is the real fix.
 - **Architecture consistency:** both replacements sit behind `ToneScorer`/`StateHead`,
   the exact interfaces Plan 1 designed for this swap — no engine or UI changes required
   beyond which class `main.ts` constructs, mirroring Plan 1→2's proven fallback pattern.
-- **Honest risk flags:** (1) Task 2's bootstrap labels are circular (derived from the
-  stand-in they replace) — real signal needs hand-authored deltas from more packs
-  (Plan 5); (2) Task 1's taxonomy mapping is drafted, not derived from verified exact
-  dataset label strings, until Task 1 actually pulls the dataset cards; (3) Task 11 is
-  explicitly a maybe, not a commitment.
+- **Honest risk flags:** (1) ~~Task 2 circular labels~~ RESOLVED — deltas now from the
+  authored `tone_intent.json`, not `LinearHead`. (2) ~~5 unreachable tone labels~~
+  RESOLVED — `tone_seed.jsonl` supplies authored examples for deceptive/evasive/
+  threatening/cold/defiant, folded into encoder training. (3) Task 1's `SOURCE_LABELS`
+  are canonical-from-docs, still to be re-verified against the installed dataset version
+  at Kaggle time (Task 4). (4) Task 11 is explicitly a maybe, not a commitment.
 - **What needs YOU specifically:** a Kaggle account + a HuggingFace Hub account, and
   ~1 hour of wall-clock time to click "run" on Task 4's notebook once the agent hands it
   to you. Everything else (Tasks 1, 2, 5, 8, 9, 10) is agent-executable now.

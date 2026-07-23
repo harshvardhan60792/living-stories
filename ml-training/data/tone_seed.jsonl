@@ -1,0 +1,30 @@
+{"text": "You have no idea what I'm capable of if you keep this up.", "labels": ["threatening"]}
+{"text": "Cross me again and you'll regret it.", "labels": ["threatening"]}
+{"text": "One more word and this ends badly for you.", "labels": ["threatening"]}
+{"text": "I know where you sleep. Remember that.", "labels": ["threatening"]}
+{"text": "Push me and see what happens.", "labels": ["threatening", "aggressive"]}
+{"text": "Do that again and there will be consequences you can't take back.", "labels": ["threatening"]}
+{"text": "That's not what happened, and you know it.", "labels": ["deceptive"]}
+{"text": "I was home all night, ask anyone.", "labels": ["deceptive"]}
+{"text": "I never touched it. Someone else must have.", "labels": ["deceptive"]}
+{"text": "Trust me, everything is exactly as it should be.", "labels": ["deceptive", "reassuring"]}
+{"text": "I have no idea what you're talking about.", "labels": ["deceptive", "evasive"]}
+{"text": "You can believe whatever you like, it changes nothing I did.", "labels": ["deceptive", "defiant"]}
+{"text": "Why does that even matter right now?", "labels": ["evasive"]}
+{"text": "Let's not get into that, it's complicated.", "labels": ["evasive"]}
+{"text": "I'd rather not say.", "labels": ["evasive"]}
+{"text": "That's a question for another time.", "labels": ["evasive"]}
+{"text": "Can we talk about something else instead?", "labels": ["evasive"]}
+{"text": "I don't see how that's any of your business.", "labels": ["evasive", "dismissive"]}
+{"text": "Do whatever you want, I'm not signing anything.", "labels": ["defiant"]}
+{"text": "You can't make me say it.", "labels": ["defiant"]}
+{"text": "I don't answer to you.", "labels": ["defiant"]}
+{"text": "Go ahead and try. I'm not afraid of you.", "labels": ["defiant"]}
+{"text": "I'll stand by what I did and I'd do it again.", "labels": ["defiant"]}
+{"text": "No. And that's final.", "labels": ["defiant", "dismissive"]}
+{"text": "It doesn't matter to me either way.", "labels": ["cold"]}
+{"text": "Save your feelings. Just answer the question.", "labels": ["cold"]}
+{"text": "I don't care whether it lives or dies.", "labels": ["cold"]}
+{"text": "Spare me the sentiment. Sign the form.", "labels": ["cold"]}
+{"text": "Your comfort isn't my concern.", "labels": ["cold", "dismissive"]}
+{"text": "Feelings are irrelevant here. Facts only.", "labels": ["cold"]}

@@ -86,9 +86,10 @@ TAXONOMY = {
 # IMPORTANT FINDING (Plan 3 Task 1): 5 of 14 targets are unreachable from these
 # emotion corpora. deceptive/evasive/threatening describe INTENT/manipulation, and
 # cold/defiant describe stance/attitude — none are "felt emotions" the datasets label.
-# A tone encoder trained only on these three datasets will be blind to these 5 classes.
-# Mitigation (later): add synthetic/authored examples for them, or lean on DailyDialog
-# dialogue-acts + a few hand-written seed lines. Surfaced, not hidden.
+# A tone encoder trained only on these three datasets would be blind to these 5 classes.
+# MITIGATION (done): ml-training/data/tone_seed.jsonl provides authored multi-label
+# examples for exactly these gap labels; the training script (Task 3) concatenates it
+# with the mapped dataset rows so every one of the 14 labels has training signal.
 EXPECTED_GAPS = {"deceptive", "evasive", "threatening", "cold", "defiant"}
 
 

@@ -1,0 +1,19 @@
+{
+  "_doc": "Plan 3 — authored tone -> Δmeter design-intent table (spec §4.2 ground truth). This is HUMAN design intent for how each tone should move the abstract meter roles (RAPPORT=trust, VOLATILITY=instability, PRESSURE=external pressure, INSIGHT=suspicion/understanding). It deliberately does NOT come from LinearHead (the runtime stand-in Plan 3 replaces), which breaks the earlier circular-bootstrap issue. Covers all 14 TONE_LABELS, including the 5 the public emotion datasets can't reach.",
+  "intent": {
+    "empathetic":  { "RAPPORT":  8, "VOLATILITY": -5, "PRESSURE":  0, "INSIGHT":  1 },
+    "aggressive":  { "RAPPORT": -8, "VOLATILITY":  8, "PRESSURE":  3, "INSIGHT":  0 },
+    "deceptive":   { "RAPPORT": -2, "VOLATILITY":  2, "PRESSURE":  0, "INSIGHT":  6 },
+    "reassuring":  { "RAPPORT":  5, "VOLATILITY": -7, "PRESSURE": -1, "INSIGHT":  0 },
+    "defiant":     { "RAPPORT": -4, "VOLATILITY":  6, "PRESSURE":  4, "INSIGHT":  1 },
+    "cold":        { "RAPPORT": -6, "VOLATILITY":  1, "PRESSURE":  5, "INSIGHT":  0 },
+    "submissive":  { "RAPPORT":  2, "VOLATILITY": -3, "PRESSURE": -2, "INSIGHT":  0 },
+    "curious":     { "RAPPORT":  1, "VOLATILITY":  0, "PRESSURE":  0, "INSIGHT":  6 },
+    "threatening": { "RAPPORT": -10, "VOLATILITY": 12, "PRESSURE":  5, "INSIGHT":  1 },
+    "apologetic":  { "RAPPORT":  4, "VOLATILITY": -4, "PRESSURE":  0, "INSIGHT":  0 },
+    "dismissive":  { "RAPPORT": -5, "VOLATILITY":  2, "PRESSURE":  1, "INSIGHT":  0 },
+    "sincere":     { "RAPPORT":  6, "VOLATILITY": -2, "PRESSURE":  0, "INSIGHT":  3 },
+    "evasive":     { "RAPPORT": -2, "VOLATILITY":  1, "PRESSURE":  0, "INSIGHT":  5 },
+    "calm":        { "RAPPORT":  2, "VOLATILITY": -6, "PRESSURE": -1, "INSIGHT":  0 }
+  }
+}
