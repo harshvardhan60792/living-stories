@@ -49,6 +49,16 @@ MAX_LEN = 64
 # On Kaggle: add your HF token as a Secret named HF_TOKEN (Add-ons -> Secrets),
 # then this reads it. Locally, set the env var HF_TOKEN instead.
 HF_TOKEN = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
+if not HF_TOKEN:
+    # Kaggle secrets are NOT always exported as env vars — pull it directly from the
+    # secret store (secret must be named HF_TOKEN and attached to the notebook).
+    try:
+        from kaggle_secrets import UserSecretsClient
+        HF_TOKEN = UserSecretsClient().get_secret("HF_TOKEN")
+        os.environ["HF_TOKEN"] = HF_TOKEN
+        print("HF_TOKEN loaded from Kaggle secret store.")
+    except Exception as e:
+        print(f"could not load HF_TOKEN from Kaggle secrets: {e}")
 # ---------------------------------------------------------------------------
 
 L2I = {label: i for i, label in enumerate(TONE_LABELS)}
@@ -79,14 +89,16 @@ def _int2key(ds, field, r, taxo_name):
     return inner.int2str(r) if hasattr(inner, "int2str") else r
 
 
-def rows_from_source(name, text_field, label_field, taxo_name=None, **load_kw):
+def rows_from_source(name, text_field, label_field, taxo_name=None, config=None, **load_kw):
     """Yield {text, labels[]} rows from one HF dataset, applying the taxonomy.
 
     daily_dialog rows carry PARALLEL lists (dialog[] + emotion[]); flatten them
     utterance-by-utterance. Everything else is one (text, label(s)) per row.
+    `config` is the dataset config name (2nd positional arg to load_dataset).
     """
     taxo_name = taxo_name or name.split("/")[-1]
-    ds = load_dataset(name, split="train", **load_kw)
+    ds = (load_dataset(name, config, split="train", **load_kw) if config
+          else load_dataset(name, split="train", **load_kw))
 
     for ex in ds:
         text = ex[text_field]
@@ -127,8 +139,12 @@ def load_seed(path):
 # auto-convert disabled. So they are wrapped in try/except: if they load, great; if
 # not, the run still completes with full label coverage. Re-add a working mirror here
 # any time — the loader handles ints/strs and parallel-list (daily_dialog) shapes.
+# go_emotions: use the FULLY-NAMESPACED id + explicit "simplified" config. The bare
+# id "go_emotions" is rejected by newer `datasets` ("Invalid HF URI ... Repository id
+# must ..."); the namespaced id + pinned config works on every datasets version.
 SOURCES = [
-    ("go_emotions", "text", "labels", {}),                     # required, works today
+    ("google-research-datasets/go_emotions", "text", "labels",
+     {"config": "simplified"}),                                # required, version-proof
     ("empathetic_dialogues", "utterance", "context", {}),      # best-effort
     ("daily_dialog", "dialog", "emotion", {}),                 # best-effort
 ]
