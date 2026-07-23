@@ -152,6 +152,22 @@ def build_dataset():
     return Dataset.from_list(rows)
 
 
+class WeightedTrainer(Trainer):
+    """Trainer with per-label pos_weight in the BCE loss (see main() for why)."""
+
+    def __init__(self, *args, pos_weight=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pos_weight = pos_weight
+
+    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
+        labels = inputs.pop("labels")
+        outputs = model(**inputs)
+        logits = outputs.logits
+        loss_fct = torch.nn.BCEWithLogitsLoss(pos_weight=self.pos_weight.to(logits.device))
+        loss = loss_fct(logits, labels)
+        return (loss, outputs) if return_outputs else loss
+
+
 def main():
     if HF_TOKEN:
         login(token=HF_TOKEN)
@@ -168,6 +184,16 @@ def main():
 
     ds = ds.map(encode, batched=True, remove_columns=ds.column_names)
     split = ds.train_test_split(test_size=0.1, seed=42)
+
+    # Multi-label + sparse positives (~7% positive rate/label) collapses plain BCE:
+    # loss keeps falling from the majority-negative signal while true positives never
+    # cross the 0.5 threshold (observed: micro/macro F1 exactly 0.0 for 3 straight
+    # epochs). pos_weight[j] = neg/pos per label counteracts the imbalance.
+    train_labels = np.array(split["train"]["labels"], dtype=np.float32)
+    pos = train_labels.sum(axis=0)
+    neg = train_labels.shape[0] - pos
+    pos_weight = torch.tensor(np.clip(neg / np.clip(pos, 1, None), 1.0, 20.0), dtype=torch.float32)
+    print("pos_weight per label:", dict(zip(TONE_LABELS, pos_weight.tolist())))
 
     model = AutoModelForSequenceClassification.from_pretrained(
         BASE_MODEL,
@@ -198,11 +224,12 @@ def main():
         report_to="none",
     )
 
-    trainer = Trainer(
+    trainer = WeightedTrainer(
         model=model, args=args,
         train_dataset=split["train"], eval_dataset=split["test"],
         compute_metrics=metrics,
         data_collator=DataCollatorWithPadding(tok),  # dynamic pad: rows vary in length (padding=False above)
+        pos_weight=pos_weight,
     )
     trainer.train()
     print("eval:", trainer.evaluate())
@@ -213,22 +240,43 @@ def main():
 
 
 def export_onnx(repo):
-    """Task 6: export the fine-tuned classifier to int8 ONNX and push it back."""
-    from optimum.onnxruntime import ORTModelForSequenceClassification, ORTQuantizer
-    from optimum.onnxruntime.configuration import AutoQuantizationConfig
+    """Task 6: export the fine-tuned classifier to int8 ONNX and push it back.
 
-    ort_model = ORTModelForSequenceClassification.from_pretrained(repo, export=True)
-    ort_model.save_pretrained("tone-encoder-onnx")
+    Manual export (not `optimum`) — Kaggle's preinstalled optimum build imports
+    `is_tf_available` from transformers.utils, which newer transformers removed
+    (ImportError). onnx/onnxruntime themselves are unaffected, so export by hand.
+    """
+    from huggingface_hub import HfApi
+    from onnxruntime.quantization import QuantType, quantize_dynamic
+
+    model = AutoModelForSequenceClassification.from_pretrained(repo)
     tok = AutoTokenizer.from_pretrained(repo)
-    tok.save_pretrained("tone-encoder-onnx")
+    model.eval()
 
-    quantizer = ORTQuantizer.from_pretrained("tone-encoder-onnx")
-    qconfig = AutoQuantizationConfig.avx512_vnni(is_static=False, per_channel=False)
-    quantizer.quantize(save_dir="tone-encoder-onnx", quantization_config=qconfig)
+    out_dir = "tone-encoder-onnx"
+    os.makedirs(out_dir, exist_ok=True)
+    dummy = tok("hello world", return_tensors="pt")
+    torch.onnx.export(
+        model,
+        (dummy["input_ids"], dummy["attention_mask"]),
+        f"{out_dir}/model.onnx",
+        input_names=["input_ids", "attention_mask"],
+        output_names=["logits"],
+        dynamic_axes={
+            "input_ids": {0: "batch", 1: "seq"},
+            "attention_mask": {0: "batch", 1: "seq"},
+            "logits": {0: "batch"},
+        },
+        opset_version=14,
+    )
+    quantize_dynamic(f"{out_dir}/model.onnx", f"{out_dir}/model_quantized.onnx",
+                      weight_type=QuantType.QUInt8)
 
-    # push ONNX artifacts (incl. model_quantized.onnx) into an `onnx/` subfolder
-    ort_model.push_to_hub("tone-encoder-onnx", repository_id=repo)
-    print(f"ONNX pushed to {repo}. transformers.js can load it with "
+    # tokenizer/config already live at repo root (pushed in main()); push only the
+    # ONNX weights into an onnx/ subfolder, matching transformers.js's expected layout.
+    HfApi().upload_folder(folder_path=out_dir, repo_id=repo, path_in_repo="onnx",
+                           allow_patterns=["*.onnx"])
+    print(f"ONNX pushed to {repo}/onnx. transformers.js can load it with "
           f'pipeline("text-classification", "{repo}", {{ dtype: "q8" }}).')
 
 
