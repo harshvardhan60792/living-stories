@@ -11,4 +11,8 @@ body { background:var(--bg); color:var(--fg); font-family:Georgia, serif; margin
 .choice:hover { border-color:var(--accent); }
 .freetext { width:100%; padding:12px; background:#171b24; color:var(--fg);
   border:1px solid #2a2f3a; border-radius:8px; font:inherit; }
+.npc .routed { display:inline-block; margin-left:8px; font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; opacity:.4; font-family:system-ui, sans-serif; }
+.reading { opacity:.65; font-style:italic; animation:reading-pulse 1.1s ease-in-out infinite; }
+@keyframes reading-pulse { 0%,100% { opacity:.3; } 50% { opacity:.75; } }
 #flowchart { height:220px; border:1px solid #20242e; border-radius:8px; margin-top:16px; }

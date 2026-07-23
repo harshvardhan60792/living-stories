@@ -3,6 +3,7 @@ import { StoryNode } from "../state/storyTypes";
 interface SceneOpts {
   text: string;
   npcResponse?: string;
+  stanceId?: string; // matched dialogue stance, surfaced subtly for debugging
   node: StoryNode;
   onChoice(id: string): void;
   onText(text: string): void;
@@ -14,6 +15,12 @@ export function renderScene(container: HTMLElement, opts: SceneOpts): void {
     const npc = document.createElement("p");
     npc.className = "scene npc";
     npc.textContent = opts.npcResponse;
+    if (opts.stanceId) {
+      const tag = document.createElement("span");
+      tag.className = "routed";
+      tag.textContent = `↳ ${opts.stanceId}`;
+      npc.appendChild(tag);
+    }
     container.appendChild(npc);
   }
   const p = document.createElement("p");
