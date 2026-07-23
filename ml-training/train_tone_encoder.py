@@ -9,11 +9,14 @@ BEFORE RUNNING, set the two constants in the CONFIG block below (HF_REPO and
 your HF token via Kaggle Secrets), then: Run All.
 
 Datasets used (public, auto-downloaded by `datasets`):
-  - go_emotions            (28 labels)
-  - empathetic_dialogues   (32 labels)
-  - daily_dialog           (emotions + dialogue acts)
-Plus authored gap examples: ml-training/data/tone_seed.jsonl (5 labels the
-public datasets can't reach: deceptive, evasive, threatening, cold, defiant).
+  - go_emotions            (28 labels) — REQUIRED; reaches 9 of the 14 tone labels
+  - empathetic_dialogues   (32 labels) — best-effort (redundant volume)
+  - daily_dialog           (emotions + acts) — best-effort (redundant volume)
+The last two ship script loaders that modern `datasets` refuses to run; build_dataset
+wraps them in try/except and the run still completes on go_emotions alone.
+Plus authored gap examples: ml-training/data/tone_seed.jsonl (the 5 labels no public
+dataset reaches: deceptive, evasive, threatening, cold, defiant). go_emotions + this
+seed = full 14-label coverage, so the two best-effort sources are optional.
 The taxonomy mapping lives in taxonomy.py (same folder) — upload it alongside
 this file, or paste its TAXONOMY / TONE_LABELS in if running as a notebook.
 """
@@ -37,7 +40,7 @@ from taxonomy import TAXONOMY, TONE_LABELS, map_label
 
 # ----------------------------- CONFIG (EDIT ME) -----------------------------
 BASE_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-HF_REPO = "YOUR_HF_USERNAME/living-stories-tone-encoder"  # <-- change this
+HF_REPO = "Harsh-ag26/living-stories-tone-encoder"  # <-- change this
 SEED_PATH = "tone_seed.jsonl"   # upload ml-training/data/tone_seed.jsonl next to this script
 EPOCHS = 3
 BATCH_SIZE = 64
@@ -58,29 +61,53 @@ def multihot(labels):
     return v
 
 
-def rows_from_source(name, text_field, label_field):
-    """Yield {text, labels[]} rows from one HF dataset, applying the taxonomy."""
-    ds = load_dataset(name, split="train")
+# DailyDialog emotion ints -> label names (parquet/script both use this order).
+DD_EMO = {0: "no_emotion", 1: "anger", 2: "disgust", 3: "fear",
+          4: "happiness", 5: "sadness", 6: "surprise"}
+
+
+def _int2key(ds, field, r, taxo_name):
+    """Turn a raw label (int or str) into the string key the TAXONOMY dict uses."""
+    if not isinstance(r, int):
+        return r
+    # daily_dialog parquet loses ClassLabel names -> use the fixed emotion map.
+    if taxo_name == "daily_dialog":
+        return DD_EMO.get(r)
+    feat = ds.features[field]
+    inner = getattr(feat, "feature", feat)   # Sequence(ClassLabel) or ClassLabel
+    return inner.int2str(r) if hasattr(inner, "int2str") else r
+
+
+def rows_from_source(name, text_field, label_field, taxo_name=None, **load_kw):
+    """Yield {text, labels[]} rows from one HF dataset, applying the taxonomy.
+
+    daily_dialog rows carry PARALLEL lists (dialog[] + emotion[]); flatten them
+    utterance-by-utterance. Everything else is one (text, label(s)) per row.
+    """
+    taxo_name = taxo_name or name.split("/")[-1]
+    ds = load_dataset(name, split="train", **load_kw)
+
     for ex in ds:
         text = ex[text_field]
         raw = ex[label_field]
-        raw_list = raw if isinstance(raw, list) else [raw]
-        mapped = []
-        for r in raw_list:
-            # go_emotions labels are ints; others are strings — normalize to the
-            # string label the TAXONOMY dict keys on.
-            key = ds.features[label_field].feature.int2str(r) if isinstance(r, int) else r
-            tgt = map_label(name if name in TAXONOMY else _alias(name), key)
-            if tgt:
-                mapped.append(tgt)
-        if mapped:
-            yield {"text": text, "labels": sorted(set(mapped))}
-
-
-def _alias(hf_name):
-    return {"go_emotions": "go_emotions",
-            "empathetic_dialogues": "empathetic_dialogues",
-            "daily_dialog": "daily_dialog"}[hf_name]
+        # Parallel-list datasets (daily_dialog): text is a list of utterances,
+        # label is the equal-length list of per-utterance labels.
+        if isinstance(text, list) and isinstance(raw, list) and len(text) == len(raw):
+            pairs = zip(text, raw)
+        else:
+            pairs = [(text, raw)]
+        for t, r in pairs:
+            raw_list = r if isinstance(r, list) else [r]
+            mapped = []
+            for one in raw_list:
+                key = _int2key(ds, label_field, one, taxo_name)
+                if key is None:
+                    continue
+                tgt = map_label(taxo_name, key)
+                if tgt:
+                    mapped.append(tgt)
+            if mapped:
+                yield {"text": t, "labels": sorted(set(mapped))}
 
 
 def load_seed(path):
@@ -91,15 +118,36 @@ def load_seed(path):
                 yield json.loads(line)
 
 
+# Each source is best-effort: go_emotions + tone_seed.jsonl ALONE cover all 14
+# labels (go_emotions reaches 9, the seed supplies the other 5). empathetic_dialogues
+# and daily_dialog are redundant VOLUME (they map only to labels go_emotions already
+# reaches), and as of 2026 their HF repos ship script loaders that the `datasets`
+# library refuses to run ("Dataset scripts are no longer supported"), with parquet
+# auto-convert disabled. So they are wrapped in try/except: if they load, great; if
+# not, the run still completes with full label coverage. Re-add a working mirror here
+# any time — the loader handles ints/strs and parallel-list (daily_dialog) shapes.
+SOURCES = [
+    ("go_emotions", "text", "labels", {}),                     # required, works today
+    ("empathetic_dialogues", "utterance", "context", {}),      # best-effort
+    ("daily_dialog", "dialog", "emotion", {}),                 # best-effort
+]
+
+
 def build_dataset():
     rows = []
-    # NOTE: field names below are for the canonical HF versions; if a load fails
-    # on a KeyError, print ds.features once and adjust text_field/label_field.
-    rows += list(rows_from_source("go_emotions", "text", "labels"))
-    rows += list(rows_from_source("empathetic_dialogues", "utterance", "context"))
-    rows += list(rows_from_source("daily_dialog", "dialog", "emotion"))
-    rows += list(load_seed(SEED_PATH))
+    for name, tf, lf, kw in SOURCES:
+        try:
+            got = list(rows_from_source(name, tf, lf, **kw))
+            rows += got
+            print(f"  {name}: +{len(got)} rows")
+        except Exception as e:
+            print(f"  {name}: SKIPPED ({type(e).__name__}: {str(e)[:120]})")
+    seed = list(load_seed(SEED_PATH))
+    rows += seed
+    print(f"  {SEED_PATH}: +{len(seed)} rows")
     print(f"total rows after taxonomy + seed: {len(rows)}")
+    if not rows:
+        raise RuntimeError("no training rows — every source failed AND seed empty")
     return Dataset.from_list(rows)
 
 
