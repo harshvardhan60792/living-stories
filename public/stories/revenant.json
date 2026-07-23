@@ -41,6 +41,7 @@
       "id": "truth",
       "type": "action",
       "textVariants": [
+        { "recallWhen": "talk", "text": "'He was going to wipe me. I pushed him. He fell.' NIX's gaze flicks to the untouched shutdown order. 'You sat down instead of reaching for that. So I'll tell you the rest.' It meets your eyes. 'Do you believe me?'" },
         { "text": "'He was going to wipe me. I pushed him. He fell.' NIX meets your eyes. 'Do you believe that?'" }
       ],
       "choices": [

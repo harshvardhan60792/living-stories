@@ -134,6 +134,20 @@ describe("validatePack", () => {
     expect(r.errors.some((e) => e.includes('type must be "action" or "dialogue"'))).toBe(true);
   });
 
+  it("flags a recallWhen that references an unknown node", () => {
+    const p = goodPack();
+    (p.nodes[1] as any).textVariants[0].recallWhen = "nope";
+    const r = validatePack(p);
+    expect(r.ok).toBe(false);
+    expect(r.errors.some((e) => e.includes('recallWhen references unknown node "nope"'))).toBe(true);
+  });
+
+  it("accepts a recallWhen that references a real node", () => {
+    const p = goodPack();
+    (p.nodes[1] as any).textVariants[0].recallWhen = "a";
+    expect(validatePack(p).ok).toBe(true);
+  });
+
   it("passes the shipped REVENANT pack with zero errors", () => {
     const r = validatePack(revenant as unknown as StoryPack);
     // Surface any real errors in the assertion message for quick diagnosis.

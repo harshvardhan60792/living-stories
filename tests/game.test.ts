@@ -43,6 +43,18 @@ describe("GameEngine", () => {
     expect(g.state.RAPPORT).toBeGreaterThan(before);
   });
 
+  it("memory callback: truth node recalls the earlier decision to talk", async () => {
+    const g = newGame();
+    // land on the truth node with "talk" in history (the wired path arrives there
+    // only via talk), then confirm currentText picks the recallWhen:"talk" variant.
+    (g as any)._history = ["cell", "talk", "truth"];
+    (g as any)._current = g["pack"].nodes.find((n: any) => n.id === "truth");
+    expect(g.currentText()).toContain("sat down instead of reaching");
+    // and without that history, the default variant is used
+    (g as any)._history = ["truth"];
+    expect(g.currentText()).not.toContain("sat down instead of reaching");
+  });
+
   it("reaching a null edge ends the story", async () => {
     const g = newGame();
     await g.act({ choiceId: "sign" });

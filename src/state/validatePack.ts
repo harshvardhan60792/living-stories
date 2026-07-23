@@ -106,7 +106,7 @@ export function validatePack(input: unknown): ValidationResult {
       err(`${at}: textVariants must be a non-empty array`);
     } else {
       node.textVariants.forEach((v, i) =>
-        checkTextVariant(v, `${at}.textVariants[${i}]`, err),
+        checkTextVariant(v, `${at}.textVariants[${i}]`, err, ids),
       );
     }
 
@@ -199,10 +199,22 @@ function isObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
 }
 
-function checkTextVariant(v: unknown, at: string, err: (m: string) => void): void {
+function checkTextVariant(
+  v: unknown,
+  at: string,
+  err: (m: string) => void,
+  nodeIds: Set<string>,
+): void {
   if (!isObject(v)) return err(`${at} must be an object`);
   if (typeof v.text !== "string" || !v.text.length) err(`${at}.text must be a non-empty string`);
   if (v.when !== undefined) checkBandCondition(v.when, `${at}.when`, err);
+  if (v.recallWhen !== undefined) {
+    if (typeof v.recallWhen !== "string" || !v.recallWhen.length) {
+      err(`${at}.recallWhen must be a non-empty node id`);
+    } else if (!nodeIds.has(v.recallWhen)) {
+      err(`${at}.recallWhen references unknown node "${v.recallWhen}"`);
+    }
+  }
 }
 
 function checkBandCondition(when: unknown, at: string, err: (m: string) => void): void {

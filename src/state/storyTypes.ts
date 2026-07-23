@@ -11,6 +11,10 @@ export type BandCondition = Partial<Record<Role, Band>>;
 export interface TextVariant {
   text: string;
   when?: BandCondition; // absent = default variant
+  /** Memory callback (Plan 5 T5): this variant is only eligible if the given node
+   *  id is in the player's visit history — lets a late scene reference an earlier
+   *  choice. Combines with `when` (both must hold). Absent = no history gate. */
+  recallWhen?: string;
 }
 export interface Edge {
   when?: BandCondition; // absent = always-eligible fallback

@@ -35,7 +35,7 @@ export class GameEngine {
   get state(): MeterState { return { ...this._state }; }
   get history(): string[] { return this._history; }
 
-  currentText(): string { return pickTextVariant(this._current, this._state); }
+  currentText(): string { return pickTextVariant(this._current, this._state, this._history); }
 
   private node(id: string): StoryNode {
     const n = this.pack.nodes.find((x) => x.id === id);
