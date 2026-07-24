@@ -8,8 +8,8 @@ describe("buildElements", () => {
     const els = buildElements(pack as unknown as StoryPack);
     const nodes = els.filter((e) => !e.data.source);
     const edges = els.filter((e) => e.data.source);
-    expect(nodes.length).toBe(4);
-    // cell(2) + talk stances(2->1 dedup targets) + truth(2) + sign_end(1)
+    expect(nodes.length).toBe(10);
+    // one edge per outgoing non-null edge across the expanded 10-node pack
     expect(edges.length).toBeGreaterThanOrEqual(5);
   });
 });

@@ -14,9 +14,9 @@ const GAP_LABELS = ["deceptive", "evasive", "threatening", "cold", "defiant"];
 describe("buildLabels", () => {
   it("emits one row per toneTagged choice + one per stance anchor phrasing", async () => {
     const rows = await buildLabels(packs);
-    // revenant: cell(open,sign) + truth(spare,doom) = 4 choices; talk stances
-    // empathize(3 anchors) + press(3 anchors) = 6; sign_end 'end' has no toneTag.
-    expect(rows.length).toBe(10);
+    // revenant (expanded): 13 toneTagged choices + 18 stance anchor phrasings
+    // (talk/wren_memory/confront × 2 stances × 3 anchors). sign_end 'end' is untagged.
+    expect(rows.length).toBe(31);
   });
 
   it("every row matches the spec §9 schema", async () => {
@@ -33,9 +33,9 @@ describe("buildLabels", () => {
     const rows = await buildLabels(packs);
     const texts = rows.map((r) => r.text);
     expect(new Set(texts).size).toBe(texts.length);
-    expect(texts).toContain("Reach for the shutdown order."); // a choice
     expect(texts).toContain("you're safe with me"); // an empathize anchor
-    expect(texts).not.toContain("Leave."); // sign_end's untagged choice
+    expect(texts).toContain("I believe you"); // another empathize anchor
+    expect(texts).not.toContain("Set down the pen and leave the cell block."); // sign_end's untagged choice
   });
 
   it("bootstrap deltas are non-degenerate (empathetic text raises RAPPORT)", async () => {

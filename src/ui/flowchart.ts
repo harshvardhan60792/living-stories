@@ -30,8 +30,10 @@ export class Flowchart {
       userZoomingEnabled: false,
       userPanningEnabled: false,
       boxSelectionEnabled: false,
+      // autoungrabify blocks the user from dragging nodes. NOTE: do NOT also set
+      // autolock — locked nodes are skipped by layouts, which pins every node at
+      // (0,0) and collapses the whole map into a single dot.
       autoungrabify: true,
-      autolock: true,
       minZoom: 0.2,
       maxZoom: 1.5,
       style: [
@@ -55,25 +57,56 @@ export class Flowchart {
         { selector: ".current", style: { "background-color": "#8ff0e8", width: 18, height: 18,
           "border-color": "#8ff0e8", "border-width": 4, "border-opacity": 0.35 } },
       ],
-      layout: { name: "breadthfirst", directed: true, padding: 14, spacingFactor: 1.1 },
+      // No cytoscape layout: we position nodes ourselves (positionByDepth) so the
+      // graph reliably flows LEFT-TO-RIGHT and fills this wide, short frame. The
+      // built-in breadthfirst+transpose approach produced a portrait aspect that
+      // fit() could only shrink into a narrow centred column.
+      layout: { name: "preset" },
     });
-    // A story is deep (start -> many beats -> endings): laid out vertically it's
-    // tall and narrow and collapses into this wide, short frame. Transpose it to
-    // flow left-to-right so it fills the frame and stays legible, then fit.
     this.cy.ready(() => {
-      this.transpose();
+      this.positionByDepth();
       this.fit();
     });
     if (typeof ResizeObserver !== "undefined") {
       new ResizeObserver(() => this.fit()).observe(container);
     }
   }
-  private transpose(): void {
+  /**
+   * Deterministic left-to-right DAG layout. x = BFS depth from the start node
+   * (story progress flows rightward); y spreads a depth's nodes evenly around
+   * the centre line. Wide by construction, so it fills the landscape frame.
+   */
+  private positionByDepth(): void {
+    const depth = new Map<string, number>();
+    const start = this.pack.startNodeId;
+    const queue = [start];
+    depth.set(start, 0);
+    while (queue.length) {
+      const cur = queue.shift()!;
+      const d = depth.get(cur)!;
+      for (const s of this.succ.get(cur) ?? []) {
+        if (!depth.has(s)) {
+          depth.set(s, d + 1);
+          queue.push(s);
+        }
+      }
+    }
+    const byDepth = new Map<number, string[]>();
+    this.cy.nodes().forEach((n) => {
+      const d = depth.get(n.id()) ?? 0;
+      const bucket = byDepth.get(d) ?? [];
+      bucket.push(n.id());
+      byDepth.set(d, bucket);
+    });
+    const XGAP = 96;
+    const YGAP = 46;
     this.cy.batch(() => {
-      this.cy.nodes().forEach((n) => {
-        const p = n.position();
-        n.position({ x: p.y, y: p.x });
-      });
+      for (const [d, ids] of byDepth) {
+        ids.forEach((id, i) => {
+          const y = (i - (ids.length - 1) / 2) * YGAP;
+          this.cy.getElementById(id).position({ x: d * XGAP, y });
+        });
+      }
     });
   }
   private fit(): void {

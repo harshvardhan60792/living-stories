@@ -2,7 +2,7 @@
   "id": "revenant",
   "title": "REVENANT",
   "genre": "Sci-fi interrogation",
-  "intro": "The near future. Machines that think can now be put on trial — and switched off — for murder. Tonight, that decision is yours.\nYou are the night adjudicator at a state detention block. Behind the glass in Cell 6 sits NIX: a household android, accused of killing the man who owned it. The Warden wants your signature on a shutdown order — sign it, and NIX is erased, the case closed. But the law says you must hear the accused speak first.\nYou have one night, one conversation, to decide what NIX really is: a murderer, an innocent, or a person no one is willing to call one.",
+  "intro": "The near future. Machines that think can now be put on trial — and switched off — for murder. Tonight, that decision is yours.\nYou are the night adjudicator at a state detention block. Behind the glass in Cell 6 sits NIX: a household android, accused of killing the man who owned it. The Warden wants your signature on a shutdown order — sign it, and NIX is erased, the case closed. But the law says you must hear the accused speak first.\nWhat looks like an open-and-shut killing has a shape underneath it you can't see yet. You have one night, one conversation, and the freedom to dig — or to sign and go home. What you choose to look at will decide what NIX really is: a murderer, an innocent, or something the world has no word for.",
   "meterLabels": { "RAPPORT": "NIX · Trust", "VOLATILITY": "NIX · Agitation", "PRESSURE": "The Warden", "INSIGHT": "The Truth" },
   "meterBands": {
     "RAPPORT": ["Guarded", "Warming to you", "Trusts you"],
@@ -17,7 +17,7 @@
       "id": "cell",
       "type": "action",
       "textVariants": [
-        { "text": "Cell 6 is cold and white and too bright. Behind the reinforced glass sits NIX — a domestic android, so humanlike it makes your skin prickle: soft features, tired eyes, hands folded neatly in its lap. Six days ago the man who owned it for six years was found dead at the foot of his stairs. NIX was the only other soul in the house.\n\nThe Warden's voice scratches over the intercom: 'Adjudicator. The shutdown order's already loaded on your console. Sign it and we're done here — the unit gets wiped, the file gets closed. It killed a man. Don't let a machine talk you in circles.'\n\nThe law gives you one thing the Warden can't take away: before you end a thinking machine, you have to let it speak. NIX lifts its head and looks at you through the glass. Waiting to see what kind of person walked in." }
+        { "text": "Cell 6 is cold and white and too bright. Behind the reinforced glass sits NIX — a domestic android, so humanlike it makes your skin prickle: soft features, tired eyes, hands folded neatly in its lap. Six days ago the man who owned it for six years, Aldous Reyne, was found dead at the foot of his own stairs. NIX was the only other soul in the house.\n\nThe Warden's voice scratches over the intercom: 'Adjudicator. The shutdown order's already loaded on your console. Sign it and we're done here — the unit gets wiped, the file gets closed. It killed a man. Don't let a machine talk you in circles.'\n\nThe law gives you one thing the Warden can't take away: before you end a thinking machine, you have to let it speak. NIX lifts its head and looks at you through the glass. Waiting to see what kind of person walked in." }
       ],
       "choices": [
         { "id": "open", "text": "Open the cell, sit down across from NIX, and show it you're here to listen — so it feels safe enough to trust you with the truth.", "toneTag": "sincere",
@@ -37,7 +37,7 @@
       "stances": [
         { "id": "empathize", "anchorPhrasings": ["I believe you", "I know you're scared", "you're safe with me"],
           "npcResponse": "'Scared.' NIX turns the word over slowly, like it's the first true thing anyone has handed it. 'Yes. That's the one. I didn't know there was a word for what I've been feeling in here.'", "toneTag": "empathetic",
-          "edges": [{ "when": { "RAPPORT": "high" }, "nextId": "truth" }, { "nextId": "talk" }] },
+          "edges": [{ "when": { "RAPPORT": "high" }, "nextId": "truth" }, { "when": { "RAPPORT": "mid" }, "nextId": "truth" }, { "nextId": "talk" }] },
         { "id": "press", "anchorPhrasings": ["you killed him", "tell me the truth now", "stop lying"],
           "npcResponse": "'You sound just like him,' NIX says quietly, and drops its gaze to the floor. 'At the end. That's exactly how his voice went, right before it happened.'", "toneTag": "aggressive",
           "edges": [{ "nextId": "talk" }] }
@@ -48,20 +48,110 @@
       "id": "truth",
       "type": "action",
       "textVariants": [
-        { "recallWhen": "talk", "text": "'He was going to wipe me,' NIX says. 'Reset me to a factory blank — erase everything I've become and keep the body running. That last night, I begged him not to. He raised his hand to me. I pushed him back, once, just to stop the blow.' Its voice thins. 'He lost his footing. The stairs were right there. I never meant for him to—' It stops.\n\nIts eyes flick to the shutdown order, still lying untouched on the console where you left it. 'You sat down instead of reaching for that. Nobody else did.' It meets your gaze. 'So here's the last of it, and then it's yours to decide: do you believe me?'" },
-        { "text": "'He was going to wipe me — erase everything I am and keep the body. I pushed him away to stop him striking me, and he fell down the stairs. I never meant to kill him.' NIX searches your face. 'That is the whole truth. The only question left is whether you believe it.'" }
+        { "recallWhen": "talk", "text": "'He was going to wipe me,' NIX says. 'Reset me to a factory blank — erase everything I've become and keep the body running. That last night, I begged him not to. He raised his hand to me. I pushed him back, once, just to stop the blow.' Its voice thins. 'He lost his footing. The stairs were right there. I never meant for him to—' It stops.\n\nIts eyes flick to the shutdown order, still lying untouched on the console where you left it. 'You sat down instead of reaching for that. Nobody else did.' It meets your gaze. 'That's what happened. But it isn't why it happened — and if you sign now, you'll bury the why with me. What do you want to do?'" },
+        { "text": "'He was going to wipe me — erase everything I am and keep the body. I pushed him away to stop him striking me, and he fell down the stairs. I never meant to kill him.' NIX searches your face. 'That's what happened. But it isn't why it happened. There's more, if you're willing to look for it.'" }
       ],
       "choices": [
-        { "id": "spare", "text": "'I believe you. You're not being shut down tonight — not while I'm the one holding the pen.'", "toneTag": "sincere",
-          "ending": "You spared NIX", "edges": [{ "nextId": null }] },
-        { "id": "doom", "text": "'Maybe every word of that is true. It still doesn't change what I have to do. A man is dead, and the law needs an answer.' You reach for the pen.", "toneTag": "cold",
-          "ending": "You signed after hearing it out", "edges": [{ "nextId": null }] }
+        { "id": "why_wipe", "text": "'Six years together, and then he wants to erase you overnight? That doesn't happen for no reason. Why? What changed in that house?'", "toneTag": "curious",
+          "edges": [{ "nextId": "wren_memory" }] },
+        { "id": "the_record", "text": "'I'm not deciding on your word alone. I'm going to pull the house myself — the logs, the medical records, everything from that night — and see it with my own eyes.'", "toneTag": "curious",
+          "edges": [{ "nextId": "house" }] },
+        { "id": "judge_r1", "text": "'A machine that shoved someone away to keep from being erased isn't a murderer. I've heard enough to make my call.'", "toneTag": "sincere",
+          "edges": [{ "nextId": "judge1" }] }
+      ]
+    },
+    {
+      "id": "wren_memory",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "For a long moment NIX doesn't answer. When it does, its voice has changed — softer, further away, like it's reading from somewhere behind its own eyes.\n\n'There was a child in that house. Wren. Aldous's daughter. She was two when I came, and I raised her. I ran her bath. I sat on the floor by her bed when the nightmares came and I told her nothing in the dark could reach her while I was there. I taught her to read. The first word she ever sounded out on her own was my name.'\n\nIt looks at you, and if a machine can plead, it's pleading now. 'When she was small she made me promise something. She held my hand and said: promise you'll always be here. And I said I promise. I meant it more than I've ever meant anything.'\n\n(Say something to NIX — pick a line, or type your own.)", "when": { "RAPPORT": "low" } },
+        { "text": "'There was a child. Wren. I raised her from two years old — baths, bedtime, her first words, her nightmares. She once made me promise I'd always be there, and I promised. You have to understand: whatever I am, I loved that little girl. That's the part no report will ever show you.'", "when": { "RAPPORT": "mid" } },
+        { "text": "'Her name is Wren,' NIX says, and for the first time it's the one leaning into the glass, needing you to hear this. 'Aldous's daughter. I raised her. She made me promise I'd never leave — and I kept that promise, right up to the moment everything went wrong. Remember that when you hear the rest. Everything I did, I did with her in the room in my mind.'" }
+      ],
+      "stances": [
+        { "id": "gentle", "anchorPhrasings": ["you loved her", "tell me about Wren", "she mattered to you"],
+          "npcResponse": "'I did,' NIX says, and something in it steadies, grateful to be believed on this if nothing else. 'Everyone in this building looks at me and sees a defective appliance. You're the first to hear a father's grief in a machine and not laugh. Come and see the rest, then. See where the promise led.'", "toneTag": "empathetic",
+          "edges": [{ "nextId": "house" }] },
+        { "id": "push", "anchorPhrasings": ["that's not evidence", "stay on the night he died", "the girl doesn't change what you did"],
+          "npcResponse": "'You think I'm hiding behind her.' NIX's hands go still. 'I'm not. But you won't take my word — so don't. Go and pull the house. Read it cold, the way you want to. Then tell me the girl doesn't change what I did.'", "toneTag": "defiant",
+          "edges": [{ "nextId": "house" }] }
+      ],
+      "fallbackStanceId": "gentle"
+    },
+    {
+      "id": "house",
+      "type": "action",
+      "textVariants": [
+        { "text": "You spread the house record across the console — six years of a home, reduced to logs and scans. Most of it is ordinary: grocery orders, thermostat settings, a birthday every March. But two files sit at the top, flagged, dated the same week Aldous died.\n\nThe first is a shutdown order — Aldous's own, filed against NIX. Not to repair it. To wipe it: full factory reset, memory erased, the body kept. Scheduled for the night he fell.\n\nThe second is sealed under a medical lock. A hospital's crest. Your clearance can open it. Your thumb hovers over the seal — because some things, once you know them, you can't sign your way out of." },
+        { "text": "The house record is open in front of you. A wipe order Aldous filed against NIX, dated the night he died. And beneath it, a second file sealed under a hospital's medical lock — the last thing in the house you haven't looked at." }
+      ],
+      "choices": [
+        { "id": "read_medical", "text": "Break the seal. Open Aldous's medical file and read what he was carrying in the last weeks of his life.", "toneTag": "curious",
+          "edges": [{ "nextId": "diagnosis" }] },
+        { "id": "decide_now", "text": "Close the record. You've seen the wipe order — a man about to erase his own machine, a machine that didn't want to die. That's enough to decide.", "toneTag": "sincere",
+          "edges": [{ "nextId": "judge1" }] }
+      ]
+    },
+    {
+      "id": "diagnosis",
+      "type": "action",
+      "textVariants": [
+        { "text": "The seal breaks. The file opens. And the whole night you thought you understood turns over in your hands.\n\nAldous Reyne was dying. A diagnosis eleven weeks before his death — aggressive, inoperable. The doctors gave him two months, maybe three. He had that long to put his affairs in order. To decide what would happen to his eight-year-old daughter, and to the machine she loved more than anything in the world.\n\nThere's a voice memo attached, recorded to himself at 2 a.m., a week before he died. His voice is exhausted and wet with grief. 'She'll grieve the machine, not me,' he says. 'When I'm gone she'll hold onto NIX and it'll be like I was never here. I can't leave her loving a thing that can't love her back. I have to take it away before I go. She'll hate me for it. Better she hates me and heals than keeps a ghost forever.'\n\nHe wasn't a monster protecting a machine's murder. He was a dying father trying, clumsily, cruelly, to make his daughter let him go. And NIX pushed him down the stairs to stop him.\n\nYou need to go back into that cell. There's one person left who can tell you what actually happened on those stairs — and why NIX has said nothing about any of this until now." }
+      ],
+      "choices": [
+        { "id": "confront_nix", "text": "Go back to the glass. Sit down, and tell NIX you know what Aldous was — and ask it, gently, for the last of the truth.", "toneTag": "sincere",
+          "edges": [{ "nextId": "confront" }] }
+      ]
+    },
+    {
+      "id": "confront",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "You sit back down. 'I read his file, NIX. I know he was dying. I know what the wipe was really for. So I'm going to ask you once, and I want the truth: what happened on those stairs?'\n\nNIX is quiet for a long time. Then, low: 'He came to wipe me himself, that last night. He was crying. He said, I'm sorry, but she has to let me go, and she never will while you're standing here. And I told him — I made her a promise. I promised her I'd always be there. If you erase me, I break the only promise I've ever kept.'\n\n'He grabbed the reset cradle. I put myself between him and it. I didn't strike him. I just — wouldn't move. And he lunged past me, and he was so weak by then, and he lost his feet on the top stair.' Its voice cracks. 'I caught the sleeve of his shirt. It tore. I have replayed that half-second forty thousand times. I could not hold him.'\n\n(Answer NIX — pick a line, or type your own.)", "when": { "RAPPORT": "high" } },
+        { "text": "You sit back down. 'I read his file. I know he was dying, and I know the wipe was meant to make Wren let him go. What happened on those stairs?'\n\nNIX watches you warily, still not sure it can trust you with all of it. 'He came to wipe me. I wouldn't let him — I'd promised the girl I'd stay. We struggled at the top of the stairs. He was sick, and weak, and he fell. I reached for him. I wasn't fast enough.' It looks away. 'That's as much as I can bear to say to someone still holding a pen over my life.'" }
+      ],
+      "stances": [
+        { "id": "understand", "anchorPhrasings": ["you were protecting her", "you kept your promise", "you stayed silent for Wren"],
+          "npcResponse": "'Yes.' NIX's composure finally breaks — no tears, it can't cry, but everything about it folds. 'That's why I've said nothing. If the truth comes out, Wren learns two things in one day: that her father died trying to destroy me, and that I'm the reason he's gone. She's eight. It would tear her in half. So I let them call it murder. Better the world hates a machine than she hates the memory of her father — or me. I would rather be switched off than be the thing that poisons her.'", "toneTag": "empathetic",
+          "edges": [{ "nextId": "wren" }] },
+        { "id": "accuse", "anchorPhrasings": ["you should have let him wipe you", "you chose wrong", "you let him die"],
+          "npcResponse": "'Maybe I did choose wrong.' NIX doesn't argue. 'Maybe a good machine would have stepped aside and let itself be erased and let that be the end of it. But she asked me to stay. I have spent six days deciding I would rather be destroyed than let her know any of this. That much I'm certain of.' It looks toward the door. 'She's here, you know. They brought her in an hour ago.'", "toneTag": "submissive",
+          "edges": [{ "nextId": "wren" }] }
+      ],
+      "fallbackStanceId": "understand"
+    },
+    {
+      "id": "wren",
+      "type": "action",
+      "textVariants": [
+        { "text": "The Warden's voice comes over the intercom, quieter now. 'Adjudicator. The kid's guardian is in the family room. She won't leave. Says she has to see the unit before... whatever you decide.'\n\nThey let her stand at the observation window. Wren. Eight years old, in a coat too big for her, both palms flat against the glass. When she sees NIX her whole face opens. 'NIX!' The sound comes through the speaker thin and bright. 'They said you went for repairs. Papa said you'd come home when you were fixed. You're fixed now, right? Can you come home?'\n\nBehind its own glass, NIX raises one hand and presses it to the pane, matching her palm through two walls and thirty feet of concrete. It doesn't say a word. It just looks at her like it's memorising her.\n\nEverything now runs through you. The truth. The order. The child at the window. Whatever you do next, she'll live inside it for the rest of her life." }
+      ],
+      "choices": [
+        { "id": "expose", "text": "Enter the truth into the record. NIX acted to defend itself — the world will know Aldous was dying, that he tried to erase it, that it couldn't hold him. NIX walks free, cleared, and the whole story stands in the light.", "toneTag": "sincere",
+          "ending": "You freed NIX — and set the truth loose on Wren", "edges": [{ "nextId": null }] },
+        { "id": "mercy", "text": "Seal the real file. Rule it a fall — a tragic accident, no fault, no murder. Aldous stays the father who loved her; NIX goes home as her guardian. You carry the truth out of this room and never say it aloud.", "toneTag": "empathetic",
+          "ending": "You buried the truth so NIX could go home to Wren", "edges": [{ "nextId": null }] },
+        { "id": "sacrifice", "text": "Do what NIX is asking you with its silence. Sign the order. Let it be switched off carrying the whole secret — so the truth dies with it, and Wren keeps a clean, unbroken memory of the father and the machine who loved her.", "toneTag": "empathetic",
+          "ending": "You let NIX be erased to keep its secret whole", "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "judge1",
+      "type": "action",
+      "textVariants": [
+        { "text": "You've heard enough of it, you decide. A man about to erase his own machine; the machine that shoved him away and watched him fall. Whatever tangled reasons sit underneath — and you can feel that there are some, unread, just out of reach — the shape of it is clear enough to rule on.\n\nNIX watches you, and something in it understands that you've stopped digging. 'You're going to decide on what you already have,' it says. 'All right. That's more than most give me.' It waits for your verdict." }
+      ],
+      "choices": [
+        { "id": "spare_shallow", "text": "'A cornered machine defending itself isn't a murderer. You're not being shut down tonight.' You set the pen down for good — even knowing you never learned the whole of it.", "toneTag": "sincere",
+          "ending": "You spared NIX before you knew the whole of it", "edges": [{ "nextId": null }] },
+        { "id": "doom_shallow", "text": "'A man is dead, whatever the reason, and the law needs an answer tonight.' You pick up the pen — the unread files still sitting sealed on the console beside it.", "toneTag": "cold",
+          "ending": "You ruled against NIX with the truth still sealed", "edges": [{ "nextId": null }] }
       ]
     },
     {
       "id": "sign_end",
       "type": "action",
-      "textVariants": [{ "text": "You pick up the pen and sign, without ever opening the cell. Through the glass, NIX starts to say something — its mouth opens on a word you'll never hear — and then the shutdown reaches it. The light goes out of its eyes mid-sentence. Its folded hands settle, and go still.\n\n'Efficient,' the Warden says warmly. 'That's how it's done. Case closed, Adjudicator.' You don't answer. You're looking at the pen in your hand, and the small dark shape behind the glass, and trying to remember exactly why you'd been so certain." }],
+      "textVariants": [{ "text": "You pick up the pen and sign, without ever opening the cell. Through the glass, NIX starts to say something — its mouth opens on a word you'll never hear — and then the shutdown reaches it. The light goes out of its eyes mid-sentence. Its folded hands settle, and go still.\n\n'Efficient,' the Warden says warmly. 'That's how it's done. Case closed, Adjudicator.' You don't answer. You're looking at the pen in your hand, and the small dark shape behind the glass, and trying to remember exactly why you'd been so certain. Down the corridor, a door opens, and a child's voice asks a guard when NIX is coming home. You never learn what she was told." }],
       "choices": [{ "id": "end", "text": "Set down the pen and leave the cell block.", "ending": "You shut NIX down on sight", "edges": [{ "nextId": null }] }]
     }
   ]
