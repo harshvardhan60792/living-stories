@@ -343,5 +343,50 @@
     "mtime": 1784820661.780958,
     "ast_hash": "1edf38d8aef5aa8765e79a132904d2c0",
     "semantic_hash": ""
+  },
+  "ml-training/bibles/seventh-guest.bible.json": {
+    "mtime": 1784821262.951251,
+    "ast_hash": "897081d671045027f18ddb9fb547cb82",
+    "semantic_hash": ""
+  },
+  "ml-training/generate/harness.ts": {
+    "mtime": 1784821361.9120042,
+    "ast_hash": "c6b61784e5fb0cc7164508620c348557",
+    "semantic_hash": ""
+  },
+  "ml-training/generate/prompts.ts": {
+    "mtime": 1784821334.8124988,
+    "ast_hash": "ffdb967333fcf137efa5d1a70cdae370",
+    "semantic_hash": ""
+  },
+  "ml-training/generate/run-fewshot.ts": {
+    "mtime": 1784821526.6558657,
+    "ast_hash": "f9fa281ab1c81967820790b93133a8af",
+    "semantic_hash": ""
+  },
+  "src/state/bibleTypes.ts": {
+    "mtime": 1784821244.6153834,
+    "ast_hash": "c905a040188673f365a604de91dc9f56",
+    "semantic_hash": ""
+  },
+  "tests/bible.test.ts": {
+    "mtime": 1784821271.769731,
+    "ast_hash": "7f678149f207ef9175fbb786648cb1ae",
+    "semantic_hash": ""
+  },
+  "tests/harness.test.ts": {
+    "mtime": 1784821394.7018712,
+    "ast_hash": "84b614e0cc2423d3a90505141da9ded5",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1784821034.4511285,
+    "ast_hash": "f418dbbc6c854e4ce8989ccd4dfc799d",
+    "semantic_hash": ""
+  },
+  "ml-training/generate/run-fewshot.md": {
+    "mtime": 1784821565.8463829,
+    "ast_hash": "74e4e2889d236e37504f7cdcaa6738b6",
+    "semantic_hash": ""
   }
 }

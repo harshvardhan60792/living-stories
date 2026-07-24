@@ -1,16 +1,16 @@
 # Graph Report - living-stories  (2026-07-23)
 
 ## Corpus Check
-- 76 files · ~36,030 words
+- 78 files · ~37,086 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 420 nodes · 767 edges · 25 communities (24 shown, 1 thin omitted)
+- 426 nodes · 772 edges · 26 communities (25 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `07a383b8`
+- Built from commit: `b03115bc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -36,6 +36,7 @@
 - stats.ts
 - Few-shot generation dry-run — go/no-go record (Plan 4 Task 4)
 - Living Stories
+- Pack curation checklist (Plan 4 Task 9)
 
 ## God Nodes (most connected - your core abstractions)
 1. `MeterState` - 23 edges
@@ -64,7 +65,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (25 total, 1 thin omitted)
+## Communities (26 total, 1 thin omitted)
 
 ### Community 0 - "Package Manifest & Runtime Deps"
 Cohesion: 0.06
@@ -75,16 +76,16 @@ Cohesion: 0.13
 Nodes (14): Part A — Validator + few-shot pipeline (agent-executable, offline, TDD), Part B — QLoRA fine-tune (CONDITIONAL; requires human: Kaggle P100 + HF Hub), Part C — Curation + catalog integration (agent-executable), Plan 4: Author-Time Story-Generation Pipeline, Self-Review, Task 1: Pack schema + graph validator (the safety gate), Task 2: Story bible schema + one authored bible, Task 3: Node-by-node generation harness + schema exemplars (+6 more)
 
 ### Community 2 - "Tone Scoring (ML)"
-Cohesion: 0.12
-Nodes (16): ActInput, LearnedStateHead, StateHeadWeights, LinearHead, MockScorer, StateHead, TONE_LABELS, ToneScorer (+8 more)
+Cohesion: 0.07
+Nodes (31): ActInput, ActResult, GameEngine, LearnedStateHead, StateHeadWeights, LinearHead, MockScorer, StateHead (+23 more)
 
 ### Community 3 - "Story Types & Flowchart"
 Cohesion: 0.10
 Nodes (28): coerceNode(), DEFAULT_STATE, endingGuidance(), extractJson(), GenerateOptions, generatePack(), GenerateResult, LM (+20 more)
 
 ### Community 4 - "Router & Meter Math"
-Cohesion: 0.09
-Nodes (30): ActResult, GameEngine, matchesCondition(), pickTextVariant(), selectEdge(), applyDelta(), band(), bands() (+22 more)
+Cohesion: 0.32
+Nodes (11): matchesCondition(), pickTextVariant(), selectEdge(), applyDelta(), band(), bands(), clampState(), Band (+3 more)
 
 ### Community 5 - "TypeScript Config"
 Cohesion: 0.14
@@ -95,8 +96,8 @@ Cohesion: 0.08
 Nodes (28): map_label(), Plan 3 Task 1 — map source-dataset emotion labels onto the game's 14 TONE_LABELS, The set of TONE_LABELS that at least one source label maps to., TONE_LABELS that no source label maps to., Map a source (dataset, label) to a TONE_LABELS entry, or None if dropped., reachable_targets(), unreachable_targets(), Offline completeness tests for the taxonomy mapping (Plan 3 Task 1).  Run: pytho (+20 more)
 
 ### Community 7 - "App Wiring & Menu/Meter UI"
-Cohesion: 0.13
-Nodes (10): Embedder, MockEmbedder, buildStanceIndex(), nearestStance(), StanceRouter, cosineSimilarity(), l2normalize(), startStory() (+2 more)
+Cohesion: 0.14
+Nodes (9): Embedder, MockEmbedder, buildStanceIndex(), nearestStance(), StanceRouter, cosineSimilarity(), l2normalize(), TransformersEmbedder (+1 more)
 
 ### Community 8 - "Scene UI"
 Cohesion: 0.12
@@ -123,16 +124,16 @@ Cohesion: 0.36
 Nodes (9): delta_vec(), fit(), load_rows(), main(), onehot(), Plan 3 Task 5 — train the state-update head (agent-executable, CPU, no GPU).  Le, Build (X tone one-hot, Y Δstate) from the intent table + labels.jsonl., Ridge-regularized least squares: W (14x4) minimizing ||X·W - Y||² + λ||W||². (+1 more)
 
 ### Community 19 - "build-labels.ts"
-Cohesion: 0.17
-Nodes (13): buildLabels(), LabelRow, toJsonl(), trimDelta(), StoryPack, buildElements(), Flowchart, classifyNodes() (+5 more)
+Cohesion: 0.13
+Nodes (19): buildLabels(), LabelRow, toJsonl(), trimDelta(), ActionNode, BandCondition, BaseNode, Choice (+11 more)
 
 ### Community 20 - "test_state_head.py"
 Cohesion: 0.48
 Nodes (6): load(), Plan 3 Task 5 test — verify the learned state-head artifact.  Pure stdlib (no nu, test_fit_quality_reported(), test_recovers_authored_intent(), test_shapes(), test_state_block_is_zero()
 
 ### Community 21 - "validatePack.ts"
-Cohesion: 0.23
-Nodes (11): TextVariant, bfs(), buildAdjacency(), checkBandCondition(), checkEdges(), checkTextVariant(), finalize(), isObject() (+3 more)
+Cohesion: 0.25
+Nodes (10): bfs(), buildAdjacency(), checkBandCondition(), checkEdges(), checkTextVariant(), finalize(), isObject(), VALID_BANDS (+2 more)
 
 ### Community 22 - "stats.ts"
 Cohesion: 0.30
@@ -146,25 +147,29 @@ Nodes (5): Baseline for Part B (if ever triggered), Decision: **SKIP Part B (QLo
 Cohesion: 0.40
 Nodes (4): Develop, How it works, Living Stories, Stack
 
+### Community 25 - "Pack curation checklist (Plan 4 Task 9)"
+Cohesion: 0.33
+Nodes (5): Coherence (human judgement), Integration, Mechanical (the validator already enforces — just confirm it's green), Pack curation checklist (Plan 4 Task 9), Routing (Plan 2 cosine)
+
 ## Knowledge Gaps
-- **134 isolated node(s):** `DEFAULT_STATE`, `BOUNDS`, `here`, `bible`, `byId` (+129 more)
+- **138 isolated node(s):** `DEFAULT_STATE`, `BOUNDS`, `here`, `bible`, `byId` (+133 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `StoryPack` connect `build-labels.ts` to `Tone Scoring (ML)`, `Story Types & Flowchart`, `Router & Meter Math`, `App Wiring & Menu/Meter UI`, `validatePack.ts`, `stats.ts`?**
+- **Why does `StoryPack` connect `build-labels.ts` to `Tone Scoring (ML)`, `Story Types & Flowchart`, `App Wiring & Menu/Meter UI`, `validatePack.ts`, `stats.ts`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `MeterState` connect `Router & Meter Math` to `build-labels.ts`, `Tone Scoring (ML)`, `Story Types & Flowchart`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
-- **Why does `startStory()` connect `App Wiring & Menu/Meter UI` to `Tone Scoring (ML)`, `build-labels.ts`, `Router & Meter Math`, `stats.ts`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Why does `MeterState` connect `Tone Scoring (ML)` to `build-labels.ts`, `Story Types & Flowchart`, `Router & Meter Math`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `startStory()` connect `Tone Scoring (ML)` to `build-labels.ts`, `Router & Meter Math`, `stats.ts`, `App Wiring & Menu/Meter UI`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **What connects `DEFAULT_STATE`, `BOUNDS`, `here` to the rest of the system?**
-  _134 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _138 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Package Manifest & Runtime Deps` be split into smaller, more focused modules?**
   _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `Game Engine & Turn Loop` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Should `Tone Scoring (ML)` be split into smaller, more focused modules?**
-  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07075873827791987 - nodes in this community are weakly interconnected._

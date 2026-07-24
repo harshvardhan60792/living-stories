@@ -1,16 +1,16 @@
 # Graph Report - living-stories  (2026-07-23)
 
 ## Corpus Check
-- 67 files · ~32,261 words
+- 76 files · ~36,030 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 375 nodes · 681 edges · 23 communities (22 shown, 1 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
+- 420 nodes · 767 edges · 25 communities (24 shown, 1 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `49a6042b`
+- Built from commit: `07a383b8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -34,35 +34,37 @@
 - test_state_head.py
 - validatePack.ts
 - stats.ts
+- Few-shot generation dry-run — go/no-go record (Plan 4 Task 4)
+- Living Stories
 
 ## God Nodes (most connected - your core abstractions)
-1. `MeterState` - 21 edges
-2. `StoryPack` - 20 edges
+1. `MeterState` - 23 edges
+2. `StoryPack` - 22 edges
 3. `startStory()` - 17 edges
-4. `Design Spec — AI-Driven Interactive Fiction ("Living Stories")` - 17 edges
-5. `Role` - 14 edges
-6. `File Structure` - 13 edges
-7. `GameEngine` - 12 edges
-8. `ROLES` - 12 edges
-9. `StoryNode` - 10 edges
-10. `Embedder` - 9 edges
+4. `Role` - 17 edges
+5. `Design Spec — AI-Driven Interactive Fiction ("Living Stories")` - 17 edges
+6. `ROLES` - 15 edges
+7. `File Structure` - 13 edges
+8. `GameEngine` - 12 edges
+9. `StoryNode` - 11 edges
+10. `validatePack()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `LabelRow` --references--> `MeterState`  [EXTRACTED]
   scripts/build-labels.ts → src/state/storyTypes.ts
-- `ActResult` --references--> `MeterState`  [EXTRACTED]
-  src/engine/game.ts → src/state/storyTypes.ts
-- `test_map_label_roundtrip()` --calls--> `map_label()`  [EXTRACTED]
-  ml-training/tests/test_taxonomy.py → ml-training/taxonomy.py
-- `GameEngine` --references--> `MeterState`  [EXTRACTED]
-  src/engine/game.ts → src/state/storyTypes.ts
-- `startStory()` --calls--> `buildStanceIndex()`  [EXTRACTED]
-  src/main.ts → src/engine/intentRouter.ts
+- `GenerateOptions` --references--> `MeterState`  [EXTRACTED]
+  ml-training/generate/harness.ts → src/state/storyTypes.ts
+- `GenerateResult` --references--> `StoryPack`  [EXTRACTED]
+  ml-training/generate/harness.ts → src/state/storyTypes.ts
+- `generatePack()` --calls--> `validatePack()`  [EXTRACTED]
+  ml-training/generate/harness.ts → src/state/validatePack.ts
+- `GenerateResult` --references--> `ValidationResult`  [EXTRACTED]
+  ml-training/generate/harness.ts → src/state/validatePack.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (23 total, 1 thin omitted)
+## Communities (25 total, 1 thin omitted)
 
 ### Community 0 - "Package Manifest & Runtime Deps"
 Cohesion: 0.06
@@ -74,15 +76,15 @@ Nodes (14): Part A — Validator + few-shot pipeline (agent-executable, offline,
 
 ### Community 2 - "Tone Scoring (ML)"
 Cohesion: 0.12
-Nodes (18): LearnedStateHead, StateHeadWeights, LinearHead, StateHead, main(), MeterState, Role, ROLES (+10 more)
+Nodes (16): ActInput, LearnedStateHead, StateHeadWeights, LinearHead, MockScorer, StateHead, TONE_LABELS, ToneScorer (+8 more)
 
 ### Community 3 - "Story Types & Flowchart"
-Cohesion: 0.18
-Nodes (12): buildLabels(), LabelRow, toJsonl(), trimDelta(), MockScorer, TONE_LABELS, ToneScorer, ToneVector (+4 more)
+Cohesion: 0.10
+Nodes (28): coerceNode(), DEFAULT_STATE, endingGuidance(), extractJson(), GenerateOptions, generatePack(), GenerateResult, LM (+20 more)
 
 ### Community 4 - "Router & Meter Math"
-Cohesion: 0.12
-Nodes (22): ActInput, ActResult, GameEngine, matchesCondition(), pickTextVariant(), selectEdge(), applyDelta(), band() (+14 more)
+Cohesion: 0.09
+Nodes (30): ActResult, GameEngine, matchesCondition(), pickTextVariant(), selectEdge(), applyDelta(), band(), bands() (+22 more)
 
 ### Community 5 - "TypeScript Config"
 Cohesion: 0.14
@@ -94,7 +96,7 @@ Nodes (28): map_label(), Plan 3 Task 1 — map source-dataset emotion labels ont
 
 ### Community 7 - "App Wiring & Menu/Meter UI"
 Cohesion: 0.13
-Nodes (9): Embedder, MockEmbedder, buildStanceIndex(), nearestStance(), StanceRouter, cosineSimilarity(), l2normalize(), TransformersEmbedder (+1 more)
+Nodes (10): Embedder, MockEmbedder, buildStanceIndex(), nearestStance(), StanceRouter, cosineSimilarity(), l2normalize(), startStory() (+2 more)
 
 ### Community 8 - "Scene UI"
 Cohesion: 0.12
@@ -121,23 +123,31 @@ Cohesion: 0.36
 Nodes (9): delta_vec(), fit(), load_rows(), main(), onehot(), Plan 3 Task 5 — train the state-update head (agent-executable, CPU, no GPU).  Le, Build (X tone one-hot, Y Δstate) from the intent table + labels.jsonl., Ridge-regularized least squares: W (14x4) minimizing ||X·W - Y||² + λ||W||². (+1 more)
 
 ### Community 19 - "build-labels.ts"
-Cohesion: 0.26
-Nodes (7): StoryPack, buildElements(), Flowchart, classifyNodes(), ghostEdgeKeys(), NodeVizState, successors()
+Cohesion: 0.17
+Nodes (13): buildLabels(), LabelRow, toJsonl(), trimDelta(), StoryPack, buildElements(), Flowchart, classifyNodes() (+5 more)
 
 ### Community 20 - "test_state_head.py"
 Cohesion: 0.48
 Nodes (6): load(), Plan 3 Task 5 test — verify the learned state-head artifact.  Pure stdlib (no nu, test_fit_quality_reported(), test_recovers_authored_intent(), test_shapes(), test_state_block_is_zero()
 
 ### Community 21 - "validatePack.ts"
-Cohesion: 0.21
-Nodes (12): StoryManifestEntry, bfs(), buildAdjacency(), checkBandCondition(), checkEdges(), checkTextVariant(), finalize(), isObject() (+4 more)
+Cohesion: 0.23
+Nodes (11): TextVariant, bfs(), buildAdjacency(), checkBandCondition(), checkEdges(), checkTextVariant(), finalize(), isObject() (+3 more)
 
 ### Community 22 - "stats.ts"
-Cohesion: 0.25
-Nodes (9): startStory(), EndingInfo, EndingStat, endingStats(), packEndings(), readCounts(), recordEnding(), storageKey() (+1 more)
+Cohesion: 0.30
+Nodes (8): EndingInfo, EndingStat, endingStats(), packEndings(), readCounts(), recordEnding(), storageKey(), pack
+
+### Community 23 - "Few-shot generation dry-run — go/no-go record (Plan 4 Task 4)"
+Cohesion: 0.33
+Nodes (5): Baseline for Part B (if ever triggered), Decision: **SKIP Part B (QLoRA).** Few-shot is sufficient., Few-shot generation dry-run — go/no-go record (Plan 4 Task 4), Honest caveats, Result
+
+### Community 24 - "Living Stories"
+Cohesion: 0.40
+Nodes (4): Develop, How it works, Living Stories, Stack
 
 ## Knowledge Gaps
-- **118 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+113 more)
+- **134 isolated node(s):** `DEFAULT_STATE`, `BOUNDS`, `here`, `bible`, `byId` (+129 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -145,16 +155,16 @@ Nodes (9): startStory(), EndingInfo, EndingStat, endingStats(), packEndings(), r
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `StoryPack` connect `build-labels.ts` to `Tone Scoring (ML)`, `Story Types & Flowchart`, `Router & Meter Math`, `App Wiring & Menu/Meter UI`, `validatePack.ts`, `stats.ts`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
-- **Why does `startStory()` connect `stats.ts` to `Tone Scoring (ML)`, `Story Types & Flowchart`, `Router & Meter Math`, `App Wiring & Menu/Meter UI`, `build-labels.ts`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Why does `MeterState` connect `Tone Scoring (ML)` to `Story Types & Flowchart`, `Router & Meter Math`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **What connects `name`, `version`, `description` to the rest of the system?**
-  _118 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
+- **Why does `MeterState` connect `Router & Meter Math` to `build-labels.ts`, `Tone Scoring (ML)`, `Story Types & Flowchart`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `startStory()` connect `App Wiring & Menu/Meter UI` to `Tone Scoring (ML)`, `build-labels.ts`, `Router & Meter Math`, `stats.ts`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **What connects `DEFAULT_STATE`, `BOUNDS`, `here` to the rest of the system?**
+  _134 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Package Manifest & Runtime Deps` be split into smaller, more focused modules?**
   _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `Game Engine & Turn Loop` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Should `Tone Scoring (ML)` be split into smaller, more focused modules?**
-  _Cohesion score 0.12222222222222222 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._

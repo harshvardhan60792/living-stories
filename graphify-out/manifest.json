@@ -5,9 +5,9 @@
     "semantic_hash": ""
   },
   "public/stories/index.json": {
-    "mtime": 1784522792.3752353,
-    "ast_hash": "f8d7d5e94c5920f1befa470ea63586c9",
-    "semantic_hash": "f8d7d5e94c5920f1befa470ea63586c9"
+    "mtime": 1784821627.3650577,
+    "ast_hash": "47ac9787c7ff9fe626781ef1fa74d0fb",
+    "semantic_hash": ""
   },
   "public/stories/revenant.json": {
     "mtime": 1784820246.7323878,
@@ -387,6 +387,16 @@
   "ml-training/generate/run-fewshot.md": {
     "mtime": 1784821565.8463829,
     "ast_hash": "74e4e2889d236e37504f7cdcaa6738b6",
+    "semantic_hash": ""
+  },
+  "public/stories/seventh-guest.json": {
+    "mtime": 1784821623.137058,
+    "ast_hash": "cb4fba48590f36a2810eef4e006a5da1",
+    "semantic_hash": ""
+  },
+  "docs/curation-checklist.md": {
+    "mtime": 1784821642.227507,
+    "ast_hash": "b106570e8055a9414171b6da93dfe9b1",
     "semantic_hash": ""
   }
 }

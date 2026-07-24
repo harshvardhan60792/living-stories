@@ -1330,8 +1330,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_engine_game",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "game.ts"
     },
     {
@@ -1352,8 +1352,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_engine_game_actresult",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "actresult"
     },
     {
@@ -1363,8 +1363,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_engine_game_gameengine",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "gameengine"
     },
     {
@@ -1385,8 +1385,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_engine_game_gameengine_currentnode",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".currentnode()"
     },
     {
@@ -1396,8 +1396,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_engine_game_gameengine_state",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".state()"
     },
     {
@@ -1407,8 +1407,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_engine_game_gameengine_history",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".history()"
     },
     {
@@ -1418,8 +1418,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_engine_game_gameengine_currenttext",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".currenttext()"
     },
     {
@@ -1429,8 +1429,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_engine_game_gameengine_node",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".node()"
     },
     {
@@ -1440,8 +1440,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_engine_game_gameengine_act",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".act()"
     },
     {
@@ -1671,8 +1671,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_engine_scorer_tonescorer_scoretone",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".scoretone()"
     },
     {
@@ -1693,8 +1693,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_engine_scorer_statehead_delta",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".delta()"
     },
     {
@@ -1737,8 +1737,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_engine_scorer_linearhead_delta",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".delta()"
     },
     {
@@ -1803,8 +1803,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_main_startstory",
-      "community": 7,
-      "community_name": "App Wiring & Menu/Meter UI",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "startstory()"
     },
     {
@@ -1924,8 +1924,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_ml_transformersscorer_transformersscorer_create",
-      "community": 7,
-      "community_name": "App Wiring & Menu/Meter UI",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".create()"
     },
     {
@@ -2078,8 +2078,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_state_storytypes",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "storytypes.ts"
     },
     {
@@ -2089,8 +2089,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_state_storytypes_role",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "role"
     },
     {
@@ -2122,8 +2122,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_state_storytypes_meterstate",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "meterstate"
     },
     {
@@ -2133,8 +2133,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_state_storytypes_bandcondition",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "bandcondition"
     },
     {
@@ -2144,8 +2144,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_state_storytypes_textvariant",
-      "community": 21,
-      "community_name": "validatePack.ts",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "textvariant"
     },
     {
@@ -2166,8 +2166,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_state_storytypes_choice",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "choice"
     },
     {
@@ -2188,8 +2188,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_state_storytypes_basenode",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "basenode"
     },
     {
@@ -2199,8 +2199,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_state_storytypes_actionnode",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "actionnode"
     },
     {
@@ -2210,8 +2210,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_state_storytypes_dialoguenode",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "dialoguenode"
     },
     {
@@ -2221,8 +2221,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_state_storytypes_storynode",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "storynode"
     },
     {
@@ -2375,8 +2375,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_ui_deltapreview",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "deltapreview.ts"
     },
     {
@@ -2386,8 +2386,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_ui_deltapreview_formatdeltas",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "formatdeltas()"
     },
     {
@@ -2397,8 +2397,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_ui_deltapreview_effectivedeltas",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "effectivedeltas()"
     },
     {
@@ -2551,8 +2551,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_ui_meters",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "ui/meters.ts"
     },
     {
@@ -2562,8 +2562,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_ui_meters_rendermeters",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "rendermeters()"
     },
     {
@@ -2573,8 +2573,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_ui_scene",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "scene.ts"
     },
     {
@@ -2584,8 +2584,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_ui_scene_sceneopts",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "sceneopts"
     },
     {
@@ -2595,8 +2595,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_ui_scene_sceneopts_onchoice",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".onchoice()"
     },
     {
@@ -2606,8 +2606,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_ui_scene_sceneopts_ontext",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".ontext()"
     },
     {
@@ -2617,8 +2617,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_ui_scene_sceneopts_previewfor",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": ".previewfor()"
     },
     {
@@ -2628,8 +2628,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_ui_scene_renderscene",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "renderscene()"
     },
     {
@@ -2639,8 +2639,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "src_ui_scene_makepreview",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "makepreview()"
     },
     {
@@ -2804,8 +2804,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_deltapreview_test",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "deltapreview.test.ts"
     },
     {
@@ -2815,8 +2815,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "tests_deltapreview_test_labels",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "labels"
     },
     {
@@ -3002,8 +3002,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_metersui_test",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "metersui.test.ts"
     },
     {
@@ -3079,8 +3079,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_sceneui_test",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "sceneui.test.ts"
     },
     {
@@ -3090,8 +3090,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "tests_sceneui_test_action",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "action"
     },
     {
@@ -3101,8 +3101,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_sceneui_test_dialogue",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 2,
+      "community_name": "Tone Scoring (ML)",
       "norm_label": "dialogue"
     },
     {
@@ -3178,8 +3178,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_storypack_test",
-      "community": 4,
-      "community_name": "Router & Meter Math",
+      "community": 19,
+      "community_name": "build-labels.ts",
       "norm_label": "storypack.test.ts"
     },
     {
@@ -3478,6 +3478,72 @@
       "community": 24,
       "community_name": "Living Stories",
       "norm_label": "stack"
+    },
+    {
+      "label": "curation-checklist.md",
+      "file_type": "document",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_curation_checklist",
+      "community": 25,
+      "community_name": "Pack curation checklist (Plan 4 Task 9)",
+      "norm_label": "curation-checklist.md"
+    },
+    {
+      "label": "Pack curation checklist (Plan 4 Task 9)",
+      "file_type": "document",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_curation_checklist_pack_curation_checklist_plan_4_task_9",
+      "community": 25,
+      "community_name": "Pack curation checklist (Plan 4 Task 9)",
+      "norm_label": "pack curation checklist (plan 4 task 9)"
+    },
+    {
+      "label": "Mechanical (the validator already enforces \u2014 just confirm it's green)",
+      "file_type": "document",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "docs_curation_checklist_mechanical_the_validator_already_enforces_just_confirm_it_s_green",
+      "community": 25,
+      "community_name": "Pack curation checklist (Plan 4 Task 9)",
+      "norm_label": "mechanical (the validator already enforces \u2014 just confirm it's green)"
+    },
+    {
+      "label": "Coherence (human judgement)",
+      "file_type": "document",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "docs_curation_checklist_coherence_human_judgement",
+      "community": 25,
+      "community_name": "Pack curation checklist (Plan 4 Task 9)",
+      "norm_label": "coherence (human judgement)"
+    },
+    {
+      "label": "Routing (Plan 2 cosine)",
+      "file_type": "document",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "docs_curation_checklist_routing_plan_2_cosine",
+      "community": 25,
+      "community_name": "Pack curation checklist (Plan 4 Task 9)",
+      "norm_label": "routing (plan 2 cosine)"
+    },
+    {
+      "label": "Integration",
+      "file_type": "document",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "docs_curation_checklist_integration",
+      "community": 25,
+      "community_name": "Pack curation checklist (Plan 4 Task 9)",
+      "norm_label": "integration"
     },
     {
       "label": "2026-07-20-web-engine-and-client-ml.md",
@@ -12428,6 +12494,61 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_curation_checklist",
+      "target": "docs_curation_checklist_pack_curation_checklist_plan_4_task_9",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_curation_checklist_pack_curation_checklist_plan_4_task_9",
+      "target": "docs_curation_checklist_coherence_human_judgement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_curation_checklist_pack_curation_checklist_plan_4_task_9",
+      "target": "docs_curation_checklist_integration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_curation_checklist_pack_curation_checklist_plan_4_task_9",
+      "target": "docs_curation_checklist_mechanical_the_validator_already_enforces_just_confirm_it_s_green",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/curation-checklist.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_curation_checklist_pack_curation_checklist_plan_4_task_9",
+      "target": "docs_curation_checklist_routing_plan_2_cosine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "docs/superpowers/plans/2026-07-20-web-engine-and-client-ml.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -13494,5 +13615,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "07a383b8b9871e4e0877cae6871329b4cdba1fb6"
+  "built_at_commit": "b03115bca56292f85f5af0760aae42adc1893045"
 }
