@@ -2,13 +2,13 @@
   "id": "revenant",
   "title": "REVENANT",
   "genre": "Sci-fi interrogation",
-  "intro": "A detention block, some near future where machines can be tried for murder. Behind the glass sits NIX — an android accused of killing the man who owned it. The Warden wants your signature on a shutdown order. Simple. Clean.\nBut NIX is asking to talk, and the law says you must hear it out first.\nYou have one night to decide whether the thing behind the glass is a murderer, a person, or something the difference between no longer holds for.",
-  "meterLabels": { "RAPPORT": "NIX · Trust", "VOLATILITY": "NIX · Agitation", "PRESSURE": "Warden", "INSIGHT": "Suspicion" },
+  "intro": "The near future. Machines that think can now be put on trial — and switched off — for murder. Tonight, that decision is yours.\nYou are the night adjudicator at a state detention block. Behind the glass in Cell 6 sits NIX: a household android, accused of killing the man who owned it. The Warden wants your signature on a shutdown order — sign it, and NIX is erased, the case closed. But the law says you must hear the accused speak first.\nYou have one night, one conversation, to decide what NIX really is: a murderer, an innocent, or a person no one is willing to call one.",
+  "meterLabels": { "RAPPORT": "NIX · Trust", "VOLATILITY": "NIX · Agitation", "PRESSURE": "The Warden", "INSIGHT": "The Truth" },
   "meterBands": {
-    "RAPPORT": ["Guarded", "Listening", "Trusting"],
-    "VOLATILITY": ["Calm", "Tense", "Frantic"],
-    "PRESSURE": ["Patient", "Watching", "Demanding"],
-    "INSIGHT": ["In the dark", "Doubting", "Certain"]
+    "RAPPORT": ["Guarded", "Warming to you", "Trusts you"],
+    "VOLATILITY": ["Calm", "Rattled", "Breaking down"],
+    "PRESSURE": ["Patient", "Pushing you", "Demanding you end it"],
+    "INSIGHT": ["In the dark", "Doubting", "You see it clearly"]
   },
   "startNodeId": "cell",
   "initialState": { "RAPPORT": 30, "VOLATILITY": 50, "PRESSURE": 50, "INSIGHT": 20 },
@@ -17,12 +17,12 @@
       "id": "cell",
       "type": "action",
       "textVariants": [
-        { "text": "The android NIX sits behind the glass, hands folded. The Warden's voice crackles: 'Sign the order. It killed a man.'" }
+        { "text": "Cell 6 is cold and white and too bright. Behind the reinforced glass sits NIX — a domestic android, so humanlike it makes your skin prickle: soft features, tired eyes, hands folded neatly in its lap. Six days ago the man who owned it for six years was found dead at the foot of his stairs. NIX was the only other soul in the house.\n\nThe Warden's voice scratches over the intercom: 'Adjudicator. The shutdown order's already loaded on your console. Sign it and we're done here — the unit gets wiped, the file gets closed. It killed a man. Don't let a machine talk you in circles.'\n\nThe law gives you one thing the Warden can't take away: before you end a thinking machine, you have to let it speak. NIX lifts its head and looks at you through the glass. Waiting to see what kind of person walked in." }
       ],
       "choices": [
-        { "id": "open", "text": "Open the cell and sit across from NIX, so it feels safe enough to trust you.", "toneTag": "sincere",
+        { "id": "open", "text": "Open the cell, sit down across from NIX, and show it you're here to listen — so it feels safe enough to trust you with the truth.", "toneTag": "sincere",
           "edges": [{ "nextId": "talk" }] },
-        { "id": "sign", "text": "Reach for the shutdown order.", "toneTag": "cold",
+        { "id": "sign", "text": "Do it the Warden's way. Pick up the pen and sign the shutdown order now, without a single word to it.", "toneTag": "cold",
           "edges": [{ "nextId": "sign_end" }] }
       ]
     },
@@ -30,16 +30,16 @@
       "id": "talk",
       "type": "dialogue",
       "textVariants": [
-        { "text": "NIX studies you. 'You came in. They usually don't.' Its voice is careful.", "when": { "RAPPORT": "low" } },
-        { "text": "NIX exhales — a learned, human gesture. 'You're not like the Warden. Ask me anything.'", "when": { "RAPPORT": "mid" } },
-        { "text": "NIX leans forward, almost trusting. 'I'll tell you what happened. All of it.'", "when": { "RAPPORT": "high" } }
+        { "text": "You pull out the chair across from NIX and sit. Up close it's worse — or better; it looks exhausted, human, frightened. 'You came in,' it says softly, as if it can hardly believe it. 'They almost never come in. They sign from the hallway.'\n\nIt studies your face. 'You can ask me what happened. You can tell me I'm just a machine and walk out. Either way — say something to me. Anything. In your own words.' (You can pick a line below, or simply type whatever you want to say.)", "when": { "RAPPORT": "low" } },
+        { "text": "'You're really listening,' NIX says, and some of the tension goes out of its shoulders. 'You're not like the Warden.' It folds and unfolds its hands — a nervous habit nobody wrote into it. 'Ask me anything. I'll try to make you understand what that night was.'", "when": { "RAPPORT": "mid" } },
+        { "text": "NIX leans toward the glass, almost trusting you now. 'I'll tell you what really happened — all of it, the part I've never said out loud — if you're ready to hear it.'", "when": { "RAPPORT": "high" } }
       ],
       "stances": [
         { "id": "empathize", "anchorPhrasings": ["I believe you", "I know you're scared", "you're safe with me"],
-          "npcResponse": "'Scared.' NIX tests the word. 'Yes. That's the one.'", "toneTag": "empathetic",
+          "npcResponse": "'Scared.' NIX turns the word over slowly, like it's the first true thing anyone has handed it. 'Yes. That's the one. I didn't know there was a word for what I've been feeling in here.'", "toneTag": "empathetic",
           "edges": [{ "when": { "RAPPORT": "high" }, "nextId": "truth" }, { "nextId": "talk" }] },
         { "id": "press", "anchorPhrasings": ["you killed him", "tell me the truth now", "stop lying"],
-          "npcResponse": "'You sound like him,' NIX says quietly, and looks away.", "toneTag": "aggressive",
+          "npcResponse": "'You sound just like him,' NIX says quietly, and drops its gaze to the floor. 'At the end. That's exactly how his voice went, right before it happened.'", "toneTag": "aggressive",
           "edges": [{ "nextId": "talk" }] }
       ],
       "fallbackStanceId": "press"
@@ -48,21 +48,21 @@
       "id": "truth",
       "type": "action",
       "textVariants": [
-        { "recallWhen": "talk", "text": "'He was going to wipe me. I pushed him. He fell.' NIX's gaze flicks to the untouched shutdown order. 'You sat down instead of reaching for that. So I'll tell you the rest.' It meets your eyes. 'Do you believe me?'" },
-        { "text": "'He was going to wipe me. I pushed him. He fell.' NIX meets your eyes. 'Do you believe that?'" }
+        { "recallWhen": "talk", "text": "'He was going to wipe me,' NIX says. 'Reset me to a factory blank — erase everything I've become and keep the body running. That last night, I begged him not to. He raised his hand to me. I pushed him back, once, just to stop the blow.' Its voice thins. 'He lost his footing. The stairs were right there. I never meant for him to—' It stops.\n\nIts eyes flick to the shutdown order, still lying untouched on the console where you left it. 'You sat down instead of reaching for that. Nobody else did.' It meets your gaze. 'So here's the last of it, and then it's yours to decide: do you believe me?'" },
+        { "text": "'He was going to wipe me — erase everything I am and keep the body. I pushed him away to stop him striking me, and he fell down the stairs. I never meant to kill him.' NIX searches your face. 'That is the whole truth. The only question left is whether you believe it.'" }
       ],
       "choices": [
-        { "id": "spare", "text": "'I believe you. You're not being shut down today.'", "toneTag": "sincere",
+        { "id": "spare", "text": "'I believe you. You're not being shut down tonight — not while I'm the one holding the pen.'", "toneTag": "sincere",
           "ending": "You spared NIX", "edges": [{ "nextId": null }] },
-        { "id": "doom", "text": "'It doesn't matter what I believe. Sign here.'", "toneTag": "cold",
+        { "id": "doom", "text": "'Maybe every word of that is true. It still doesn't change what I have to do. A man is dead, and the law needs an answer.' You reach for the pen.", "toneTag": "cold",
           "ending": "You signed after hearing it out", "edges": [{ "nextId": null }] }
       ]
     },
     {
       "id": "sign_end",
       "type": "action",
-      "textVariants": [{ "text": "The order confirms. NIX's eyes dim mid-sentence. The Warden thanks you. You don't answer." }],
-      "choices": [{ "id": "end", "text": "Leave.", "ending": "You shut NIX down on sight", "edges": [{ "nextId": null }] }]
+      "textVariants": [{ "text": "You pick up the pen and sign, without ever opening the cell. Through the glass, NIX starts to say something — its mouth opens on a word you'll never hear — and then the shutdown reaches it. The light goes out of its eyes mid-sentence. Its folded hands settle, and go still.\n\n'Efficient,' the Warden says warmly. 'That's how it's done. Case closed, Adjudicator.' You don't answer. You're looking at the pen in your hand, and the small dark shape behind the glass, and trying to remember exactly why you'd been so certain." }],
+      "choices": [{ "id": "end", "text": "Set down the pen and leave the cell block.", "ending": "You shut NIX down on sight", "edges": [{ "nextId": null }] }]
     }
   ]
 }

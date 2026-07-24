@@ -47,24 +47,40 @@ export class Flowchart {
           "border-width": 1, "border-style": "dashed", opacity: 0.45 } },
         { selector: "edge.ghost", style: { "line-color": "#3a5f5b", "target-arrow-color": "#3a5f5b",
           "line-style": "dashed", opacity: 0.45 } },
-        { selector: ".visited", style: { "background-color": "#5ad1c8", color: "#e8e8ee", opacity: 1 } },
-        { selector: ".path", style: { "line-color": "#5ad1c8", "target-arrow-color": "#5ad1c8", width: 2, opacity: 1 } },
+        { selector: ".visited", style: { "background-color": "#5ad1c8", opacity: 1 } },
+        { selector: ".path", style: { "line-color": "#5ad1c8", "target-arrow-color": "#5ad1c8", width: 2.5, opacity: 1 } },
+        // "You are here": the node the player is currently on, enlarged + haloed.
+        { selector: ".current", style: { "background-color": "#8ff0e8", width: 18, height: 18,
+          "border-color": "#8ff0e8", "border-width": 4, "border-opacity": 0.35 } },
       ],
-      layout: { name: "breadthfirst", directed: true, padding: 14, spacingFactor: 1.1, grid: true },
+      layout: { name: "breadthfirst", directed: true, padding: 14, spacingFactor: 1.1 },
     });
-    // Fit the whole map into the frame once laid out, and keep it fitted on
-    // resize so it never overflows the container.
-    this.cy.ready(() => this.fit());
+    // A story is deep (start -> many beats -> endings): laid out vertically it's
+    // tall and narrow and collapses into this wide, short frame. Transpose it to
+    // flow left-to-right so it fills the frame and stays legible, then fit.
+    this.cy.ready(() => {
+      this.transpose();
+      this.fit();
+    });
     if (typeof ResizeObserver !== "undefined") {
       new ResizeObserver(() => this.fit()).observe(container);
     }
   }
+  private transpose(): void {
+    this.cy.batch(() => {
+      this.cy.nodes().forEach((n) => {
+        const p = n.position();
+        n.position({ x: p.y, y: p.x });
+      });
+    });
+  }
   private fit(): void {
     this.cy.resize();
-    this.cy.fit(undefined, 16);
+    this.cy.fit(undefined, 18);
   }
   markVisited(nodeId: string, fromId?: string): void {
-    this.cy.getElementById(nodeId).addClass("visited");
+    this.cy.nodes().removeClass("current");
+    this.cy.getElementById(nodeId).addClass("visited").addClass("current");
     if (fromId) {
       this.cy.edges(`[source = "${fromId}"][target = "${nodeId}"]`).addClass("path");
     }
