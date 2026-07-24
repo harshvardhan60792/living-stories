@@ -50,9 +50,10 @@ def main():
         tok.pad_token = tok.eos_token
 
     # Plain fp16, no bitsandbytes — see module docstring (P100 can't run bnb kernels).
-    model = AutoModelForCausalLM.from_pretrained(
-        BASE, torch_dtype=torch.float16, device_map="auto", token=HF_TOKEN
-    )
+    try:
+        model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.float16, device_map="auto", token=HF_TOKEN)
+    except TypeError:
+        model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.float16, device_map="auto", token=HF_TOKEN)
     model.config.use_cache = False
 
     lora = LoraConfig(
@@ -62,6 +63,12 @@ def main():
     )
 
     ds = load_dataset("json", data_files=SFT_PATH, split="train")
+
+    # TRL has renamed the seq-length arg across versions (max_seq_length ->
+    # max_length in newer releases). Pass whichever the installed SFTConfig
+    # actually accepts instead of pinning a name that may not exist.
+    import inspect
+    seq_len_kwarg = "max_seq_length" if "max_seq_length" in inspect.signature(SFTConfig).parameters else "max_length"
 
     cfg = SFTConfig(
         output_dir="out",
@@ -76,7 +83,6 @@ def main():
         save_total_limit=2,
         bf16=False, fp16=True,
         optim="adamw_torch",  # not paged_adamw_8bit — that's bnb too, unusable on P100
-        max_seq_length=MAXLEN,
         packing=False,
         gradient_checkpointing=True,
         report_to="none",
@@ -85,6 +91,7 @@ def main():
         hub_model_id=HF_REPO,
         hub_strategy="checkpoint",
         hub_token=HF_TOKEN,
+        **{seq_len_kwarg: MAXLEN},
     )
 
     trainer = SFTTrainer(model=model, args=cfg, train_dataset=ds,
