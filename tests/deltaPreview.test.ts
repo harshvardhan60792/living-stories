@@ -11,19 +11,22 @@ const labels: Record<Role, string | null> = {
 };
 
 describe("formatDeltas", () => {
-  it("formats up/down shifts with arrows and signed magnitudes", () => {
-    expect(formatDeltas({ RAPPORT: 6.4, VOLATILITY: -2.1 }, labels)).toBe(
-      "↑ RAPPORT +6   ↓ VOLATILITY −2",
-    );
+  it("describes shifts qualitatively with the short themed label, no numbers", () => {
+    expect(formatDeltas({ RAPPORT: 6.4, VOLATILITY: -2.1 }, labels)).toBe("↑ Trust   ↓ Stability");
   });
 
-  it("drops roles that round to zero", () => {
-    expect(formatDeltas({ RAPPORT: 0.3, PRESSURE: 4 }, labels)).toBe("↑ PRESSURE +4");
+  it("uses the evocative name after the middle dot", () => {
+    const themed = { ...labels, RAPPORT: "The Countess · Pity" };
+    expect(formatDeltas({ RAPPORT: 4 }, themed)).toBe("↑ Pity");
+  });
+
+  it("drops negligible moves", () => {
+    expect(formatDeltas({ RAPPORT: 0.3, PRESSURE: 4 }, labels)).toBe("↑ Warden");
   });
 
   it("omits hidden meters (null label)", () => {
     const hidden = { ...labels, INSIGHT: null };
-    expect(formatDeltas({ INSIGHT: 9, RAPPORT: 3 }, hidden)).toBe("↑ RAPPORT +3");
+    expect(formatDeltas({ INSIGHT: 9, RAPPORT: 3 }, hidden)).toBe("↑ Trust");
   });
 
   it("returns empty string when nothing moves", () => {

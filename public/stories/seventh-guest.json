@@ -9,6 +9,12 @@
     "PRESSURE": "The Table's Suspicion",
     "INSIGHT": "The Truth Uncovered"
   },
+  "meterBands": {
+    "RAPPORT": ["Silent", "Stirring", "Speaking to you"],
+    "VOLATILITY": ["Still", "Trembling", "Unraveling"],
+    "PRESSURE": ["At ease", "Uneasy", "Turning on you"],
+    "INSIGHT": ["Hidden", "Glimpsed", "Laid bare"]
+  },
   "startNodeId": "start",
   "initialState": {
     "RAPPORT": 30,

@@ -9,6 +9,12 @@
     "PRESSURE": "The Wolf's Claim",
     "INSIGHT": "The Truth"
   },
+  "meterBands": {
+    "RAPPORT": ["Wary", "Softening", "Grieving with her"],
+    "VOLATILITY": ["Quiet", "Rising", "Overwhelming"],
+    "PRESSURE": ["Distant", "Circling", "Upon you"],
+    "INSIGHT": ["Unknown", "Suspected", "Revealed"]
+  },
   "startNodeId": "inn",
   "initialState": { "RAPPORT": 10, "VOLATILITY": 35, "PRESSURE": 10, "INSIGHT": 10 },
   "nodes": [

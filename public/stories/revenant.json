@@ -3,7 +3,13 @@
   "title": "REVENANT",
   "genre": "Sci-fi interrogation",
   "intro": "A detention block, some near future where machines can be tried for murder. Behind the glass sits NIX — an android accused of killing the man who owned it. The Warden wants your signature on a shutdown order. Simple. Clean.\nBut NIX is asking to talk, and the law says you must hear it out first.\nYou have one night to decide whether the thing behind the glass is a murderer, a person, or something the difference between no longer holds for.",
-  "meterLabels": { "RAPPORT": "NIX · Trust", "VOLATILITY": "NIX · Stability", "PRESSURE": "Warden", "INSIGHT": "Suspicion" },
+  "meterLabels": { "RAPPORT": "NIX · Trust", "VOLATILITY": "NIX · Agitation", "PRESSURE": "Warden", "INSIGHT": "Suspicion" },
+  "meterBands": {
+    "RAPPORT": ["Guarded", "Listening", "Trusting"],
+    "VOLATILITY": ["Calm", "Tense", "Frantic"],
+    "PRESSURE": ["Patient", "Watching", "Demanding"],
+    "INSIGHT": ["In the dark", "Doubting", "Certain"]
+  },
   "startNodeId": "cell",
   "initialState": { "RAPPORT": 30, "VOLATILITY": 50, "PRESSURE": 50, "INSIGHT": 20 },
   "nodes": [

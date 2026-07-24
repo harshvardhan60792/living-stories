@@ -1,21 +1,28 @@
 import { MeterState, Role, ROLES } from "../state/storyTypes";
 
-/** Emotion-read tooltip (Plan 5 T4): format a predicted meter change into a
- *  compact string like "↑ RAPPORT +6   ↓ VOLATILITY −2". Pure. Hidden meters
- *  (null label) are omitted, and roles whose rounded shift is 0 are dropped.
- *  Returns "" when nothing moves — the caller shows a "no shift" affordance. */
+/** The evocative short name of a themed meter for inline use — the part after
+ *  the "·" ("The Countess · Pity" -> "Pity"), else the whole label. */
+export function shortLabel(label: string): string {
+  const i = label.lastIndexOf("·");
+  return (i >= 0 ? label.slice(i + 1) : label).trim();
+}
+
+/** Emotion-read tooltip (Plan 5 T4): describe where a choice would move the
+ *  feelings — qualitative and diegetic, e.g. "↑ Pity   ↓ Dread". No numbers, no
+ *  raw role enums (labels are polarity-aligned: value up = more of the named
+ *  thing). Hidden meters (null label) and negligible moves are dropped. Returns
+ *  "" when nothing meaningful moves. */
 export function formatDeltas(
   deltas: Partial<MeterState>,
   meterLabels: Record<Role, string | null>,
 ): string {
   const parts: string[] = [];
   for (const r of ROLES) {
-    if (meterLabels[r] == null) continue; // hidden meter for this story
-    const n = Math.round(deltas[r] ?? 0);
-    if (n === 0) continue;
-    const arrow = n > 0 ? "↑" : "↓";
-    const sign = n > 0 ? "+" : "−"; // U+2212 minus, matches |n|
-    parts.push(`${arrow} ${r} ${sign}${Math.abs(n)}`);
+    const label = meterLabels[r];
+    if (label == null) continue; // hidden meter for this story
+    const n = deltas[r] ?? 0;
+    if (Math.abs(n) < 0.5) continue; // negligible — don't clutter the read
+    parts.push(`${n > 0 ? "↑" : "↓"} ${shortLabel(label)}`);
   }
   return parts.join("   ");
 }

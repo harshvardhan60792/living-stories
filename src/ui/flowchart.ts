@@ -22,11 +22,25 @@ export class Flowchart {
     this.cy = cytoscape({
       container,
       elements: buildElements(pack),
+      // Presentation only: the player can't pan, zoom, drag, or box-select, so
+      // the map physically cannot wander out of its frame. It's a picture, not
+      // a toy. Smooth colour/opacity transitions animate visited/ghost changes.
+      userZoomingEnabled: false,
+      userPanningEnabled: false,
+      boxSelectionEnabled: false,
+      autoungrabify: true,
+      autolock: true,
+      minZoom: 0.2,
+      maxZoom: 1.5,
       style: [
-        { selector: "node", style: { "background-color": "#2a2f3a", label: "data(label)",
-          color: "#8a90a0", "font-size": 9 } },
+        // No labels: raw node ids aren't player-facing and overlap badly on a
+        // deep graph. The map reads by colour — where you've been, where you
+        // could have gone — like a constellation, not a diagram.
+        { selector: "node", style: { "background-color": "#2a2f3a", width: 12, height: 12,
+          "transition-property": "background-color, border-width, opacity", "transition-duration": 350 } },
         { selector: "edge", style: { "line-color": "#20242e", width: 1, "target-arrow-shape": "triangle",
-          "target-arrow-color": "#20242e", "curve-style": "bezier" } },
+          "target-arrow-color": "#20242e", "curve-style": "bezier",
+          "transition-property": "line-color, width, opacity", "transition-duration": 350 } },
         // ghost = branches the player saw from a visited node but didn't take:
         // faded + dashed so divergence is visible without dominating the view.
         { selector: "node.ghost", style: { "background-color": "#2a2f3a", "border-color": "#5ad1c8",
@@ -36,8 +50,18 @@ export class Flowchart {
         { selector: ".visited", style: { "background-color": "#5ad1c8", color: "#e8e8ee", opacity: 1 } },
         { selector: ".path", style: { "line-color": "#5ad1c8", "target-arrow-color": "#5ad1c8", width: 2, opacity: 1 } },
       ],
-      layout: { name: "breadthfirst", directed: true, padding: 8 },
+      layout: { name: "breadthfirst", directed: true, padding: 14, spacingFactor: 1.1, grid: true },
     });
+    // Fit the whole map into the frame once laid out, and keep it fitted on
+    // resize so it never overflows the container.
+    this.cy.ready(() => this.fit());
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(() => this.fit()).observe(container);
+    }
+  }
+  private fit(): void {
+    this.cy.resize();
+    this.cy.fit(undefined, 16);
   }
   markVisited(nodeId: string, fromId?: string): void {
     this.cy.getElementById(nodeId).addClass("visited");

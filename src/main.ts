@@ -88,7 +88,7 @@ async function beginStory(pack: StoryPack) {
     return effectiveDeltas(engine.state, applyDelta(engine.state, raw));
   }
   function draw(text: string, npcResponse?: string, stanceId?: string) {
-    renderMeters(metersEl, pack.meterLabels, engine.state);
+    renderMeters(metersEl, pack.meterLabels, engine.state, pack.meterBands);
     renderScene(sceneEl, {
       text, npcResponse, stanceId, node: engine.currentNode,
       onChoice: (cid) => turn({ choiceId: cid }),
@@ -131,7 +131,7 @@ async function beginStory(pack: StoryPack) {
     }
     const res = await engine.act(input);
     if (res.ended) {
-      renderMeters(metersEl, pack.meterLabels, engine.state);
+      renderMeters(metersEl, pack.meterLabels, engine.state, pack.meterBands);
       sceneEl.innerHTML =
         `<p class="scene">${escapeHtml(res.npcResponse ?? "")}</p>` +
         `<p class="scene"><em>— End —</em></p>` +

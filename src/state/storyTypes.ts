@@ -61,6 +61,10 @@ export interface StoryPack {
    *  in (back-compat). */
   intro?: string;
   meterLabels: Record<Role, string | null>; // null = meter hidden for this story
+  /** Diegetic band words per meter — [low, mid, high] — shown instead of a bare
+   *  number so the state reads as a feeling ("Wary" / "Softening" / "Grieving
+   *  with her"), not a stat. Optional; a generic fallback is used if absent. */
+  meterBands?: Partial<Record<Role, [string, string, string]>>;
   startNodeId: string;
   initialState: MeterState;
   nodes: StoryNode[];
