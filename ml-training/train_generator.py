@@ -6,16 +6,18 @@ SFTTrainer, seq len ~1536. Pushes the LoRA adapter to the Hub every N steps and
 at the end, so a killed Kaggle session can `resume_from_checkpoint` from the
 Hub next run (Kaggle has no persistence — spec §11).
 
-NOTE: bitsandbytes 4-bit (nf4) requires CUDA compute capability >=7.0
-(Volta+). Kaggle's free-tier P100 is Pascal (sm_60) and cannot run bnb's
-compiled kernels at all ("named symbol not found" is the tell) — so this
-script deliberately skips quantization. 3B in fp16 is ~6 GB weights + LoRA
-overhead, which fits P100's 16 GB without it. If your Kaggle GPU is a T4/A100
-instead (Volta+), 4-bit would work, but plain fp16 LoRA is simpler and this
-model comfortably fits either way — no need to re-add bnb.
+USE A T4 GPU, NOT P100. Kaggle's current pinned PyTorch is built WITHOUT
+Pascal (sm_60) kernels, so the free-tier P100 fails with "no kernel image is
+available for execution on the device" the instant any CUDA op runs — the GPU
+is simply unusable with this torch. The T4 (Turing, sm_75) is fully supported.
+Set the notebook accelerator to "GPU T4 x2" (Settings -> Accelerator).
+
+No bitsandbytes: plain fp16 + LoRA. 3B fp16 (~6 GB) fits one 16 GB T4.
 
 Kaggle cells:
+    # Settings -> Accelerator -> GPU T4 x2 (NOT P100)
     !pip install -U "transformers>=4.44" "trl>=0.9" peft accelerate datasets
+    !pip uninstall -y torchao   # old preinstalled torchao breaks peft's LoRA dispatch
     # add HF_TOKEN as a Kaggle secret AND tick it "attached" for this notebook
     # (Add-ons -> Secrets -> check the box next to HF_TOKEN, then restart session)
     !python prepare_light_sft.py --exemplars exemplars.jsonl --out sft.jsonl
@@ -49,11 +51,13 @@ def main():
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
-    # Plain fp16, no bitsandbytes — see module docstring (P100 can't run bnb kernels).
+    # Plain fp16, no bitsandbytes. Pin the whole model to GPU 0 — on a T4 x2
+    # notebook device_map="auto" would shard this 3B across both cards for no
+    # reason; {"":0} keeps it on one. (fp16 3B ~6 GB fits a single 16 GB T4.)
     try:
-        model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.float16, device_map="auto", token=HF_TOKEN)
+        model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.float16, device_map={"": 0}, token=HF_TOKEN)
     except TypeError:
-        model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.float16, device_map="auto", token=HF_TOKEN)
+        model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.float16, device_map={"": 0}, token=HF_TOKEN)
     model.config.use_cache = False
 
     lora = LoraConfig(

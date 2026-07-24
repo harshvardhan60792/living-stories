@@ -1,25 +1,29 @@
 # LoRA generator fine-tune — Kaggle recipe (Plan 4 Part B, T7)
 
 Only run if the Task-4 few-shot baseline (100% on THE SEVENTH GUEST) proves
-inadequate on a real unaided 3B. Needs: Kaggle notebook w/ **P100 16 GB**, a HF
-account, and an adapter repo `Harsh-ag26/living-stories-generator-lora` (create it
-or let `push_to_hub` create it).
+inadequate on a real unaided 3B. Needs: Kaggle notebook w/ **GPU T4** (see
+warning), a HF account, and an adapter repo `Harsh-ag26/living-stories-generator-lora`
+(create it or let `push_to_hub` create it).
+
+**USE T4, NOT P100.** Kaggle's current PyTorch build has no Pascal (sm_60)
+kernels, so the P100 dies with `no kernel image is available for execution on
+the device` on the first CUDA op — unusable regardless of our code. The T4
+(Turing, sm_75) is supported. Settings -> Accelerator -> **GPU T4 x2**.
 
 **HF_TOKEN secret:** add it under Add-ons -> Secrets, then **tick the checkbox
 to attach it to this notebook** (adding it isn't enough — Kaggle secrets are
 opt-in per notebook) and restart the session before running.
 
-**No bitsandbytes.** P100 is Pascal (sm_60); bitsandbytes' compiled kernels
-require compute capability 7.0+ (Volta+) and fail with `named symbol not found`
-on P100. `train_generator.py` uses plain fp16 + LoRA instead — no 4-bit
-quantization, no `bitsandbytes` package needed. Qwen2.5-3B fp16 (~6 GB) fits
-P100's 16 GB fine.
+**No bitsandbytes.** Plain fp16 + LoRA — no 4-bit quantization, no
+`bitsandbytes` needed. Qwen2.5-3B fp16 (~6 GB) fits one 16 GB T4.
 
 ## Cells
 
 ```bash
-# 1. deps (no bitsandbytes — see note above)
+# 0. Settings -> Accelerator -> GPU T4 x2 (NOT P100)
+# 1. deps (no bitsandbytes; drop the stale torchao that breaks peft LoRA dispatch)
 !pip install -U "transformers>=4.44" "trl>=0.9" peft accelerate datasets
+!pip uninstall -y torchao
 ```
 
 ```bash
