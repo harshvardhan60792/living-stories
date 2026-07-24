@@ -1,14 +1,23 @@
-"""Plan 4 Task 6 — QLoRA fine-tune Qwen2.5-3B-Instruct to emit story-node JSON.
+"""Plan 4 Task 6 — LoRA fine-tune Qwen2.5-3B-Instruct to emit story-node JSON.
 
-Only run this if the Task-4 few-shot dry-run was inadequate. Qwen2.5-3B +
-bitsandbytes nf4 4-bit + LoRA (r16/a32) + paged_adamw_8bit, TRL SFTTrainer,
-seq len ~1536. Pushes the LoRA adapter to the Hub every N steps and at the end,
-so a killed Kaggle session can `resume_from_checkpoint` from the Hub next run
-(Kaggle has no persistence — spec §11). Fits well within P100 16 GB / 30 GPU-hr.
+Only run this if the Task-4 few-shot dry-run was inadequate. Qwen2.5-3B in
+plain fp16 (NO bitsandbytes quantization) + LoRA (r16/a32) + adamw_torch, TRL
+SFTTrainer, seq len ~1536. Pushes the LoRA adapter to the Hub every N steps and
+at the end, so a killed Kaggle session can `resume_from_checkpoint` from the
+Hub next run (Kaggle has no persistence — spec §11).
+
+NOTE: bitsandbytes 4-bit (nf4) requires CUDA compute capability >=7.0
+(Volta+). Kaggle's free-tier P100 is Pascal (sm_60) and cannot run bnb's
+compiled kernels at all ("named symbol not found" is the tell) — so this
+script deliberately skips quantization. 3B in fp16 is ~6 GB weights + LoRA
+overhead, which fits P100's 16 GB without it. If your Kaggle GPU is a T4/A100
+instead (Volta+), 4-bit would work, but plain fp16 LoRA is simpler and this
+model comfortably fits either way — no need to re-add bnb.
 
 Kaggle cells:
-    !pip install -U "transformers>=4.44" "trl>=0.9" peft bitsandbytes accelerate datasets
-    # add HF_TOKEN as a Kaggle secret; script self-loads it
+    !pip install -U "transformers>=4.44" "trl>=0.9" peft accelerate datasets
+    # add HF_TOKEN as a Kaggle secret AND tick it "attached" for this notebook
+    # (Add-ons -> Secrets -> check the box next to HF_TOKEN, then restart session)
     !python prepare_light_sft.py --exemplars exemplars.jsonl --out sft.jsonl
     !python train_generator.py
 """
@@ -32,7 +41,7 @@ if not HF_TOKEN:
 def main():
     import torch
     from datasets import load_dataset
-    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+    from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import LoraConfig
     from trl import SFTConfig, SFTTrainer
 
@@ -40,14 +49,9 @@ def main():
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
-    bnb = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=torch.float16,
-    )
+    # Plain fp16, no bitsandbytes — see module docstring (P100 can't run bnb kernels).
     model = AutoModelForCausalLM.from_pretrained(
-        BASE, quantization_config=bnb, device_map="auto", token=HF_TOKEN
+        BASE, torch_dtype=torch.float16, device_map="auto", token=HF_TOKEN
     )
     model.config.use_cache = False
 
@@ -71,7 +75,7 @@ def main():
         save_steps=50,
         save_total_limit=2,
         bf16=False, fp16=True,
-        optim="paged_adamw_8bit",
+        optim="adamw_torch",  # not paged_adamw_8bit — that's bnb too, unusable on P100
         max_seq_length=MAXLEN,
         packing=False,
         gradient_checkpointing=True,

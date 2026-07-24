@@ -1,16 +1,25 @@
-# QLoRA generator fine-tune — Kaggle recipe (Plan 4 Part B, T7)
+# LoRA generator fine-tune — Kaggle recipe (Plan 4 Part B, T7)
 
 Only run if the Task-4 few-shot baseline (100% on THE SEVENTH GUEST) proves
 inadequate on a real unaided 3B. Needs: Kaggle notebook w/ **P100 16 GB**, a HF
 account, and an adapter repo `Harsh-ag26/living-stories-generator-lora` (create it
-or let `push_to_hub` create it). Add **HF_TOKEN** as a Kaggle secret — the scripts
-self-load it.
+or let `push_to_hub` create it).
+
+**HF_TOKEN secret:** add it under Add-ons -> Secrets, then **tick the checkbox
+to attach it to this notebook** (adding it isn't enough — Kaggle secrets are
+opt-in per notebook) and restart the session before running.
+
+**No bitsandbytes.** P100 is Pascal (sm_60); bitsandbytes' compiled kernels
+require compute capability 7.0+ (Volta+) and fail with `named symbol not found`
+on P100. `train_generator.py` uses plain fp16 + LoRA instead — no 4-bit
+quantization, no `bitsandbytes` package needed. Qwen2.5-3B fp16 (~6 GB) fits
+P100's 16 GB fine.
 
 ## Cells
 
 ```bash
-# 1. deps
-!pip install -U "transformers>=4.44" "trl>=0.9" peft bitsandbytes accelerate datasets
+# 1. deps (no bitsandbytes — see note above)
+!pip install -U "transformers>=4.44" "trl>=0.9" peft accelerate datasets
 ```
 
 ```bash
