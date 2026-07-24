@@ -136,11 +136,12 @@ def main():
 
     def gen(prompt):
         msgs = [{"role": "system", "content": SYS}, {"role": "user", "content": prompt}]
-        ids = tok.apply_chat_template(msgs, add_generation_prompt=True, return_tensors="pt").to(model.device)
+        enc = tok.apply_chat_template(msgs, add_generation_prompt=True,
+                                      return_tensors="pt", return_dict=True).to(model.device)
         with torch.no_grad():
-            out = model.generate(ids, max_new_tokens=700, do_sample=False,
+            out = model.generate(**enc, max_new_tokens=700, do_sample=False,
                                  pad_token_id=tok.pad_token_id or tok.eos_token_id)
-        return tok.decode(out[0][ids.shape[1]:], skip_special_tokens=True)
+        return tok.decode(out[0][enc["input_ids"].shape[1]:], skip_special_tokens=True)
 
     filled, incoming, queued, queue, errs = {}, {}, {"start"}, ["start"], []
     while queue:
