@@ -1,6 +1,6 @@
 import cytoscape, { Core, ElementDefinition } from "cytoscape";
 import { StoryPack } from "../state/storyTypes";
-import { classifyNodes, ghostEdgeKeys } from "./ghostPaths";
+import { successors } from "./ghostPaths";
 
 export function buildElements(pack: StoryPack): ElementDefinition[] {
   const els: ElementDefinition[] = [];
@@ -17,8 +17,10 @@ export function buildElements(pack: StoryPack): ElementDefinition[] {
 export class Flowchart {
   private cy: Core;
   private pack: StoryPack;
+  private succ: Map<string, string[]>;
   constructor(container: HTMLElement, pack: StoryPack) {
     this.pack = pack;
+    this.succ = successors(pack);
     this.cy = cytoscape({
       container,
       elements: buildElements(pack),
@@ -76,7 +78,8 @@ export class Flowchart {
   }
   private fit(): void {
     this.cy.resize();
-    this.cy.fit(undefined, 18);
+    const shown = this.cy.elements(":visible");
+    this.cy.fit(shown.length ? shown : undefined, 18);
   }
   markVisited(nodeId: string, fromId?: string): void {
     this.cy.nodes().removeClass("current");
@@ -85,19 +88,52 @@ export class Flowchart {
       this.cy.edges(`[source = "${fromId}"][target = "${nodeId}"]`).addClass("path");
     }
   }
-  /** Recompute ghost (untaken-but-seen) nodes/edges from the visit history. */
+  /**
+   * Reveal the map as the player earns it — never spoil the road ahead.
+   * Shown: nodes you've visited, plus the branches you *passed up* at decisions
+   * you've already moved through (the "what you missed" ghosts). The choices at
+   * the node you're standing on now are NOT previewed here — you only learn a
+   * road existed once you've chosen past it. Everything else stays hidden.
+   */
   refreshGhosts(history: string[]): void {
-    const states = classifyNodes(this.pack, history);
+    const visited = new Set(history);
+    const current = history[history.length - 1];
+    const ghostNodes = new Set<string>();
+    const ghostEdges = new Set<string>();
+    for (const v of history) {
+      if (v === current) continue; // don't reveal the choices where you now stand
+      for (const s of this.succ.get(v) ?? []) {
+        if (!visited.has(s)) {
+          ghostNodes.add(s);
+          ghostEdges.add(`${v}->${s}`);
+        }
+      }
+    }
+    const revealed = new Set([...visited, ...ghostNodes]);
     this.cy.nodes().forEach((n) => {
-      // never override a taken node; only (re)mark ghosts
-      if (states.get(n.id()) === "ghost" && !n.hasClass("visited")) n.addClass("ghost");
+      const id = n.id();
+      if (!revealed.has(id)) {
+        n.style("display", "none");
+        return;
+      }
+      n.style("display", "element");
+      if (ghostNodes.has(id) && !visited.has(id)) n.addClass("ghost");
       else n.removeClass("ghost");
     });
-    const ghostEdges = ghostEdgeKeys(this.pack, history);
     this.cy.edges().forEach((e) => {
+      if (e.hasClass("path")) {
+        e.style("display", "element");
+        return;
+      }
       const key = `${e.data("source")}->${e.data("target")}`;
-      if (ghostEdges.has(key) && !e.hasClass("path")) e.addClass("ghost");
-      else e.removeClass("ghost");
+      if (ghostEdges.has(key)) {
+        e.style("display", "element");
+        e.addClass("ghost");
+      } else {
+        e.style("display", "none");
+        e.removeClass("ghost");
+      }
     });
+    this.fit();
   }
 }
