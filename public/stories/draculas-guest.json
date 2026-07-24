@@ -1,0 +1,297 @@
+{
+  "id": "draculas-guest",
+  "title": "DRACULA'S GUEST",
+  "genre": "Gothic horror",
+  "meterLabels": {
+    "RAPPORT": "The Countess · Pity",
+    "VOLATILITY": "The Night · Dread",
+    "PRESSURE": "The Wolf's Claim",
+    "INSIGHT": "The Truth"
+  },
+  "startNodeId": "inn",
+  "initialState": { "RAPPORT": 10, "VOLATILITY": 35, "PRESSURE": 10, "INSIGHT": 10 },
+  "nodes": [
+    {
+      "id": "inn",
+      "type": "action",
+      "textVariants": [
+        { "text": "Walpurgisnacht, and Munich has bolted its shutters. In the Quatre Saisons the innkeeper Maisch crosses himself when you call for a carriage north. 'Not tonight, mein Herr. Tonight the dead walk.' In your breast pocket: a letter to Elise you never sent, and your dead father's watch, still stopped at the hour he died unforgiven. The boy Johann — barely seventeen — waits by the horses, watching you the way a dog watches a door." }
+      ],
+      "choices": [
+        { "id": "read_letter", "text": "Sit by the fire first, and finally read Elise's letter through.", "toneTag": "sincere", "edges": [{ "nextId": "the_letter" }] },
+        { "id": "ask_maisch", "text": "'What did you mean — the dead walk?' Press the innkeeper.", "toneTag": "curious", "edges": [{ "nextId": "maisch" }] },
+        { "id": "bring_boy", "text": "Tell Johann to ready two seats. You'd rather not be alone out there.", "toneTag": "empathetic", "edges": [{ "nextId": "andreas_joins" }] },
+        { "id": "go_alone", "text": "Wave the boy off. Take the reins yourself and go — alone.", "toneTag": "defiant", "edges": [{ "nextId": "the_letter" }] },
+        { "id": "stay_first", "text": "Pour a drink. Steady your hands. Then go.", "toneTag": "calm", "edges": [{ "nextId": "the_letter" }] }
+      ]
+    },
+    {
+      "id": "maisch",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "Maisch lowers his voice, though the taproom is empty. 'A village north of here — gone. Emptied in a single winter, a hundred years back. They buried her at the crossroads with iron through her heart, and still the houses stand dark. Do not go to the valley, Herr. Whatever calls, do not answer it.'" }
+      ],
+      "stances": [
+        { "id": "heed", "anchorPhrasings": ["I'll be careful", "thank you for the warning", "I'll keep to the road"], "npcResponse": "'Careful.' He almost smiles. 'They were all careful, once.' He presses a sprig of wild rose into your hand.", "toneTag": "reassuring", "edges": [{ "nextId": "the_letter" }] },
+        { "id": "press", "anchorPhrasings": ["who was she", "tell me what happened to her", "what was her name"], "npcResponse": "'A countess. She loved a man who died, and would not live without him — so she made her own death. The Church would not have her. The village would not keep her.' He shudders. 'And yet she would not stay dead.'", "toneTag": "curious", "edges": [{ "nextId": "the_letter" }] },
+        { "id": "scoff", "anchorPhrasings": ["it's just superstition", "the dead stay dead", "I don't believe in ghosts"], "npcResponse": "'Englishmen,' he says softly, and turns away. 'You will believe. That is the pity of it.'", "toneTag": "dismissive", "edges": [{ "nextId": "the_letter" }] }
+      ],
+      "fallbackStanceId": "heed"
+    },
+    {
+      "id": "the_letter",
+      "type": "action",
+      "textVariants": [
+        { "text": "The letter is three months old and still sealed. Elise's hand on the envelope, patient, waiting for a man who ran east rather than say yes. Beside it, your father's watch — you were on a train when he died, carrying his silence with you like luggage. Two people you loved and could not face. The night presses its cold face to the glass." }
+      ],
+      "choices": [
+        { "id": "reread_elise", "text": "Break the seal. Read what Elise wrote, whatever it costs.", "toneTag": "sincere", "edges": [{ "nextId": "road" }] },
+        { "id": "fathers_watch", "text": "Wind the dead watch. Try, once, to forgive him.", "toneTag": "apologetic", "edges": [{ "nextId": "road" }] },
+        { "id": "pocket_both", "text": "Pocket them both, unread, unwound. Later. Always later.", "toneTag": "cold", "edges": [{ "nextId": "road" }] },
+        { "id": "carry_on", "text": "Enough. The road won't drive itself.", "toneTag": "calm", "edges": [{ "nextId": "road" }] }
+      ]
+    },
+    {
+      "id": "andreas_joins",
+      "type": "action",
+      "textVariants": [
+        { "text": "The boy climbs up beside you before you finish the sentence, as if he'd been waiting all his life to be asked. 'My mother says I'm not to go past the black chapel,' Johann says, and grins to show he isn't afraid, which is how you know he is. 'But you shouldn't go alone, Herr. Nobody should, tonight.' He tucks a blanket around your knees like you're the one who needs minding." }
+      ],
+      "choices": [
+        { "id": "promise_protect", "text": "'Stay close to me and you'll come to no harm.' Mean it.", "toneTag": "sincere", "edges": [{ "nextId": "road" }] },
+        { "id": "let_him_lead", "text": "Let him take the reins — he knows the valley, you don't.", "toneTag": "calm", "edges": [{ "nextId": "road" }] }
+      ]
+    },
+    {
+      "id": "road",
+      "type": "dialogue",
+      "textVariants": [
+        { "recallWhen": "andreas_joins", "text": "The horses hate the road. Johann talks to keep the dark back — his mother, a girl in the next village, the horse he's saving for. Snow begins, soft as ash. 'You've someone waiting, Herr?' he asks. 'You get a look, sometimes. Like England's still got its hand on your sleeve.'" },
+        { "text": "You drive alone into a silence so total it rings. Snow begins, soft as ash, and every mile east the horses fight you harder. In the quiet, Elise's face. Your father's. All the words you carried instead of said.", "when": { "VOLATILITY": "low" } },
+        { "text": "The wind has teeth now. Somewhere ahead, something is waiting that knows your name — you feel it the way you feel weather coming. Alone was a choice you are beginning to regret." }
+      ],
+      "stances": [
+        { "id": "comfort", "anchorPhrasings": ["you're safe with me", "we'll be alright", "stay calm, we'll make it"], "npcResponse": "The boy nods, steadier. 'My mother said an Englishman once. That you don't feel the cold. I don't think that's true.' He edges closer anyway.", "toneTag": "reassuring", "edges": [{ "nextId": "village" }] },
+        { "id": "confide", "anchorPhrasings": ["there's a woman I love", "I never buried my father right", "I left England a coward"], "npcResponse": "For a while there's only the runners hissing on snow. Then, quietly: 'Then you should go home, Herr. After tonight. Whatever it is — go home and say it.'", "toneTag": "sincere", "edges": [{ "nextId": "village" }] },
+        { "id": "press_on", "anchorPhrasings": ["drive faster", "we don't stop", "push the horses"], "npcResponse": "The horses scream against the bits. The valley swallows the last of the light.", "toneTag": "defiant", "edges": [{ "nextId": "village" }] }
+      ],
+      "fallbackStanceId": "comfort"
+    },
+    {
+      "id": "village",
+      "type": "action",
+      "textVariants": [
+        { "recallWhen": "andreas_joins", "text": "The village is a mouthful of broken teeth — dark houses, doors hanging, snow drifting through open rooms where fires should be. On a rise beyond the last roof stands a figure, tall and gaunt and utterly still, watching you the way the moon watches. The horses will go no further. Johann has stopped talking. His hand finds your sleeve." },
+        { "text": "The village is a mouthful of broken teeth — dark houses, doors hanging, snow filling rooms where fires should be. On a rise beyond stands a figure, tall and gaunt and utterly still, watching you the way the moon watches. The horses will go no further. You are, you realize, entirely alone with it." }
+      ],
+      "choices": [
+        { "id": "approach_stranger", "text": "Walk toward the watching figure. Look it in the face.", "toneTag": "curious", "edges": [{ "nextId": "stranger" }] },
+        { "id": "send_boy_back", "text": "Cut a horse loose and send Johann galloping back to Munich. Now.", "toneTag": "empathetic", "edges": [{ "nextId": "storm" }] },
+        { "id": "press_on", "text": "Ignore it. Press deeper into the valley on foot.", "toneTag": "defiant", "edges": [{ "nextId": "storm" }] },
+        { "id": "shelter_here", "text": "Get out of the open — into one of the dead houses.", "toneTag": "calm", "edges": [{ "nextId": "storm" }] },
+        { "id": "pray", "text": "Take out Maisch's wild rose. Hold it up. Pray.", "toneTag": "apologetic", "edges": [{ "nextId": "storm" }] }
+      ]
+    },
+    {
+      "id": "stranger",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "Up close the figure is a wrongness in the shape of a man — too tall, too still, casting no shadow though the moon is behind him. It does not breathe. When it speaks, the voice is inside your skull, courteous and cold. 'You are expected,' it says. 'Farther east than this. But the night is long, and the valley is hungry, and I would know what manner of guest you mean to be.'" }
+      ],
+      "stances": [
+        { "id": "defy", "anchorPhrasings": ["get out of my way", "I'm not afraid of you", "leave me be"], "npcResponse": "'Brave.' The word has no warmth in it. 'She was brave too, the lady in the ground. Go and meet her, then. Bravely.' The figure is simply gone, and the snow rushes in to fill where it stood.", "toneTag": "defiant", "edges": [{ "nextId": "storm" }] },
+        { "id": "plead", "anchorPhrasings": ["please let me pass", "I mean no harm", "I only want to go home"], "npcResponse": "'Home.' It tastes the word. 'Everyone here wanted only to go home. The valley keeps them anyway.' A long pause. 'But you it will not keep. Not yet. You are promised elsewhere.'", "toneTag": "submissive", "edges": [{ "nextId": "storm" }] },
+        { "id": "question", "anchorPhrasings": ["who are you", "what is this place", "who is expecting me"], "npcResponse": "'A servant of the one who wrote your name in a ledger far away. As for this place —' it gestures at the dark houses '— this is what love does, when it will not let go. Remember that, when you meet her.'", "toneTag": "curious", "edges": [{ "nextId": "storm" }] }
+      ],
+      "fallbackStanceId": "question"
+    },
+    {
+      "id": "storm",
+      "type": "action",
+      "textVariants": [
+        { "recallWhen": "andreas_joins", "text": "The blizzard comes down like a dropped curtain — from soft snow to white blindness in the space of a breath. The cold is a living thing with intent. Johann is somewhere at your side, calling your name, his voice thinning. You can save one thing in this whiteout: your bearings, or your grip on the boy." },
+        { "text": "The blizzard comes down like a dropped curtain — soft snow to white blindness in a breath. The cold is a living thing with intent, and it wants you still. Through it, dark against the white: cypress trees. A wall. Graves." }
+      ],
+      "choices": [
+        { "id": "find_shelter", "text": "Fight through the white toward the shape of a wall ahead.", "toneTag": "curious", "edges": [{ "nextId": "graveyard" }] },
+        { "id": "hold_boy", "text": "Forget the cold — get both hands on Johann and don't let go.", "toneTag": "sincere", "edges": [{ "nextId": "graveyard" }] },
+        { "id": "push_through", "text": "Lower your head and drive through it by will alone.", "toneTag": "defiant", "edges": [{ "nextId": "graveyard" }] },
+        { "id": "pray_storm", "text": "Kneel in the snow and pray it passes.", "toneTag": "apologetic", "edges": [{ "nextId": "graveyard" }] }
+      ]
+    },
+    {
+      "id": "graveyard",
+      "type": "action",
+      "textVariants": [
+        { "text": "The wall becomes a gate, the gate a graveyard drowning in snow — and at its heart, a tomb larger than the dead houses, marble black with age. An iron stake as thick as your wrist has been driven down through its roof, into whatever lies inside. Cut in the marble, in Russian and in German: COUNTESS DOLINGEN OF GRATZ — SOUGHT AND FOUND DEATH — 1801. The door stands the width of a hand ajar. Warmth breathes out of it. Warmth, in all this cold." }
+      ],
+      "choices": [
+        { "id": "enter_tomb", "text": "Push the door and step inside the tomb.", "toneTag": "curious", "edges": [{ "nextId": "tomb" }] },
+        { "id": "read_inscription", "text": "Read the whole inscription first — every word cut in the stone.", "toneTag": "curious", "edges": [{ "nextId": "tomb" }] },
+        { "id": "call_andreas", "text": "Call for Johann to come into the warmth before the cold takes him.", "toneTag": "empathetic", "edges": [{ "nextId": "tomb" }] },
+        { "id": "kneel_pray", "text": "Kneel at the threshold and beg whatever's inside for mercy.", "toneTag": "apologetic", "edges": [{ "nextId": "tomb" }] }
+      ]
+    },
+    {
+      "id": "tomb",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "She lies on a bier as if sleeping — young, unbearably still, cheeks flushed as though with fever, lips full and dark. Not a corpse. A woman a hundred years dead who has not decayed a single day, held down by the iron through her breast. Her eyes open. They find yours. They are the loneliest thing you have ever seen. 'You came in,' she whispers, and it is almost gratitude. 'A hundred years, and someone came in.'", "when": { "RAPPORT": "low" } },
+        { "text": "She lies on the bier, and when her eyes open they are wet. 'You pity me,' she says, wondering, as if the word were a language she'd forgotten. 'Careful. Pity is how it started, for me. I pitied a dying man, and I loved him, and when he died I could not — I would not —' The iron stake shifts with her breathing. 'Do you know what it is, to be too much in love to be allowed to die?'", "when": { "RAPPORT": "mid" } },
+        { "text": "She looks at you as though she has always known you. 'You carry your dead the way I carried mine,' she says softly. 'In your pocket. In a letter you cannot send. I know the weight of it. I chose the ground rather than set it down. Do not — please — do not become what I became. Whatever you decide to do with me tonight.'", "when": { "RAPPORT": "high" } },
+        { "text": "She lies on the bier, still as the marble around her, and when her eyes open they hold you fast." }
+      ],
+      "stances": [
+        { "id": "pity", "anchorPhrasings": ["I'm so sorry for you", "you didn't deserve this", "you must have been so lonely"], "npcResponse": "Something breaks in her face — a grief a hundred years deep. 'Sorry,' she breathes. 'No one has been sorry. They were only afraid.'", "toneTag": "empathetic", "edges": [{ "nextId": "countess_story" }] },
+        { "id": "free_her", "anchorPhrasings": ["let me take the iron out", "I can end this for you", "I'll set you free"], "npcResponse": "'Free.' Her hand rises toward the stake, then falls. 'You do not know what you would be freeing. But oh — that you would offer —'", "toneTag": "sincere", "edges": [{ "nextId": "countess_story" }] },
+        { "id": "fear", "anchorPhrasings": ["stay away from me", "you're a monster", "I won't let you take me"], "npcResponse": "The tenderness in her face goes out like a snuffed candle. 'Monster,' she repeats. 'Yes. In the end they always find the word.' She smiles, and it is terrible.", "toneTag": "defiant", "edges": [{ "nextId": "lightning" }] },
+        { "id": "accuse", "anchorPhrasings": ["how many have you killed", "you emptied this whole village", "you did this to them"], "npcResponse": "'I did,' she says, without flinching. 'Loneliness is a hunger, and a hundred years is a long time to starve. Judge me. You would have done the same. You are doing it now, with your letter and your watch — starving what loves you.'", "toneTag": "aggressive", "edges": [{ "nextId": "lightning" }] }
+      ],
+      "fallbackStanceId": "fear"
+    },
+    {
+      "id": "countess_story",
+      "type": "action",
+      "textVariants": [
+        { "text": "She tells it plainly, the way only the dead can. A man she loved, wasting in a winter like this one. The doctors giving up. Her praying to anything that would listen — and something listened. It offered her forever, if she would come to it. She went. And when she returned to him with her new cold gift, he was already three days in the ground, and forever had become a punishment with no one left to share it. 'I sought death to follow him,' she says, 'and found I could no longer die. That is the joke. That is the whole joke.'" }
+      ],
+      "choices": [
+        { "id": "share_grief", "text": "Tell her about Elise. About your father. About the words you never said.", "toneTag": "sincere", "edges": [{ "nextId": "lightning" }] },
+        { "id": "offer_release", "text": "'Then let me be the one to let you follow him. Truly, this time.'", "toneTag": "reassuring", "edges": [{ "nextId": "lightning" }] },
+        { "id": "recoil", "text": "Step back. Her grief is a pit and you feel yourself leaning in.", "toneTag": "cold", "edges": [{ "nextId": "lightning" }] },
+        { "id": "weep", "text": "Say nothing. Simply weep — for her, for your father, for all of it.", "toneTag": "apologetic", "edges": [{ "nextId": "lightning" }] }
+      ]
+    },
+    {
+      "id": "lightning",
+      "type": "action",
+      "textVariants": [
+        { "text": "The storm finds the iron. Lightning walks down the stake in a single white scream, and the tomb comes apart around you. In the strobing dark you see her rise — or try to — mouth open, reaching, whether for you or for release you cannot tell. You have one heartbeat to decide what you are.", "when": { "RAPPORT": "high" } },
+        { "text": "The storm finds the iron. Lightning walks down the stake in a white scream and the tomb bursts apart. She rises in the blast — reaching, screaming, and the scream is not rage, it is relief. One heartbeat. Decide." }
+      ],
+      "choices": [
+        { "id": "shield_her", "text": "Throw yourself over her against the falling stone.", "toneTag": "sincere", "edges": [{ "nextId": "wolf" }] },
+        { "id": "reach_her", "text": "Take her reaching hand in yours. Don't let her go alone.", "toneTag": "empathetic", "edges": [{ "nextId": "wolf" }] },
+        { "id": "flee", "text": "Run. Out into the storm, away from the collapsing tomb.", "toneTag": "submissive", "edges": [{ "nextId": "wolf" }] },
+        { "id": "stake_her", "text": "Seize the falling iron and drive it home yourself — end it.", "toneTag": "cold", "edges": [{ "nextId": "wolf" }] }
+      ]
+    },
+    {
+      "id": "wolf",
+      "type": "dialogue",
+      "textVariants": [
+        { "text": "You wake in snow with the sky wheeling above and a weight on your chest — an enormous wolf, grey as iron, its breath hot on your throat. It is not tearing at you. It is lying over you, keeping the cold off, and its eyes in the dark are not an animal's eyes. They are old, and knowing, and they wait for what you will do.", "when": { "PRESSURE": "low" } },
+        { "text": "You wake with a great grey wolf across your chest, its mouth at your throat — but gently, gently, holding not biting, and where its warmth touches you the cold cannot reach. Its eyes are the eyes from the ledger, from the ridge, from the stranger. It has been yours, you understand, since Munich. Since before. It is only now letting you see.", "when": { "PRESSURE": "high" } }
+      ],
+      "stances": [
+        { "id": "trust", "anchorPhrasings": ["thank you for keeping me warm", "you're protecting me", "I'm not afraid of you"], "npcResponse": "The great head lowers. For a moment something like tenderness moves in those ancient eyes — and something like ownership. It has decided you are worth keeping. That is not the same as worth saving.", "toneTag": "calm", "edges": [{ "nextId": "andreas_fate" }] },
+        { "id": "name_it", "anchorPhrasings": ["I know what you are", "you're him, aren't you", "Dracula"], "npcResponse": "The wolf goes very still. Then, impossibly, it inclines its head — a bow, a greeting between equals, or between a master and a thing he has already bought. Snow settles on its fur like the beginning of a shroud.", "toneTag": "curious", "edges": [{ "nextId": "andreas_fate" }] },
+        { "id": "fight", "anchorPhrasings": ["get off me", "I'll kill you first", "I won't be taken"], "npcResponse": "It bears down — not to wound, only to remind you which of you decides. When it eases back, there is blood at your throat that is not from any bite you felt it make.", "toneTag": "aggressive", "edges": [{ "nextId": "andreas_fate" }] },
+        { "id": "surrender", "anchorPhrasings": ["take me then", "I give up", "do what you want with me"], "npcResponse": "A sound rolls through its chest that might be satisfaction. The warmth deepens. It is so easy, suddenly, to stop fighting the cold and the dark and the long road east.", "toneTag": "submissive", "edges": [{ "nextId": "andreas_fate" }] }
+      ],
+      "fallbackStanceId": "trust"
+    },
+    {
+      "id": "andreas_fate",
+      "type": "action",
+      "textVariants": [
+        { "recallWhen": "andreas_joins", "text": "Torches, downhill — and Johann's voice among them, cracked with cold and terror, calling your name across the snow. He came back for you. Of course he did. But the wolf is between you and him, and the boy is stumbling straight toward it, and you have one motion left in your frozen body to spend." },
+        { "text": "Torches, downhill — soldiers, a search party, calling out in German, floundering through the drifts toward the ruined tomb. The wolf's weight lifts from your chest. You have one motion left in your frozen body to spend before they reach you." }
+      ],
+      "choices": [
+        { "id": "shield_boy", "text": "Throw yourself between the wolf and the boy. Whatever it costs.", "toneTag": "sincere", "edges": [{ "when": { "PRESSURE": "high" }, "nextId": "end_sacrifice" }, { "nextId": "soldiers" }] },
+        { "id": "call_out", "text": "Raise your arm to the torches and cry out that you live.", "toneTag": "calm", "edges": [{ "nextId": "soldiers" }] },
+        { "id": "crawl", "text": "Drag yourself toward the light while you still can.", "toneTag": "defiant", "edges": [{ "nextId": "soldiers" }] },
+        { "id": "lie_still", "text": "Lie still under the wolf's warmth and let them come to you.", "toneTag": "submissive", "edges": [{ "nextId": "soldiers" }] }
+      ]
+    },
+    {
+      "id": "soldiers",
+      "type": "action",
+      "textVariants": [
+        { "recallWhen": "andreas_joins", "text": "The horsemen drive the wolf off with fire and shouting; it goes unhurried, looking back once, at you, before the storm takes it. They wrap you in blankets. Johann is alive — shaking, weeping, refusing to let go of your coat. There is blood at your throat and no wound they can find to explain it. 'What happened up there?' the officer asks. The boy watches your face to learn what the truth is going to be." },
+        { "text": "The horsemen drive the wolf off with fire and shouting; it goes unhurried, looking back once, at you, before the storm takes it. They wrap you in blankets and find, at your throat, blood with no wound beneath it to explain it. 'You should not be alive,' the officer says, almost angry. 'What happened up there?'" }
+      ],
+      "choices": [
+        { "id": "tell_truth", "text": "Tell them everything. The tomb, the woman, the wolf. All of it.", "toneTag": "sincere", "edges": [{ "nextId": "telegram" }] },
+        { "id": "stay_silent", "text": "Say you remember nothing. Bury it, the way you bury everything.", "toneTag": "cold", "edges": [{ "nextId": "telegram" }] },
+        { "id": "ask_wolf", "text": "Ask them: the wolf — did they truly see it too?", "toneTag": "curious", "edges": [{ "nextId": "telegram" }] },
+        { "id": "collapse", "text": "Let the warmth and the shock take you. Collapse into their arms.", "toneTag": "submissive", "edges": [{ "nextId": "telegram" }] }
+      ]
+    },
+    {
+      "id": "telegram",
+      "type": "action",
+      "textVariants": [
+        { "text": "Back at the Quatre Saisons, Maisch meets you white-faced with a telegram that came while you were gone — sent, impossibly, before you ever left. It is from the east. From the man you are travelling to meet. 'Be careful of my guest,' it reads. 'The dangers of snow and wolves and night are great. Make all speed. He is precious to me.' Precious. In the mirror, the blood at your throat has already healed to a pale double scar. Outside, dawn is a grey rumour, and the road east is waiting.", "when": { "PRESSURE": "high" } },
+        { "text": "Back at the Quatre Saisons, Maisch meets you white-faced with a telegram that came while you were gone — sent, impossibly, before you ever left. From the east. From the man you travel to meet. 'Be careful of my guest,' it reads. 'The dangers of snow and wolves and night are great. Make all speed.' Dawn is a grey rumour outside, and in your pocket, still, the letter and the watch. Two things you carried east instead of home." }
+      ],
+      "choices": [
+        { "id": "go_east", "text": "Finish the journey. Go east, to the one who calls you 'precious.'", "toneTag": "calm", "edges": [{ "nextId": "end_guest" }] },
+        { "id": "mourn_her", "text": "Before anything — sit, and grieve the Countess properly, and send Elise's letter at last.", "toneTag": "empathetic", "edges": [{ "when": { "RAPPORT": "high" }, "nextId": "end_mercy" }, { "nextId": "end_reason" }] },
+        { "id": "feel_wound", "text": "Touch the healed scar. Feel the cold that will not leave your blood.", "toneTag": "apologetic", "edges": [{ "when": { "PRESSURE": "high" }, "nextId": "end_turned" }, { "nextId": "end_reason" }] },
+        { "id": "refuse_road", "text": "Refuse. Turn the horses west, toward England, toward home.", "toneTag": "defiant", "edges": [{ "when": { "PRESSURE": "high" }, "nextId": "end_wolf" }, { "nextId": "end_reason" }] }
+      ]
+    },
+    {
+      "id": "end_mercy",
+      "type": "action",
+      "textVariants": [
+        { "text": "You do not go east that day. You sit in the cold church at the valley's edge and you grieve her — the countess who loved too much to die — as no one has grieved her in a hundred years. And in the grieving, something in you thaws. You post the letter to Elise before noon. You wind your father's watch and let it run. You will carry the scar at your throat all your life, and some nights you will feel the cold stir in it — but you carried two loves home instead of east, and that, she taught you, is the whole of it. Somewhere in the frozen valley, at last, a lady is only sleeping." }
+      ],
+      "choices": [
+        { "id": "end", "text": "— The Countess's Mercy —", "ending": "You grieved her, and went home to your living", "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "end_turned",
+      "type": "action",
+      "textVariants": [
+        { "text": "The scar does not fade. The cold does not leave. Within a week you cannot bear the noon sun, and food is ash, and the only warmth left in the world is the memory of her breath on your throat. Elise's letter stays sealed on the table; you no longer trust your hand to answer it kindly. You understand her joke now, the countess's joke — to be too much in love with living to be allowed to stop. When at last you go east, it is not to keep an appointment. It is to find the others like you, and to learn what a hundred lonely years will ask of you." }
+      ],
+      "choices": [
+        { "id": "end", "text": "— The Cold in the Blood —", "ending": "The night's gift took root; you are turning", "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "end_guest",
+      "type": "action",
+      "textVariants": [
+        { "text": "You go east, because you are expected, and because a part of you has wanted all your life to be wanted like this — completely, and without escape. The passes rise white around you. Somewhere ahead a castle waits, and a host who called you precious before he ever saw your face. You should be afraid. Instead you feel the strange peace of a debt about to come due. The wolf pads the treeline, keeping pace, keeping you. You were always going to be his guest. The only thing you ever chose was how gladly." }
+      ],
+      "choices": [
+        { "id": "end", "text": "— Dracula's Guest —", "ending": "You went east, precious and claimed", "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "end_wolf",
+      "type": "action",
+      "textVariants": [
+        { "text": "You turn the horses west and whip them toward England and home — and the wolf lets you get as far as the tree line before it steps into the road. It does not attack. It simply walks beside the carriage, tireless, patient, all the long way to the coast, and onto the packet, and into your dreams, until you can no longer remember which thoughts are yours and which are its. You reach England. You reach Elise's door. But the thing that knocks is kept, now, and answers to a name that is not the one she loved. You should never have let it keep you warm." }
+      ],
+      "choices": [
+        { "id": "end", "text": "— The Wolf's Keeping —", "ending": "You fled, but the wolf had already kept you", "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "end_reason",
+      "type": "action",
+      "textVariants": [
+        { "text": "By morning you have a rational account of all of it: exposure, a fever dream, a real wolf and a lucky rescue, a tomb already ruined by an old lightning-strike. You tell it so well you almost silence the other knowledge — the one that lives in the healed scar and will not be reasoned with. You finish your journey. You do your business in the east and you come home and you marry Elise and you never, ever speak of the valley. But some winter nights, when the snow comes down soft as ash, you find yourself at the window, listening — and part of you is disappointed when nothing answers." }
+      ],
+      "choices": [
+        { "id": "end", "text": "— What the Living Tell Themselves —", "ending": "You reasoned it away, and it never quite let you go", "edges": [{ "nextId": null }] }
+      ]
+    },
+    {
+      "id": "end_sacrifice",
+      "type": "action",
+      "textVariants": [
+        { "text": "You put your body between the boy and the grey shape in the snow, and the cold comes into you all at once, complete, like a held breath finally let go. The last thing you feel is Johann's hands dragging you toward the torches, and his voice — furious, grieving, seventeen — swearing he will not leave you. He keeps that promise. He carries you down; he carries, too, the letter from your coat, and months later a girl named Elise in England opens her door to a weeping German boy who has crossed a continent to tell her that at the end you were brave, and that you were, finally, coming home." }
+      ],
+      "choices": [
+        { "id": "end", "text": "— For the Boy —", "ending": "You died shielding Johann; he carried your letter home", "edges": [{ "nextId": null }] }
+      ]
+    }
+  ]
+}
