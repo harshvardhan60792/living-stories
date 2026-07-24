@@ -23,8 +23,9 @@ MAXNODES = 16
 USE_ADAPTER = os.environ.get("USE_ADAPTER", "1") != "0"
 # Sampling + repetition_penalty kill the greedy repetition loops the adapter fell
 # into; SEED keeps a run reproducible.
-TEMP = float(os.environ.get("GEN_TEMP", "0.7"))
-REP_PENALTY = float(os.environ.get("GEN_REP", "1.3"))
+TEMP = float(os.environ.get("GEN_TEMP", "0.4"))  # lower = stricter JSON
+REP_PENALTY = float(os.environ.get("GEN_REP", "1.2"))
+RETRIES = int(os.environ.get("GEN_RETRIES", "4"))  # per-slot attempts before giving up
 SYS = ("You author ONE node of a branching interactive-fiction story as strict "
        "JSON. Return ONLY the JSON object for the single node — no prose, no "
        "markdown fence.")
@@ -109,6 +110,27 @@ def extract_json(raw):
     return raw[s:e + 1]
 
 
+def parse_node(raw, nid):
+    """Extract + light-repair the model's JSON. Small models slip on trailing
+    commas and smart quotes; fix the common ones before giving up."""
+    js = extract_json(raw)
+    for attempt in (js, _repair(js)):
+        try:
+            node = json.loads(attempt)
+            node["id"] = nid
+            if node.get("type") in ("action", "dialogue") and node.get("textVariants"):
+                return node
+        except Exception:
+            pass
+    raise ValueError("unparseable/invalid node")
+
+
+def _repair(js):
+    js = re.sub(r",(\s*[}\]])", r"\1", js)          # trailing commas
+    js = js.replace("“", '"').replace("”", '"').replace("’", "'")  # smart quotes
+    return js
+
+
 def out_edges(node):
     carriers = ([( c["id"], c.get("edges", [])) for c in node.get("choices", [])]
                 if node.get("type") == "action"
@@ -165,13 +187,17 @@ def main():
             errs.append(f"maxNodes {MAXNODES} hit at {nid}")
             break
         slot = {"id": nid, "start": nid == "start", "incoming": incoming.get(nid, [])}
-        raw = gen(build_prompt(b, summarize(filled), slot, ex))
-        try:
-            node = json.loads(extract_json(raw))
-            node["id"] = nid
-            assert node.get("type") in ("action", "dialogue")
-        except Exception as e:
-            errs.append(f"slot {nid}: {e} :: {raw[:160]!r}")
+        prompt = build_prompt(b, summarize(filled), slot, ex)
+        node, last = None, ""
+        for _ in range(RETRIES):
+            last = gen(prompt)
+            try:
+                node = parse_node(last, nid)
+                break
+            except Exception:
+                node = None
+        if node is None:
+            errs.append(f"slot {nid}: unparseable after {RETRIES} tries :: {last[:160]!r}")
             continue
         filled[nid] = node
         for via, nx in out_edges(node):
