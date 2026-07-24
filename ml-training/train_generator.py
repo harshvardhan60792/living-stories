@@ -25,6 +25,12 @@ Kaggle cells:
 """
 import os
 
+# Single-GPU only. On a T4 x2 notebook, HF Trainer sees 2 GPUs and auto-wraps
+# the model in nn.DataParallel, replicating to cuda:1 while our weights are
+# pinned to cuda:0 -> "tensors on cuda:1 vs cuda:0" crash. The 3B fits one T4,
+# so hide the second card entirely (must be set before torch/CUDA init).
+os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0")
+
 BASE = "Qwen/Qwen2.5-3B-Instruct"
 HF_REPO = "Harsh-ag26/living-stories-generator-lora"
 SFT_PATH = os.environ.get("SFT_PATH", "sft.jsonl")
