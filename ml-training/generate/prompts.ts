@@ -20,8 +20,8 @@ export interface Exemplar {
 
 const BOUNDS = [
   'type must be "action" or "dialogue".',
-  "action nodes: 2-4 choices, each { id, text, toneTag?, edges }.",
-  "dialogue nodes: 2-3 stances { id, anchorPhrasings[], npcResponse, toneTag?, edges } + a fallbackStanceId naming one of them.",
+  "action nodes: 3-6 choices, each { id, text, toneTag?, edges } — prefer richer branching over binary choices.",
+  "dialogue nodes: 2-4 stances { id, anchorPhrasings[], npcResponse, toneTag?, edges } + a fallbackStanceId naming one of them.",
   "every node: non-empty textVariants[] ({ text, when? }); prose 120-200 words max, in the bible's voice.",
   "edges: [{ when?: {ROLE:'low'|'mid'|'high'}, nextId }]; nextId is another node id or null (an ending). Always include one edge with no `when` as a fallback.",
   "toneTag (optional) must be one of: empathetic, aggressive, deceptive, reassuring, defiant, cold, submissive, curious, threatening, apologetic, dismissive, sincere, evasive, calm.",

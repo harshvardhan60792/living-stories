@@ -19,6 +19,12 @@ os.environ.setdefault("CUDA_VISIBLE_DEVICES", "0")
 BASE = "Qwen/Qwen2.5-3B-Instruct"
 ADAPTER = "Harsh-ag26/living-stories-generator-lora"
 MAXNODES = 16
+# USE_ADAPTER=0 -> base 3B + few-shot only (no fine-tune), to A/B the adapter.
+USE_ADAPTER = os.environ.get("USE_ADAPTER", "1") != "0"
+# Sampling + repetition_penalty kill the greedy repetition loops the adapter fell
+# into; SEED keeps a run reproducible.
+TEMP = float(os.environ.get("GEN_TEMP", "0.7"))
+REP_PENALTY = float(os.environ.get("GEN_REP", "1.3"))
 SYS = ("You author ONE node of a branching interactive-fiction story as strict "
        "JSON. Return ONLY the JSON object for the single node — no prose, no "
        "markdown fence.")
@@ -68,12 +74,14 @@ def digest(b):
 
 
 BOUNDS = f"""- type must be "action" or "dialogue".
-- action nodes: 2-4 choices, each {{ id, text, toneTag?, edges }}.
-- dialogue nodes: 2-3 stances {{ id, anchorPhrasings[], npcResponse, toneTag?, edges }} + a fallbackStanceId naming one of them.
+- action nodes: 3-6 choices, each {{ id, text, toneTag?, edges }} — prefer richer branching over binary choices.
+- dialogue nodes: 2-4 stances {{ id, anchorPhrasings[], npcResponse, toneTag?, edges }} + a fallbackStanceId naming one of them.
 - every node: non-empty textVariants[] ({{ text, when? }}); prose in the bible's voice.
 - edges: [{{ when?: {{ROLE:'low'|'mid'|'high'}}, nextId }}]; nextId is another node id or null (an ending). Always include one edge with no `when` as a fallback.
 - toneTag (optional) from: {TONE}.
-- when-conditions use only roles: RAPPORT, VOLATILITY, PRESSURE, INSIGHT."""
+- when-conditions use only roles: RAPPORT, VOLATILITY, PRESSURE, INSIGHT.
+- An ENDING is a choice/stance whose edge has "nextId": null. At least one path must reach one. End nodes must NOT loop back to other nodes.
+- The bible's ending summaries are AUTHOR GUIDANCE ONLY — write fresh in-scene prose; never copy a summary into any text or choice."""
 
 
 def build_prompt(b, summary, slot, ex):
@@ -128,7 +136,11 @@ def main():
         model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.float16, device_map={"": 0}, token=HF_TOKEN)
     except TypeError:
         model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.float16, device_map={"": 0}, token=HF_TOKEN)
-    model = PeftModel.from_pretrained(model, ADAPTER, token=HF_TOKEN)
+    if USE_ADAPTER:
+        model = PeftModel.from_pretrained(model, ADAPTER, token=HF_TOKEN)
+        print(f"loaded adapter: {ADAPTER}")
+    else:
+        print("BASE MODEL ONLY (no adapter) — few-shot A/B")
     model.eval()
 
     b = load_bible()
@@ -139,7 +151,8 @@ def main():
         enc = tok.apply_chat_template(msgs, add_generation_prompt=True,
                                       return_tensors="pt", return_dict=True).to(model.device)
         with torch.no_grad():
-            out = model.generate(**enc, max_new_tokens=700, do_sample=False,
+            out = model.generate(**enc, max_new_tokens=700, do_sample=True,
+                                 temperature=TEMP, top_p=0.9, repetition_penalty=REP_PENALTY,
                                  pad_token_id=tok.pad_token_id or tok.eos_token_id)
         return tok.decode(out[0][enc["input_ids"].shape[1]:], skip_special_tokens=True)
 
