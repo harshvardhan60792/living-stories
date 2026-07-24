@@ -56,6 +56,10 @@ export interface StoryPack {
   id: string;
   title: string;
   genre: string;
+  /** Optional world-setting premise shown on an intro screen before play, so
+   *  players know the situation before the first scene. Absent = skip straight
+   *  in (back-compat). */
+  intro?: string;
   meterLabels: Record<Role, string | null>; // null = meter hidden for this story
   startNodeId: string;
   initialState: MeterState;

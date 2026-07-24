@@ -8,6 +8,7 @@ import type { StanceRouter } from "./engine/intentRouter";
 import { renderMeters } from "./ui/meters";
 import { renderScene } from "./ui/scene";
 import { renderMenu } from "./ui/menu";
+import { renderIntro } from "./ui/intro";
 import { Flowchart } from "./ui/flowchart";
 import { recordEnding, endingStats } from "./ui/stats";
 import { effectiveDeltas } from "./ui/deltaPreview";
@@ -22,8 +23,18 @@ async function main() {
   renderMenu(app, entries, (id) => startStory(id));
 }
 
+function toMenu() {
+  main();
+}
+
+// Fetch the pack, then show the world-setting intro. Only on "Begin" do we
+// load the ML models and drop into the first scene.
 async function startStory(id: string) {
   const pack: StoryPack = await (await fetch(`${base}stories/${id}.json`)).json();
+  renderIntro(app, pack, () => beginStory(pack), toMenu);
+}
+
+async function beginStory(pack: StoryPack) {
   app.innerHTML = `<div id="meters"></div><div id="scene"></div><div id="flowchart"></div>`;
   const metersEl = document.getElementById("meters")!;
   const sceneEl = document.getElementById("scene")!;
@@ -33,7 +44,7 @@ async function startStory(id: string) {
 
   // Models lazy-load from the HF Hub on first play; show a placeholder so the
   // scene area isn't blank while they download (cold load can take some seconds).
-  sceneEl.innerHTML = `<p class="scene reading">Waking the interrogation room…</p>`;
+  sceneEl.innerHTML = `<p class="scene reading">Setting the scene…</p>`;
 
   let scorer: ToneScorer = new MockScorer();
   try {
@@ -116,7 +127,7 @@ async function startStory(id: string) {
     const from = engine.currentNode.id;
     // Typed turns embed the text (async); show a brief "reading…" affordance.
     if ("text" in input) {
-      sceneEl.innerHTML = `<p class="scene reading">NIX considers your words…</p>`;
+      sceneEl.innerHTML = `<p class="scene reading">Considering your words…</p>`;
     }
     const res = await engine.act(input);
     if (res.ended) {

@@ -29,6 +29,20 @@ body { background:var(--bg); color:var(--fg); font-family:Georgia, serif; margin
 .ending-row.mine .ending-label { color:var(--fg); font-weight:600; }
 .ending-row.locked { opacity:.5; font-style:italic; }
 .endstats-total { margin:12px 2px 0; font-size:12px; opacity:.5; font-family:system-ui, sans-serif; }
+.intro { max-width:640px; margin:0 auto; padding:8px 0 40px; animation:intro-fade .5s ease; }
+@keyframes intro-fade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.intro-back { background:none; border:none; color:var(--fg); opacity:.5; cursor:pointer; font:inherit; font-size:13px; padding:6px 0; margin-bottom:18px; }
+.intro-back:hover { opacity:.9; color:var(--accent); }
+.intro-genre { margin:0; font-family:system-ui, sans-serif; font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.5; }
+.intro-title { margin:4px 0 22px; font-size:38px; letter-spacing:.02em; }
+.intro-premise { font-size:18px; line-height:1.65; margin:0 0 16px; opacity:.92; }
+.intro-block { margin:26px 0; }
+.intro-h2 { font-family:system-ui, sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 10px; }
+.intro-meters { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.intro-meter { font-family:system-ui, sans-serif; font-size:13px; padding:6px 12px; background:#171b24; border:1px solid #2a2f3a; border-radius:999px; }
+.intro-how { font-size:15px; line-height:1.6; opacity:.8; margin:0; font-family:system-ui, sans-serif; }
+.intro-begin { display:block; width:100%; margin-top:28px; padding:15px; background:var(--accent); color:#08110f; border:none; border-radius:9px; cursor:pointer; font:inherit; font-size:17px; font-weight:700; letter-spacing:.03em; transition:filter .2s; }
+.intro-begin:hover { filter:brightness(1.12); }
 .tone-preview { position:sticky; bottom:8px; margin-top:12px; padding:8px 12px; border-radius:8px;
   background:#12151d; border:1px solid #2a2f3a; color:var(--accent);
   font-family:system-ui, sans-serif; font-size:13px; letter-spacing:.03em;
